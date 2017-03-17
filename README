@@ -1,0 +1,36 @@
+## References0
+http://xpo6.com/list-of-english-stop-words/
+
+## estadao-articles-spider
+
+### settings - topic
+Esportes
+Economia
+Internacional
+Not%C3%ADcias
+Geral
+Cultura
+Pol%C3%ADtica
+Politica
+Opini%C3%A3o
+Brasil
+Eldorado%2FESPN
+S%C3%A3o+Paulo
+Link
+Educa%C3%A7%C3%A3o
+Vida+%26+Estilo
+Sa%C3%BAde
+Paladar
+Ci%C3%AAncia
+Viagem
+M%C3%BAsica
+
+## pyspider in Docker
+
+### MySQL
+```
+docker run --name argonautcrewcrawler_mysql -d -v /home/gustavorps/databases/mysql/crawler:/var/lib/mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes mysql:latest
+```
+
+# RabbitMQ
+docker run --name argonautcrewcrawler_rabbitmq -d rabbitmq:latest
