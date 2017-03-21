@@ -9,7 +9,7 @@ from journals.items.article import ArticleItem, ArticleItemLoader
 
 class EstadaoArticlesSpider(scrapy.Spider):
 
-    name = 'estadao-articles-spider'
+    name = 'estadao'
     allowed_domains = ['estadao.com.br']
     config = {}
 
