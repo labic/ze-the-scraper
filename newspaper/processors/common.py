@@ -1,29 +1,35 @@
 # -*- coding: utf-8 -*-
 
-import re
-from datetime import datetime
-import logging as log
+import dateparser
+import logging
+logger = logging.getLogger(__name__)
 
 class CommonProcessor():
 
     @staticmethod
     def process_date_time(value):
 
-        value = value.replace('Atualizado:', '').strip()
-
-        formats = (
-            '%d %B %Y | %Hh %M',
-            '%d %B %Y | %H:%M',
+        value = value.replace('Atualizado:', '') \
+                    .replace(' | ', ' ') \
+                    .replace('h', ':') \
+                    .replace('h ', ':') \
+                    .replace(', ', '') \
+                    .replace('  ', ' ') \
+                    .strip()
+        date_formats = (
+            '%d %B %Y %H:%M',
             '%d de %B de %Y %Hh%M',
-            '%d/%m/%Y, %Hh%M',
+            '%d/%m/%Y %H:%M',
         )
-
-        for f in formats:
-            try:
-                return datetime.strptime(value, f).isoformat()
-            except Exception as e:
-                log.info(e)
-                pass
+        
+        try:
+            return dateparser.parse(value, 
+                        date_formats=['%d %B %Y %H:%M'], 
+                        languages=['pt']) \
+                        .isoformat()
+        except Exception as e:
+            logger.warning('Date %s not processed with none of formats: %s' % (value, ', '.join(date_formats)))
+            pass
 
         return value
 
