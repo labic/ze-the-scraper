@@ -8,8 +8,8 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose
-from newspaper.processors.article import ArticleProcessor
-from newspaper.processors.common import CommonProcessor
+from ze.processors.article import ArticleProcessor
+from ze.processors.common import CommonProcessor
 
 class ArticleItem(scrapy.Item):
     name = scrapy.Field(

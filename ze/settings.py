@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for newspaper module
+# Scrapy settings for ze module
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,8 +9,8 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-SPIDER_MODULES = ['newspaper.spiders']
-NEWSPIDER_MODULE = 'newspaper.spiders'
+SPIDER_MODULES = ['ze.spiders']
+NEWSPIDER_MODULE = 'ze.spiders'
 
 DUPEFILTER_DEBUG = True
 
@@ -43,13 +43,13 @@ CONCURRENT_REQUESTS_PER_IP=16
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'newspaper.middlewares.MyCustomSpiderMiddleware': 543,
+#    'ze.middlewares.MyCustomSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'newspaper.middlewares.MyCustomDownloaderMiddleware': 543,
+#    'ze.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -61,7 +61,7 @@ CONCURRENT_REQUESTS_PER_IP=16
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'newspaper.pipelines.SomePipeline': 300,
+#    'ze.pipelines.SomePipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

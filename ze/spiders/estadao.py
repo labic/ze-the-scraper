@@ -11,7 +11,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.loader import ItemLoader
 from scrapy.exceptions import CloseSpider
-from newspaper.items.article import ArticleItem, ArticleItemLoader
+from ze.items.article import ArticleItem, ArticleItemLoader
 
 class EstadaoArticlesSpider(scrapy.Spider):
 

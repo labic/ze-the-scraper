@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 
 class MongoPipeline(object):
-
-    collection_name = 'newspaper'
+    # TODO: Get collection name of MongoDB via spider.name or use item name
+    collection_name = 'ze'
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
