@@ -13,6 +13,9 @@ from ze.processors.common import CommonProcessor
 
 class ArticleItem(scrapy.Item):
     name = scrapy.Field(
+        input_processor=MapCompose(
+            ArticleProcessor.process_text
+        ),
         output_processor=TakeFirst(),
     )
     date_published = scrapy.Field(
@@ -28,6 +31,9 @@ class ArticleItem(scrapy.Item):
         output_processor=TakeFirst(),
     )
     description = scrapy.Field(
+        input_processor=MapCompose(
+            ArticleProcessor.process_text
+        ),
         output_processor=TakeFirst(),
     )
     authors = scrapy.Field(
