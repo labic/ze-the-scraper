@@ -19,7 +19,7 @@ class EstadaoArticlesSpider(scrapy.Spider):
     allowed_domains = ['g1.globo.com']
     config = {
         'searchlUrl': 'http://g1.globo.com/busca/',
-        'cdnUrl': 'http://falkor-cda.bastian.globo.com/feeds/{feedId}/posts/page/{page}'
+        'cdnUrl': 'http://falkor-cda.bastian.globo.com/feeds/{feedId}/posts/page/{page}',
         'args': None,
         'feeds': {
             'educacao': '42f93818-a7ce-41d9-9a3f-57f43df62f03'
