@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import subprocess
+import json
 import scrapy
 from scrapy.loader import ItemLoader
 from ze.items.article import ArticleItem, ArticleItemLoader
@@ -13,9 +15,30 @@ class VejaSpider(scrapy.Spider):
         'searchlUrl': 'http://veja.abril.com.br/?infinity=scrolling',
         'args': None
     }
+    DURATIONS = {
+        'PT24H': 'h24',
+        'P1D': 'd1',
+        'P2D': 'd2',
+        'P3D': 'd3',
+        'P4D': 'd4',
+        'P5D': 'd5',
+        'P6D': 'd6',
+        'P1W': 'w1',
+        'P2W': 'w2',
+        'P3W': 'w3',
+        'P1M': 'm1',
+        'P2M': 'm2',
+        'P3M': 'm3',
+        'P4M': 'm4',
+        'P5M': 'm5',
+        'P6M': 'm6',
+        'P7M': 'm7',
+        'P8M': 'm8',
+        'P9M': 'm9',
+    }
 
 
-    def __init__(self, url=None, query=None, editorial=None, subject=None, when=None, contentType=None, *args, **kwargs):
+    def __init__(self, url=None, query=None, editorial=None, subject=None, when=None, contentType=None, googler=False, *args, **kwargs):
         super(VejaSpider, self).__init__(*args, **kwargs)
         
         self.config['args'] = {
@@ -67,6 +90,13 @@ class VejaSpider(scrapy.Spider):
         
         if url:
             self.start_urls = [self.config['args']['url']]
+        if googler:
+            results = json.loads(subprocess.check_output(
+                ['python ../libs/googler.py -n 100 -w %s %s --json' % ('veja.abril.com.br', query)], 
+                shell=True,
+                stderr=subprocess.STDOUT,
+            ).decode('utf-8'))
+            self.start_urls = [r['url'] for r in results]
         else:
             self.config['args']['source'] = 'searchlUrl'
 
