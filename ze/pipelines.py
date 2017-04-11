@@ -67,6 +67,6 @@ class GooglePubSubPipeline(object):
 
 
     def process_item(self, item, spider):
-        self.topic.publish(json.dumps(item))
+        self.topic.publish(json.dumps(dict(item)))
         return item
 
