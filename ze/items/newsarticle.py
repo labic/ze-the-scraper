@@ -8,7 +8,7 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose
-from ze.processors.newsarticle import ArticleProcessor
+from ze.processors.article import ArticleProcessor
 from ze.processors.common import CommonProcessor
 
 class NewsArticleItem(scrapy.Item):
