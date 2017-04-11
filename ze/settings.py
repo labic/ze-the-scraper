@@ -58,11 +58,15 @@ CONCURRENT_REQUESTS_PER_IP=16
 #    'scrapy.telnet.TelnetConsole': None,
 #}
 
+# Google Cloud Project ID. This can be found on the 'Overview' page at
+# https://console.developers.google.com
+GOOGLE_APPLICATION_CREDENTIALS_JSON = None
+
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'ze.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'ze.pipelines.GooglePubSubPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -1,0 +1,139 @@
+Help on Credentials in module google.auth.compute_engine.credentials object:
+
+class CCrreeddeennttiiaallss(google.auth.credentials.Scoped, google.auth.credentials.Credentials)
+ |  Compute Engine Credentials.
+ |  
+ |  These credentials use the Google Compute Engine metadata server to obtain
+ |  OAuth 2.0 access tokens associated with the instance's service account.
+ |  
+ |  For more information about Compute Engine authentication, including how
+ |  to configure scopes, see the `Compute Engine authentication
+ |  documentation`_.
+ |  
+ |  .. note:: Compute Engine instances can be created with scopes and therefore
+ |      these credentials are considered to be 'scoped'. However, you can
+ |      not use :meth:`~google.auth.credentials.ScopedCredentials.with_scopes`
+ |      because it is not possible to change the scopes that the instance
+ |      has. Also note that
+ |      :meth:`~google.auth.credentials.ScopedCredentials.has_scopes` will not
+ |      work until the credentials have been refreshed.
+ |  
+ |  .. _Compute Engine authentication documentation:
+ |      https://cloud.google.com/compute/docs/authentication#using
+ |  
+ |  Method resolution order:
+ |      Credentials
+ |      google.auth.credentials.Scoped
+ |      google.auth.credentials.Credentials
+ |      builtins.object
+ |  
+ |  Methods defined here:
+ |  
+ |  ____iinniitt____(self, service_account_email='default')
+ |      Args:
+ |          service_account_email (str): The service account email to use, or
+ |              'default'. A Compute Engine instance may have multiple service
+ |              accounts.
+ |  
+ |  rreeffrreesshh(self, request)
+ |      Refresh the access token and scopes.
+ |      
+ |      Args:
+ |          request (google.auth.transport.Request): The object used to make
+ |              HTTP requests.
+ |      
+ |      Raises:
+ |          google.auth.exceptions.RefreshError: If the Compute Engine metadata
+ |              service can't be reached if if the instance has not
+ |              credentials.
+ |  
+ |  wwiitthh__ssccooppeess(self, scopes)
+ |      Unavailable, Compute Engine credentials can not be scoped.
+ |      
+ |      Scopes can only be set at Compute Engine instance creation time.
+ |      See the `Compute Engine authentication documentation`_ for details on
+ |      how to configure instance scopes.
+ |      
+ |      .. _Compute Engine authentication documentation:
+ |          https://cloud.google.com/compute/docs/authentication#using
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  rreeqquuiirreess__ssccooppeess
+ |      False: Compute Engine credentials can not be scoped.
+ |  
+ |  sseerrvviiccee__aaccccoouunntt__eemmaaiill
+ |      The service account email.
+ |      
+ |      .. note: This is not guaranteed to be set until :meth`refresh` has been
+ |          called.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |  
+ |  ____aabbssttrraaccttmmeetthhooddss____ = frozenset([])
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from google.auth.credentials.Scoped:
+ |  
+ |  hhaass__ssccooppeess(self, scopes)
+ |      Checks if the credentials have the given scopes.
+ |      
+ |      .. warning: This method is not guaranteed to be accurate if the
+ |          credentials are :attr:`~Credentials.invalid`.
+ |      
+ |      Returns:
+ |          bool: True if the credentials have the given scopes.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from google.auth.credentials.Scoped:
+ |  
+ |  ____ddiicctt____
+ |      dictionary for instance variables (if defined)
+ |  
+ |  ____wweeaakkrreeff____
+ |      list of weak references to the object (if defined)
+ |  
+ |  ssccooppeess
+ |      Sequence[str]: the credentials' current set of scopes.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from google.auth.credentials.Credentials:
+ |  
+ |  aappppllyy(self, headers, token=None)
+ |      Apply the token to the authentication header.
+ |      
+ |      Args:
+ |          headers (Mapping): The HTTP request headers.
+ |          token (Optional[str]): If specified, overrides the current access
+ |              token.
+ |  
+ |  bbeeffoorree__rreeqquueesstt(self, request, method, url, headers)
+ |      Performs credential-specific before request logic.
+ |      
+ |      Refreshes the credentials if necessary, then calls :meth:`apply` to
+ |      apply the token to the authentication header.
+ |      
+ |      Args:
+ |          request (google.auth.transport.Request): The object used to make
+ |              HTTP requests.
+ |          method (str): The request's HTTP method or the RPC method being
+ |              invoked.
+ |          url (str): The request's URI or the RPC service's URI.
+ |          headers (Mapping): The request's headers.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from google.auth.credentials.Credentials:
+ |  
+ |  eexxppiirreedd
+ |      Checks if the credentials are expired.
+ |      
+ |      Note that credentials can be invalid but not expired becaue Credentials
+ |      with :attr:`expiry` set to None is considered to never expire.
+ |  
+ |  vvaalliidd
+ |      Checks the validity of the credentials.
+ |      
+ |      This is True if the credentials have a :attr:`token` and the token
+ |      is not :attr:`expired`.
