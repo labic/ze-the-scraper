@@ -11,7 +11,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.loader import ItemLoader
 from scrapy.exceptions import CloseSpider
-from ze.items.article import ArticleItem, ArticleItemLoader
+from ze.items.newsarticle import NewsArticleItem, NewsArticleItemLoader
 
 class EstadaoArticlesSpider(scrapy.Spider):
 
@@ -67,21 +67,21 @@ class EstadaoArticlesSpider(scrapy.Spider):
 
 
     def parse_article(self, response):
-        l = ArticleItemLoader(item=ArticleItem(), response=response)
+        l = NewsArticleItemLoader(item=NewsArticleItem(), response=response)
 
         l.add_css('name', '[itemprop=headline]::text')
         l.add_fallback_css('name', '.titulo-principal::text')
-        l.add_css('authors', '[itemprop=author]::text')
+        l.add_css('author', '[itemprop=author]::text')
         l.add_css('description', '[itemprop=description]::text')
         l.add_fallback_css('description', '.linha-fina::text')
-        l.add_css('date_published', '[itemprop=datePublished]::text')
-        l.add_fallback_css('date_published', '.data::text')
-        l.add_css('date_modified', '[itemprop=dateModified]::text')
+        l.add_css('datePublished', '[itemprop=datePublished]::text')
+        l.add_fallback_css('datePublished', '.data::text')
+        l.add_css('dateModified', '[itemprop=dateModified]::text')
         l.add_css('keywords', '[itemprop=keywords] a::text')
         l.add_fallback_css('keywords', '.tags a::text')
         l.add_fallback_css('keywords', '.tags a span::text')
-        l.add_css('text', '[itemprop=articleBody]')
-        l.add_fallback_css('text', '.main-news .content')
+        l.add_css('articleBody', '[itemprop=articleBody]')
+        l.add_fallback_css('articleBody', '.main-news .content')
         l.add_value('url', response.url)
         
         if 'blog' in response.url:

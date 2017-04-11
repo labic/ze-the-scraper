@@ -2,7 +2,7 @@
 
 import scrapy
 from scrapy.loader import ItemLoader
-from ze.items.article import ArticleItem, ArticleItemLoader
+from ze.items.newsarticle import NewsArticleItem, NewsArticleItemLoader
 
 class VejaSpider(scrapy.Spider):
 
@@ -87,22 +87,22 @@ class VejaSpider(scrapy.Spider):
 
 
     def parse_article(self, response):
-        l = ArticleItemLoader(item=ArticleItem(), response=response)
+        l = NewsArticleItemLoader(item=NewsArticleItem(), response=response)
 
         l.add_css('name', '[itemprop=headline]::text')
         l.add_fallback_css('name', '.article-title::text')
-        l.add_css('authors', '[itemprop=author]::text')
-        l.add_fallback_css('authors', '.article-author span strong::text')
+        l.add_css('author', '[itemprop=author]::text')
+        l.add_fallback_css('author', '.article-author span strong::text')
         l.add_css('description', '[itemprop=description]::text')
         l.add_fallback_css('description', '.article-subtitle::text')
-        l.add_css('date_published', '[itemprop=datePublished]::text')
-        l.add_fallback_css('date_published', '.article-date span::text')
-        l.add_css('date_modified', '[itemprop=dateModified]::text')
-        l.add_fallback_css('date_modified', '.article-date span::text')
+        l.add_css('datePublished', '[itemprop=datePublished]::text')
+        l.add_fallback_css('datePublished', '.article-date span::text')
+        l.add_css('dateModified', '[itemprop=dateModified]::text')
+        l.add_fallback_css('dateModified', '.article-date span::text')
         l.add_css('keywords', '[itemprop=keywords] a::text')
         l.add_fallback_css('keywords', '.article-tags a::text')
-        l.add_css('text', '[itemprop=articleBody]')
-        l.add_fallback_css('text', '.article-content')
+        l.add_css('articleBody', '[itemprop=articleBody]')
+        l.add_fallback_css('articleBody', '.article-content')
         l.add_value('url', response.url)
         
         if 'blog' in response.url:
