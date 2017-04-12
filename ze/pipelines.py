@@ -15,7 +15,7 @@ class MongoPipeline(object):
 
     def __init__(self, settings):
         self.mongo_uri = settings.get('MONGO_URI'),
-        self.mongo_db = settings.get('MONGO_DATABASE', 'items')
+        self.mongo_db = settings.get('MONGO_DATABASE', 'ze-the-scraper')
 
 
     def open_spider(self, spider):

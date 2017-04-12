@@ -80,14 +80,20 @@ SPIDER_MIDDLEWARES = {
 #    'scrapy.telnet.TelnetConsole': None,
 #}
 
+# Google Cloud pipeline configuration
 # Google Cloud Project ID. This can be found on the 'Overview' page at
 # https://console.developers.google.com
 GOOGLE_APPLICATION_CREDENTIALS_JSON = None
+
+# MongoDB pipeline configuration
+MONGO_URI = None
+MONGO_DATABASE = None
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'ze.pipelines.GooglePubSubPipeline': 300,
+    'ze.pipelines.MongoPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
