@@ -1,29 +1,25 @@
 # -*- coding: utf-8 -*-
 
 import os
+import logging
 import json
-import pymongo
+from pymongo import MongoClient
 from google.cloud import pubsub
 
-class MongoPipeline(object):
-    # TODO: Get collection name of MongoDB via spider.name or use item name
-    collection_name = 'ze'
 
+class MongoPipeline(object):
     @classmethod
     def from_crawler(cls, crawler):
-        return cls(
-            mongo_uri=crawler.settings.get('MONGO_URI'),
-            mongo_db=crawler.settings.get('MONGO_DATABASE', 'items')
-        )
+        return cls(settings = crawler.settings)
 
 
-    def __init__(self, mongo_uri, mongo_db):
-        self.mongo_uri = mongo_uri
-        self.mongo_db = mongo_db
+    def __init__(self, settings):
+        self.mongo_uri = settings.get('MONGO_URI'),
+        self.mongo_db = settings.get('MONGO_DATABASE', 'items')
 
 
     def open_spider(self, spider):
-        self.client = pymongo.MongoClient(self.mongo_uri)
+        self.client = MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
 
 
@@ -32,41 +28,48 @@ class MongoPipeline(object):
 
 
     def process_item(self, item, spider):
-        self.db[self.collection_name].insert(dict(item))
+        # TODO: Get collection name via spider.name or use item name
+        self.db['NewsArticle'].insert(dict(item))
         return item
 
 
 class GooglePubSubPipeline(object):
+    log = logging.getLogger('ze.pipelines.GooglePubSubPipeline')
     topic = None
     credentials_json_file = '../service-account.json'
 
 
     @classmethod
     def from_crawler(cls, crawler):
-        return cls(
-            credentials_json=crawler.settings.get('GOOGLE_APPLICATION_CREDENTIALS_JSON')
-        )
+        return cls(settings=crawler.settings)
+ 
 
-
-    def __init__(self, credentials_json):
-        with open(self.credentials_json_file, 'w') as outfile:
-            outfile.write(credentials_json)
+    def __init__(self, settings):
+        self.credentials_exist = settings.getbool('GOOGLE_APPLICATION_CREDENTIALS_JSON')
         
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.credentials_json_file
-        self.pubsub = pubsub.Client()
+        if self.credentials_exist:
+            with open(self.credentials_json_file, 'w') as outfile:
+                outfile.write(settings.get('GOOGLE_APPLICATION_CREDENTIALS_JSON'))
+            
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.credentials_json_file
+            self.pubsub = pubsub.Client()
+        else:
+            self.log.error('GOOGLE_APPLICATION_CREDENTIALS_JSON not set in  settings')
 
 
     def open_spider(self, spider):
-        self.topic = self.pubsub.topic('ze-the-scraper.'+spider.name+'.newsarticle')
-        if not self.topic.exists():
-            self.topic.create()
+        if self.credentials_exist:
+            self.topic = self.pubsub.topic('ze-the-scraper.'+spider.name+'.newsarticle')
+            if not self.topic.exists():
+                self.topic.create()
 
 
     def close_spider(self, spider):
-        os.remove(self.credentials_json_file)
+        if self.credentials_exist:
+            os.remove(self.credentials_json_file)
 
 
     def process_item(self, item, spider):
-        self.topic.publish(json.dumps(dict(item)))
+        if self.credentials_exist:
+            self.topic.publish(json.dumps(dict(item)))
         return item
-

@@ -23,21 +23,20 @@ class RandomProxy(object):
             raise KeyError('PROXY_LIST setting is missing')
 
         if self.mode == Mode.RANDOMIZE_PROXY_EVERY_REQUESTS or self.mode == Mode.RANDOMIZE_PROXY_ONCE:
-            fin = open(self.proxy_list)
             self.proxies = {}
-            for line in fin.readlines():
-                parts = re.match('(\w+://)(\w+:\w+@)?(.+)', line.strip())
-                if not parts:
-                    continue
-
-                # Cut trailing @
-                if parts.group(2):
-                    user_pass = parts.group(2)[:-1]
-                else:
-                    user_pass = ''
-
-                self.proxies[parts.group(1) + parts.group(3)] = user_pass
-            fin.close()
+            with open(self.proxy_list, 'r') as plf:
+                for line in plf.readlines():
+                    parts = re.match('(\w+://)(\w+:\w+@)?(.+)', line.strip())
+                    if not parts:
+                        continue
+    
+                    # Cut trailing @
+                    if parts.group(2):
+                        user_pass = parts.group(2)[:-1]
+                    else:
+                        user_pass = ''
+    
+                    self.proxies[parts.group(1) + parts.group(3)] = user_pass
             if self.mode == Mode.RANDOMIZE_PROXY_ONCE:
                 self.chosen_proxy = random.choice(list(self.proxies.keys()))
         elif self.mode == Mode.SET_CUSTOM_PROXY:
@@ -64,9 +63,11 @@ class RandomProxy(object):
     def process_request(self, request, spider):
         # Don't overwrite with a random one (server-side state for IP)
         if 'proxy' in request.meta:
-            if request.meta["exception"] is False:
+            if request.meta['exception'] is False:
                 return
-        request.meta["exception"] = False
+        
+        request.meta['exception'] = False
+        
         if len(self.proxies) == 0:
             raise ValueError('All proxies are unusable, cannot proceed')
 
@@ -83,6 +84,7 @@ class RandomProxy(object):
             request.headers['Proxy-Authorization'] = basic_auth
         else:
             log.debug('Proxy user pass not found')
+        
         log.debug('Using proxy <%s>, %d proxies left' % (proxy_address, len(self.proxies)))
 
 
