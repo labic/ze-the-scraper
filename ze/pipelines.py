@@ -28,7 +28,7 @@ class MongoPipeline(object):
 
 
     def process_item(self, item, spider):
-        # TODO: Get collection name via spider.name or use item name
+        # TODO: Get collection name via item name
         self.db['NewsArticle'].insert(dict(item))
         return item
 
@@ -59,6 +59,7 @@ class GooglePubSubPipeline(object):
 
     def open_spider(self, spider):
         if self.credentials_exist:
+            # TODO: Create topic for using spider and item name 
             self.topic = self.pubsub.topic('ze-the-scraper.'+spider.name+'.newsarticle')
             if not self.topic.exists():
                 self.topic.create()
