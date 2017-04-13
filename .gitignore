@@ -6,6 +6,8 @@ __pycache__
 /scrapinghub.yml
 *.csv
 /logs
+*.logs
+*.log
 *.pyc
 .c9
 /bin

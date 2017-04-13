@@ -1,23 +1,16 @@
-## References0
-http://xpo6.com/list-of-english-stop-words/
 
-## Spiders
+## Using
 
-### Estadão
+### Estadão Spider
 
-How To Use:
-
+Basic use:
 ```sh
 scrapy crawl estadao -a query=$ESTADAO_QUERY -a topic=$ESTADAO_TOPIC
 ```
 
-**query** (opt)
-
-Texto usado para filtrar as publicações diretamente site do Estadão
-
-**topic** (opt)
-
-Coletar publicações em tópico expecifico
+| Argmument | Description |
+**query** (opt) | Texto usado para filtrar as publicações diretamente site do Estadão
+**topic** (opt) | Coletar publicações em tópico expecifico
 
 - Esportes
 - Economia
@@ -40,12 +33,7 @@ Coletar publicações em tópico expecifico
 - Viagem
 - M%C3%BAsica
 
-## pyspider in Docker
+## References
 
-### MySQL
-```
-docker run --name argonautcrewcrawler_mysql -d -v /home/gustavorps/databases/mysql/crawler:/var/lib/mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes mysql:latest
-```
-
-# RabbitMQ
-docker run --name argonautcrewcrawler_rabbitmq -d rabbitmq:latest
+ - http://xpo6.com/list-of-english-stop-words/
+ - [Scrapy - Docs | Jobs: pausing and resuming crawls](https://doc.scrapy.org/en/latest/topics/jobs.html?highlight=scheduler)
