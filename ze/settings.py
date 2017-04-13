@@ -51,11 +51,11 @@ CONCURRENT_REQUESTS_PER_IP=16
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
-    'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+#     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+#     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
 }
 
-ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
+# ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
 
 GOOGLE_CLOUD_ENABLED = True
 # Google Cloud Application Credentions used for many pipelines
