@@ -51,9 +51,9 @@ class GooglePubSubPipeline(object):
 
         if self.google_cloud_enabled:
             self.pubsub = pubsub.Client()
-            logger.info('Google Cloud Pub/Sub pipeline initiated with success')
+            logger.info('Google Cloud Pub/Sub client initiated with success')
         else:
-            logger.error('Google Cloud is not enabled, check Google Cloud extension')
+            logger.error('Google Cloud is not enabled, check Google Cloud extension configuration')
 
 
     def open_spider(self, spider):

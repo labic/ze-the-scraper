@@ -54,7 +54,7 @@ RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
 PROXY_LIST = './proxies-list.txt'
 
 # Proxy mode
-# 0 = Every requests have different proxy
+# 0 = Each requests have different proxy
 # 1 = Take only one proxy from the list and assign it to every requests
 # 2 = Put a custom proxy to use in the settings
 PROXY_MODE = 0
@@ -64,15 +64,15 @@ PROXY_MODE = 0
 
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-SPIDER_MIDDLEWARES = {
-    'ze.middlewares.proxies.RandomProxy': 543,
-}
+# SPIDER_MIDDLEWARES = {
+#     'ze.middlewares.somemiddkeware': 100,
+# }
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'ze.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'ze.middlewares.RandomProxy': 100,
+}
 
 GOOGLE_CLOUD_ENABLED = True
 # Google Cloud Application Credentions used for many pipelines
