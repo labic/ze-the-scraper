@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import ze.utils.file
 
 # Scrapy settings for ze module
 #
@@ -41,28 +42,6 @@ CONCURRENT_REQUESTS_PER_IP=16
 #   'Accept-Language': 'en',
 #}
 
-# Retry many times since proxies often fail
-RETRY_TIMES = 10
-
-# Retry on most error codes since proxies fail for different reasons
-RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
-
-# Proxy list containing entries like
-# http://host1:port
-# http://username:password@host2:port
-# http://host3:port
-# ...
-PROXY_LIST = './proxies-list.txt'
-
-# Proxy mode
-# 0 = Each requests have different proxy
-# 1 = Take only one proxy from the list and assign it to every requests
-# 2 = Put a custom proxy to use in the settings
-PROXY_MODE = 0
-
-# If proxy mode is 2 uncomment this sentence :
-#CUSTOM_PROXY = "http://host1:port"
-
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
@@ -72,8 +51,11 @@ PROXY_MODE = 0
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'ze.middlewares.RandomProxy': 100,
+    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
 }
+
+ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
 
 GOOGLE_CLOUD_ENABLED = True
 # Google Cloud Application Credentions used for many pipelines

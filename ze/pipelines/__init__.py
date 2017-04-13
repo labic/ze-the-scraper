@@ -50,7 +50,7 @@ class GooglePubSubPipeline(object):
         self.stats = stats
         self.topics = {}
         self.stats.set_value('google/pubsub/published_count', 0)
-        self.stats.set_value('google/pubsub/erroscount', 0)
+        self.stats.set_value('google/pubsub/erros_count', 0)
 
         if self.google_cloud_enabled:
             self.client = pubsub.Client()
