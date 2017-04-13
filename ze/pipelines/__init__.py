@@ -37,20 +37,23 @@ class MongoPipeline(object):
 
 
 class GooglePubSubPipeline(object):
-    topic = None
-    credentials_json_file = '../service-account.json'
-
-
     @classmethod
     def from_crawler(cls, crawler):
-        return cls(settings=crawler.settings)
+        return cls(crawler.settings, crawler.stats)
  
 
-    def __init__(self, settings):
+    def __init__(self, settings, stats):
         self.google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
+        self.settings = {
+            'project_name': settings.get('PROJECT_NAME')
+        }
+        self.stats = stats
+        self.topics = {}
+        self.stats.set_value('google/pubsub/published_count', 0)
+        self.stats.set_value('google/pubsub/erroscount', 0)
 
         if self.google_cloud_enabled:
-            self.pubsub = pubsub.Client()
+            self.client = pubsub.Client()
             logger.info('Google Cloud Pub/Sub client initiated with success')
         else:
             logger.error('Google Cloud is not enabled, check Google Cloud extension configuration')
@@ -59,8 +62,8 @@ class GooglePubSubPipeline(object):
     def open_spider(self, spider):
         if self.google_cloud_enabled:
             try:
-                # TODO: Create topic for using spider and item nam
-                self.topic = self.pubsub.topic('ze-the-scraper.'+spider.name+'.newsarticle')
+                # TODO: Use multiples topics {} and create topic for using spider and item nam
+                self.topic = self.client.topic('ze-the-scraper.'+spider.name+'.newsarticle')
                 if not self.topic.exists():
                     self.topic.create()
             except Exception as e:
@@ -69,8 +72,23 @@ class GooglePubSubPipeline(object):
     def process_item(self, item, spider):
         if self.google_cloud_enabled:
             try:
-                self.topic.publish(json.dumps(dict(item)))
+                topic_name = '%s.%s.%s' % (self.settings['project_name'], spider.name, 'newsarticle')
+                topic = None
+                
+                if topic_name in self.topics:
+                    topic = self.topics[topic_name] 
+                else:
+                    self.topics[topic_name] = self.client.topic(topic_name)
+                    
+                    if not self.topics[topic_name].exists():
+                        self.topics[topic_name].create()
+                    
+                    topic = self.topics[topic_name]
+                
+                topic.publish(json.dumps(dict(item)))
+                
+                self.stats.inc_value('google/pubsub/published_count')
             except Exception as e:
                 logger.error('Failed publish item to Google Cloud Pub/Sub: %s' % e)
-            
+                self.stats.inc_value('google/pubsub/erros_count')
         return item
