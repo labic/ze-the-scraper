@@ -16,7 +16,7 @@ from ze.items.newsarticle import NewsArticleItem, NewsArticleItemLoader
 class CartaCapitalSpider(scrapy.Spider):
 
     name = 'cartacapital'
-    allowed_domains = ['cartacapital.com.br']
+    allowed_domains = ['cartacapital.com.br', 'cartaeducacao.com.br']
     config = {
         'defaultSearchlUrl': '',
         'ajaxSearchUrl': 'cartacapital.com.br',
@@ -49,7 +49,7 @@ class CartaCapitalSpider(scrapy.Spider):
             yield scrapy.Request(self.config['args']['url'], callback=self.load_article_item)
         
         if self.config['args']['source'] == 'defaultSearchlUrl':
-            raise NotImplemented
+            raise NotImplementedError
             results = [int(s) for s in response.css('.flt-registros::text').extract()[0].split() if s.isdigit()][0]
             self.logger.info('Total of Results: %d', results)
             pages = int(math.ceil(results / 10))
@@ -63,14 +63,15 @@ class CartaCapitalSpider(scrapy.Spider):
 
 
     def load_article_item_urls(self, response):
-        raise NotImplemented
+        raise NotImplementedError
         for i, url in enumerate(response.css('.link-title::attr(href)').extract()):
             yield scrapy.Request(url, meta={'index': i}, callback=self.load_article_item)
 
 
     def load_article_item(self, response):
         l = NewsArticleItemLoader(item=NewsArticleItem(), response=response)
-
+        l.context['spider'] = self.name
+        
         l.add_css('name', '[itemprop=headline]::text')
         l.add_fallback_css('name', '.documentFirstHeading::text')
         l.add_css('author', '[itemprop=author]::text')
@@ -83,6 +84,7 @@ class CartaCapitalSpider(scrapy.Spider):
         l.add_css('keywords', '[property="rnews:keywords"] a::text')
         l.add_fallback_css('keywords', '#category .link-category a::text')
         l.add_css('articleBody', '[itemprop=articleBody]')
+        l.add_fallback_css('articleBody', '.td-post-content')
         l.add_fallback_css('articleBody', '#content-core')
         # TODO: Add publisher
         l.add_value('url', response.url)
@@ -96,4 +98,4 @@ class CartaCapitalSpider(scrapy.Spider):
 
 
     def generateUrls(self, values):
-        raise NotImplemented
+        raise NotImplementedError

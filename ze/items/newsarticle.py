@@ -10,12 +10,10 @@ from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose
 from ze.processors.article import ArticleProcessor
 from ze.processors.common import CommonProcessor
+from ze.processors.html import CleanHTML
 
 class NewsArticleItem(scrapy.Item):
     name = scrapy.Field(
-        input_processor=MapCompose(
-            ArticleProcessor.process_text
-        ),
         output_processor=TakeFirst(),
     )
     datePublished = scrapy.Field(
@@ -31,9 +29,6 @@ class NewsArticleItem(scrapy.Item):
         output_processor=TakeFirst(),
     )
     description = scrapy.Field(
-        input_processor=MapCompose(
-            ArticleProcessor.process_text
-        ),
         output_processor=TakeFirst(),
     )
     author = scrapy.Field(
@@ -43,7 +38,7 @@ class NewsArticleItem(scrapy.Item):
     )
     articleBody = scrapy.Field(
         input_processor=MapCompose(
-            ArticleProcessor.process_text
+            CleanHTML(),
         ),
         output_processor=TakeFirst(),
     )

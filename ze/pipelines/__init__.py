@@ -3,9 +3,10 @@
 import os
 import logging
 import json
-from pymongo import MongoClient
 from google.cloud import pubsub
+from pymongo import MongoClient
 import scrapy
+from scrapy.selector import Selector
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,7 @@ class GooglePubSubPipeline(object):
                     self.topic.create()
             except Exception as e:
                 logger.error('Failed to get or create topic in Google Cloud Pub/Sub: %s' % e)
+
 
     def process_item(self, item, spider):
         if self.google_cloud_enabled:
