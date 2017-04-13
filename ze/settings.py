@@ -74,16 +74,14 @@ SPIDER_MIDDLEWARES = {
 #    'ze.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 
+GOOGLE_CLOUD_ENABLED = True
+# Google Cloud Application Credentions used for many pipelines
+GOOGLE_APPLICATION_CREDENTIALS_JSON = ''
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.telnet.TelnetConsole': None,
-#}
-
-# Google Cloud pipeline configuration
-# Google Cloud Project ID. This can be found on the 'Overview' page at
-# https://console.developers.google.com
-GOOGLE_APPLICATION_CREDENTIALS_JSON = None
+EXTENSIONS = {
+    'ze.extensions.google.GoogleCloud': 10
+}
 
 # MongoDB pipeline configuration
 MONGO_URI = None
@@ -93,7 +91,7 @@ MONGO_DATABASE = None
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'ze.pipelines.GooglePubSubPipeline': 300,
-    'ze.pipelines.MongoPipeline': 300,
+    # 'ze.pipelines.MongoPipeline': 310,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

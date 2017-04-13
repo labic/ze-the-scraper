@@ -5,7 +5,9 @@ import logging
 import json
 from pymongo import MongoClient
 from google.cloud import pubsub
+import scrapy
 
+logger = logging.getLogger(__name__)
 
 class MongoPipeline(object):
     @classmethod
@@ -16,6 +18,7 @@ class MongoPipeline(object):
     def __init__(self, settings):
         self.mongo_uri = settings.get('MONGO_URI'),
         self.mongo_db = settings.get('MONGO_DATABASE', 'ze-the-scraper')
+        self.client = None
 
 
     def open_spider(self, spider):
@@ -34,7 +37,6 @@ class MongoPipeline(object):
 
 
 class GooglePubSubPipeline(object):
-    log = logging.getLogger('ze.pipelines.GooglePubSubPipeline')
     topic = None
     credentials_json_file = '../service-account.json'
 
@@ -45,32 +47,30 @@ class GooglePubSubPipeline(object):
  
 
     def __init__(self, settings):
-        self.credentials_exist = settings.getbool('GOOGLE_APPLICATION_CREDENTIALS_JSON')
-        
-        if self.credentials_exist:
-            with open(self.credentials_json_file, 'w') as outfile:
-                outfile.write(settings.get('GOOGLE_APPLICATION_CREDENTIALS_JSON'))
-            
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.credentials_json_file
+        self.google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
+
+        if self.google_cloud_enabled:
             self.pubsub = pubsub.Client()
+            logger.info('Google Cloud Pub/Sub pipeline initiated with success')
         else:
-            self.log.error('GOOGLE_APPLICATION_CREDENTIALS_JSON not set in  settings')
+            logger.error('Google Cloud is not enabled, check Google Cloud extension')
 
 
     def open_spider(self, spider):
-        if self.credentials_exist:
-            # TODO: Create topic for using spider and item name 
-            self.topic = self.pubsub.topic('ze-the-scraper.'+spider.name+'.newsarticle')
-            if not self.topic.exists():
-                self.topic.create()
-
-
-    def close_spider(self, spider):
-        if self.credentials_exist:
-            os.remove(self.credentials_json_file)
-
+        if self.google_cloud_enabled:
+            try:
+                # TODO: Create topic for using spider and item nam
+                self.topic = self.pubsub.topic('ze-the-scraper.'+spider.name+'.newsarticle')
+                if not self.topic.exists():
+                    self.topic.create()
+            except Exception as e:
+                logger.error('Failed to get or create topic in Google Cloud Pub/Sub: %s' % e)
 
     def process_item(self, item, spider):
-        if self.credentials_exist:
-            self.topic.publish(json.dumps(dict(item)))
+        if self.google_cloud_enabled:
+            try:
+                self.topic.publish(json.dumps(dict(item)))
+            except Exception as e:
+                logger.error('Failed publish item to Google Cloud Pub/Sub: %s' % e)
+            
         return item
