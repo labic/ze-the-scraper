@@ -11,7 +11,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.loader import ItemLoader
 from scrapy.exceptions import CloseSpider
-from ze.items.article import ArticleItem, ArticleItemLoader
+from ze.items.newsarticle import NewsArticleItem, NewsArticleItemLoader
 
 class EstadaoArticlesSpider(scrapy.Spider):
 
@@ -70,17 +70,17 @@ class EstadaoArticlesSpider(scrapy.Spider):
 
 
     def parse_article(self, response):
-        l = ArticleItemLoader(item=ArticleItem(), response=response)
+        l = NewsArticleItemLoader(item=NewsArticleItem(), response=response)
 
         l.add_css('name', '[itemprop=headline]::text')
         l.add_fallback_css('name', '.content-head__title::text')
-        l.add_css('authors', '[itemprop=creator]::text')
+        l.add_css('author', '[itemprop=creator]::text')
         # l.add_css('publisher', '[itemprop=publisher]::attr(content)')
         l.add_css('description', '[itemprop=alternativeHeadline]::text')
         l.add_fallback_css('description', '.content-head__subtitle::text')
-        l.add_css('date_published', '[itemprop=datePublished]::attr(datetime)')
-        l.add_css('date_modified', '[itemprop=dateModified]::attr(datetime)')
-        l.add_css('text', '.mc-body')
+        l.add_css('datePublished', '[itemprop=datePublished]::attr(datetime)')
+        l.add_css('dateModified', '[itemprop=dateModified]::attr(datetime)')
+        l.add_css('articleBody', '.mc-body')
         l.add_css('keywords', '.entities__list-itemLink::text')
         l.add_value('url', response.url)
         

@@ -11,7 +11,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.loader import ItemLoader
 from scrapy.exceptions import CloseSpider
-from ze.items.article import ArticleItem, ArticleItemLoader
+from ze.items.newsarticle import NewsArticleItem, NewsArticleItemLoader
 
 class EstadaoArticlesSpider(scrapy.Spider):
 
@@ -65,15 +65,15 @@ class EstadaoArticlesSpider(scrapy.Spider):
 
 
     def parse_article(self, response):
-        l = ArticleItemLoader(item=ArticleItem(), response=response)
+        l = NewsArticleItemLoader(item=NewsArticleItem(), response=response)
 
         l.add_css('name', 'h1::text')
-        l.add_css('authors', '.autores::text')
+        l.add_css('author', '.autores::text')
         l.add_css('description', '.definicao::text')
-        l.add_css('date_published', '.data::text')
-        l.add_css('date_modified', '.data::text')
+        l.add_css('datePublished', '.data::text')
+        l.add_css('dateModified', '.data::text')
         # l.add_css('keywords', '[itemprop=keywords] a::text')
-        l.add_css('text', '.conteudo-materia')
+        l.add_css('articleBody', '.conteudo-materia')
         l.add_value('url', response.url)
 
         yield l.load_item()

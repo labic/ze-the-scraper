@@ -20,7 +20,3 @@ class ArticleProcessor():
     @staticmethod
     def process_keywords(value):
         return value.strip().replace(' -', '').replace(',', '').lower()
-
-    @staticmethod
-    def process_text(value):
-        return value.strip().replace('\n', '').replace('\t', '')
