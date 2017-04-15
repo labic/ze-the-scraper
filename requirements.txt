@@ -1,5 +1,6 @@
+beautifulsoup4==4.5.3
 dateparser==0.6.0
-google-cloud==0.24.0
+google-cloud-pubsub==0.24.0
 GoogleScraper==0.2.1
 pymongo==3.4.0
 Scrapy==1.3.3

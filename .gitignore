@@ -2,6 +2,7 @@ __pycache__
 .scrapecache/
 bin/
 build/
+dist/
 eggs/
 env/
 include/
