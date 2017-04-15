@@ -29,12 +29,10 @@ class VejaSpider(ze.spiders.ZeSpider):
     def start_requests(self):
         urls = []
         if self.args['search']['engine'] in ['google']:
-            self.args['search']['params']['query'] = '%s site:%s' % (
-                self.args['search']['params']['query'], 
+            self.args['search']['query'] = '%s site:%s' % (
+                self.args['search']['query'], 
                 self.allowed_domains[0])
-            urls = self.get_urls_from_search_engine(
-                self.args['search']['engine'], 
-                self.args['search']['params'])
+            urls = self.get_urls_from_search_engine(self.args['search'])
         
             for url in urls:
                 yield scrapy.Request(url, callback=self.parse_article)

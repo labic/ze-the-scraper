@@ -25,17 +25,32 @@ class ZeSpider(scrapy.Spider):
         spider._set_crawler(crawler)
         return spider
     
-    def get_urls_from_search_engine(self, search_engine='google', args={}):
+    def get_urls_from_search_engine(self, args={}):
+        """
+        args['config']['last_update']
+            Applications: tbm=app
+            Blogs: tbm=blg
+            Books: tbm=bks
+            Discussions: tbm=dsc
+            Discussions: tbm=dsc
+            Images: tbm=isch
+            News: tbm=nws
+            Patents: tbm=pts
+            Places: tbm=plcs
+            Recipes: tbm=rcp
+            Shopping: tbm=shop
+            Video: tbm=vid
+        """
         config = {}
         
         # TODO: implement quantity arg
-        if search_engine == 'google':
+        if args.get('engine', 'google') == 'google':
             config = {
                 'use_own_ip': 'True',
                 'keywords': [args['query']],
-                'google_search_url': 'https://www.google.com/search?qdr:%s&' % args.get('time_range', 'w'),
-                'num_results_per_page': 10,
-                'num_pages_for_keyword': 1,
+                'google_search_url': 'https://www.google.com/search?qdr:%s&' % args.get('last_update', 'w'),
+                'num_results_per_page': args.get('results_per_page', 50),
+                'num_pages_for_keyword': args.get('pages', 2),
                 'num_workers': 1,
                 'search_engines': ['google',],
                 'search_type': 'normal',
