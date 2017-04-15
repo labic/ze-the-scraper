@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-import logging
 import json
 from google.cloud import pubsub
 from pymongo import MongoClient
 import scrapy
 from scrapy.selector import Selector
-
+import logging
 logger = logging.getLogger(__name__)
 
 class MongoPipeline(object):
