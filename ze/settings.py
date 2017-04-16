@@ -77,6 +77,12 @@ ITEM_PIPELINES = {
     # 'ze.pipelines.MongoPipeline': 310,
 }
 
+SPIDER_CONTRACTS = {
+    'scrapy.contracts.default.UrlContract': 10,
+    'scrapy.contracts.default.ReturnsContract': 20,
+    'scrapy.contracts.default.ScrapesContract': 30,
+}
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 # NOTE: AutoThrottle will honour the standard settings for concurrency and delay

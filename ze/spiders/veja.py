@@ -9,18 +9,18 @@ from ze.items.newsarticle import NewsArticleItem, NewsArticleItemLoader
 
 
 class VejaSpider(ze.spiders.ZeSpider):
+    
     name = 'veja'
     allowed_domains = ['veja.abril.com.br']
     start_urls = []
     settings = {
         'search_url': 'http://veja.abril.com.br/?infinity=scrolling'
     }
-    
 
     def __init__(self, *args, **kwargs):
         super(VejaSpider, self).__init__(*args, **kwargs)
         self.args = kwargs
-        print(self.args)
+        
         if self.args.get('url') and self.args.get('search'):
             raise ValueError('url and search arguments is passed, must one of then')
         elif self.args.get('url'):
@@ -32,8 +32,9 @@ class VejaSpider(ze.spiders.ZeSpider):
             self.args['search']['query'] = '%s site:%s' % (
                 self.args['search']['query'], 
                 self.allowed_domains[0])
+            self.logger.info('PROFILING: ')
             urls = self.get_urls_from_search_engine(self.args['search'])
-        
+            
             for url in urls:
                 yield scrapy.Request(url, callback=self.parse_article)
         elif self.args['search']['engine'] == 'own':
@@ -87,8 +88,12 @@ class VejaSpider(ze.spiders.ZeSpider):
         }
 
     def parse_article(self, response):
+        """ parse_article_with invalid url
+        @url http://veja.abril.com.br/noticias-sobre/educacao/
+        @returns items 0
+        """
         l = NewsArticleItemLoader(item=NewsArticleItem(), response=response)
-
+        
         l.add_css('name', '[itemprop=headline]::text')
         l.add_fallback_css('name', '.article-title::text')
         l.add_css('author', '[itemprop=author]::text')
@@ -109,5 +114,5 @@ class VejaSpider(ze.spiders.ZeSpider):
             l.add_value('sources_types', ('portal', 'blog'))
         else:
             l.add_value('sources_types', ('portal'))
-
+        
         yield l.load_item()
