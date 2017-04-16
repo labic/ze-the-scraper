@@ -44,7 +44,7 @@ class CleanHTML(object):
             fg.append(soup.new_tag('img', src=e.select('img.content-media__image')[0]['data-src']))
             fc = soup.new_tag('figcaption')
             fc.string = e.select('img.content-media__image')[0]['alt']
-            f.append(fc)
+            fg.append(fc)
             
             e.replace_with(fg)
         
