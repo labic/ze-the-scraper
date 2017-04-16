@@ -25,6 +25,12 @@ class ZeSpider(scrapy.Spider):
         spider._set_crawler(crawler)
         return spider
     
+    def make_requests_from_url(url):
+        if args.get('engine'):
+            [url.strip('/amp/') for s in ('/amp/')]
+            
+        
+    
     def get_urls_from_search_engine(self, args={}):
         """
         args['config']['last_update']
@@ -40,7 +46,11 @@ class ZeSpider(scrapy.Spider):
             Recipes: tbm=rcp
             Shopping: tbm=shop
             Video: tbm=vid
-        """
+        """, 
+        # TODO: know more of about this posibilites. may can use to profiling
+        def __repr__(self):
+            return '%s' % (__name__, eof)
+        
         config = {}
         
         # TODO: implement quantity arg
@@ -74,4 +84,5 @@ class ZeSpider(scrapy.Spider):
         
         self.logger.info('Google Search scrapped with success: %d links extracted' % len(urls))
         self.logger.info('List of link extracted from Google Search: %s' % urls)
+        
         return urls
