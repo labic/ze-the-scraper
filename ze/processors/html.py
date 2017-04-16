@@ -10,10 +10,10 @@ class CleanHTML(object):
 
     def __call__(self, value, context=None):
         soup = BeautifulSoup(value, 'html.parser')
-        print(soup.prettify())
-        print('##############################################')
-        print('##############################################')
-        print('##############################################')
+        # print(soup.prettify())
+        # print('##############################################')
+        # print('##############################################')
+        # print('##############################################')
         
         # veja
         for e in soup.select('.featured-image'):
@@ -82,7 +82,7 @@ class CleanHTML(object):
             .content-ads, 
             [id^="ad-"], 
             .comments""")]
-        
+        # Remove empy elements
         [e.decompose() for e in soup.select('p, div') if not e.contents]
         
         # TODO: B4S bug
@@ -95,13 +95,14 @@ class CleanHTML(object):
             del e['width']
             del e['height']
         
+        attrs_to_remove = ['alt', 'title', 'style']
         for e in soup.select('img'):
-            if e['alt'].strip(): del e['alt']
-            del e['title']
+            for a in attrs_to_remove:
+                if e.get(a, '').strip(): del e[a]
         
         for comments in soup.findAll(text=lambda text:isinstance(text, Comment)):
             comments.extract()
         
         value = soup.prettify()
-        print(value)
+        # print(value)
         return value
