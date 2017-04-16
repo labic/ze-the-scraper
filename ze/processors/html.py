@@ -20,7 +20,7 @@ class CleanHTML(object):
             f = soup.new_tag('figure')
             f.append(soup.new_tag('img', src=e.select('img')[0]['data-src']))
             fc = soup.new_tag('figcaption')
-            fc.string = string=e.select('p')[0].string
+            fc.string = e.select('p')[0].string
             f.append(fc)
             
             e.replace_with(f)
@@ -28,6 +28,15 @@ class CleanHTML(object):
         [e.unwrap() for e in soup.select('section.article-content')]
         
         [e.decompose() for e in soup.select('div.widget-news')]
+        
+        for e in soup.select('td p s'):
+            e.parent.parent.string = e.string
+            
+        for e in soup.select('p span iframe[src*="https://www.youtube.com/embed"]'):
+            # TODO: Use Regex?
+            video_id = e['data-lazy-src'].split('/')[4]
+            fm = soup.new_tag('iframe', src='https://www.youtube.com/embed/%s?rel=0' % video_id,
+                width='1280', height='720', frameborder='0', allowfullscreen='true')
         
         # g1
         for e in soup.select('[data-block-type="backstage-photo"]'):
@@ -46,8 +55,7 @@ class CleanHTML(object):
             fc = soup.new_tag('figcaption')
             fc.string = e.select('[itemprop="caption"]')[0]['content']
             f.append(fc)
-            a = soup.new_tag('a', href='https://globoplay.globo.com/v/%s/' 
-                % video_id)
+            a = soup.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
             a.append(fg)
             
             e.replace_with(a)
@@ -70,7 +78,8 @@ class CleanHTML(object):
             .td-post-content, 
             .td-post-featured-image, 
             #mobile1stparagraph, 
-            figure a""")]
+            figure a,
+            script""")]
         
         [e.decompose() for e in soup.select("""
             .content-head, 
@@ -81,7 +90,8 @@ class CleanHTML(object):
             .content-share-bar, 
             .content-ads, 
             [id^="ad-"], 
-            .comments""")]
+            .comments,
+            #liveblog-container""")]
         # Remove empy elements
         [e.decompose() for e in soup.select('p, div') if not e.contents]
         
@@ -94,11 +104,21 @@ class CleanHTML(object):
             del e['data-track-links']
             del e['width']
             del e['height']
+            del e['style']
+            del e['data-sizes']
+            del e['rel']
+            del e['data-width']
+            del e['type']
         
-        attrs_to_remove = ['alt', 'title', 'style']
+        attrs_to_remove = ['alt', 'title']
         for e in soup.select('img'):
             for a in attrs_to_remove:
                 if e.get(a, '').strip(): del e[a]
+        
+        for e in soup.select('table, td'):
+            del e['cellpadding']
+            del e['cellspacing']
+            del e['valign']
         
         for comments in soup.findAll(text=lambda text:isinstance(text, Comment)):
             comments.extract()
