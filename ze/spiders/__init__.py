@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-import copy
-import subprocess
 import json
-import six
-import os
-
+try:
+    import urlparse
+    from urllib import urlencode
+except: # Python 3
+    import urllib.parse as urlparse
+    from urllib.parse import urlencode
 import scrapy
 from scrapy.http import Request, HtmlResponse
 from scrapy.utils.spider import iterate_spider_output
@@ -25,12 +26,6 @@ class ZeSpider(scrapy.Spider):
         spider._set_crawler(crawler)
         return spider
     
-    def make_requests_from_url(url):
-        if args.get('engine'):
-            [url.strip('/amp/') for s in ('/amp/')]
-            
-        
-    
     def get_urls_from_search_engine(self, args={}):
         """
         args['config']['last_update']
@@ -47,9 +42,15 @@ class ZeSpider(scrapy.Spider):
             Shopping: tbm=shop
             Video: tbm=vid
         """, 
+    
+        def fix_urls(url):
+            url = url.replace('/amp/', '') if '/amp/' in url else url
+            url = 'http://'.join(url) if 'http://' not in url else url
+            return url
+        
         # TODO: know more of about this posibilites. may can use to profiling
-        def __repr__(self):
-            return '%s' % (__name__, eof)
+        # def __repr__(self):
+        #     return '%s' % (__name__, eof)
         
         config = {}
         
@@ -80,9 +81,10 @@ class ZeSpider(scrapy.Spider):
         
         urls = []
         for serp in search.serps:
-            [urls.append(r.link) for r in serp.links]
+            [urls.append(fix_urls(r.link)) for r in serp.links]
         
         self.logger.info('Google Search scrapped with success: %d links extracted' % len(urls))
         self.logger.info('List of link extracted from Google Search: %s' % urls)
         
+        print(urls)
         return urls
