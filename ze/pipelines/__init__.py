@@ -9,46 +9,56 @@ from scrapy.selector import Selector
 import logging
 logger = logging.getLogger(__name__)
 
-class MongoPipeline(object):
+
+class BasePipeline(object):
+
     @classmethod
     def from_crawler(cls, crawler):
         return cls(settings = crawler.settings)
 
 
+class MongoPipeline(BasePipeline):
+
     def __init__(self, settings):
         self.mongo_uri = settings.get('MONGO_URI'),
         self.mongo_db = settings.get('MONGO_DATABASE', 'ze-the-scraper')
         self.client = None
+        
+        self.stats = stats
+        self.stats.set_value('items/mongodb/insert_count', 0)
+        self.stats.set_value('items/mongodb/insert_erros_count', 0)
 
 
     def open_spider(self, spider):
         self.client = MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
+        self.stats.set_value('items/mongodb/database_name', self.db.name)
 
 
     def close_spider(self, spider):
         self.client.close()
 
-
     def process_item(self, item, spider):
         # TODO: Get collection name via item name
-        self.db['NewsArticle'].insert(dict(item))
+        try:
+            self.db['NewsArticle'].insert(dict(item))
+            self.stats.inc_value('items/mongodb/insert_count')
+        except Exception as e:
+            self.stats.inc_value('items/mongodb/insert_erros_count')
+            pass
+        
         return item
 
 
 class GooglePubSubPipeline(object):
-    @classmethod
-    def from_crawler(cls, crawler):
-        return cls(crawler.settings, crawler.stats)
- 
 
     def __init__(self, settings, stats):
         self.google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
         self.settings = {
             'project_name': settings.get('PROJECT_NAME')
         }
-        self.stats = stats
         self.topics = {}
+        self.stats = stats
         self.stats.set_value('google/pubsub/published_count', 0)
         self.stats.set_value('google/pubsub/erros_count', 0)
 
