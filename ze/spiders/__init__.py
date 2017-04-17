@@ -9,6 +9,7 @@ except: # Python 3
 import scrapy
 from scrapy.http import Request, HtmlResponse
 from scrapy.utils.spider import iterate_spider_output
+from ze.items.article import ArticleItem
 
 import GoogleScraper
 
@@ -118,5 +119,5 @@ class ZeSpider(scrapy.Spider):
     def make_request_from_onw_search_engine(self, args=None):
         raise NotImplementedError
 
-    def load_article_item(self, response):
+    def load_article_item(self, response, item=ArticleItem):
         raise NotImplementedError

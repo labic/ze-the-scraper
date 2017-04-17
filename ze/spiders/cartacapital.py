@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ze
-from ze.items.newsarticle import NewsArticleItem
+from ze.items.article import NewsArticleItem
 
 class CartaCapitalSpider(ze.spiders.ZeSpider):
 

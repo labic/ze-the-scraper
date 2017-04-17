@@ -6,7 +6,7 @@ from ze.processors.article import ArticleProcessor
 from ze.processors.common import CommonProcessor
 from ze.processors.html import CleanHTML
 
-class NewsArticleItem(Item):
+class ArticleItem(Item):
     name = Field(
         output_processor=TakeFirst(),
     )
@@ -49,3 +49,8 @@ class NewsArticleItem(Item):
         output_processor=TakeFirst(),
     )
     sources_types = Field()
+
+
+class NewsArticleItem(ArticleItem): pass
+    
+    
