@@ -10,30 +10,18 @@ class CleanHTML(object):
 
     def __call__(self, value, context=None):
         soup = BeautifulSoup(value, 'html.parser')
-        # print(soup.prettify())
-        # print('##############################################')
-        # print('##############################################')
-        # print('##############################################')
         
         # veja
         for e in soup.select('.featured-image'):
-            f = soup.new_tag('figure')
-            f.append(soup.new_tag('img', src=e.select('img')[0]['data-src']))
+            fg = soup.new_tag('figure')
+            fg.append(soup.new_tag('img', src=e.select('img')[0]['data-src']))
             fc = soup.new_tag('figcaption')
             fc.string = e.select('p')[0].string
-            f.append(fc)
+            fg.append(fc)
             
-            e.replace_with(f)
-        
-        [e.unwrap() for e in soup.select('section.article-content')]
-        
-        [e.decompose() for e in soup.select('div.widget-news')]
-        
-        for e in soup.select('td p s'):
-            e.parent.parent.string = e.string
+            e.replace_with(fg)
             
-        for e in soup.select('p span iframe[src*="https://www.youtube.com/embed"]'):
-            # TODO: Use Regex?
+        for e in soup.select('p span iframe[src*="https://www.youtube.com/embed"]'):    
             video_id = e['data-lazy-src'].split('/')[4]
             fm = soup.new_tag('iframe', src='https://www.youtube.com/embed/%s?rel=0' % video_id,
                 width='1280', height='720', frameborder='0', allowfullscreen='true')
@@ -54,7 +42,7 @@ class CleanHTML(object):
             fg.append(soup.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
             fc = soup.new_tag('figcaption')
             fc.string = e.select('[itemprop="caption"]')[0]['content']
-            f.append(fc)
+            fg.append(fc)
             a = soup.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
             a.append(fg)
             
@@ -70,55 +58,64 @@ class CleanHTML(object):
             e.parent.replace_with(fm)
         
         # All
-        [e.unwrap() for e in soup.select("""
-            [itemprop="articleBody"], 
-            main, 
-            .content-text, 
-            .content-intertitle, 
-            .td-post-content, 
-            .td-post-featured-image, 
-            #mobile1stparagraph, 
-            figure a,
-            script""")]
-        
-        [e.decompose() for e in soup.select("""
-            .content-head, 
-            style, 
-            .content-share-bar, 
-            .mc-side-item__container, 
-            .mc-show-later, 
-            .content-share-bar, 
-            .content-ads, 
-            [id^="ad-"], 
-            .comments,
-            #liveblog-container""")]
-        # Remove empy elements
-        [e.decompose() for e in soup.select('p, div') if not e.contents]
+        el_to_uwrap = [ 
+            'main', 
+            '#mobile1stparagraph',  
+            '.content', 
+            '.content-text', 
+            '.article-content', 
+            '.content-intertitle,', 
+            '.td-post-content', 
+            '.td-post-featured-image', 
+            '[itemprop="articleBody"]', 
+        ] if not context.get('el_to_uwrap') else context.get('el_to_uwrap')
+        [e.unwrap() for e in soup.select(','.join(el_to_uwrap))]
+            
+        el_to_decompose = {
+            'geral': [
+                'style', 
+                'script', 
+                '#liveblog-container', 
+                '.content-head', 
+                '.content-share-bar', 
+                '.mc-side-item__container', 
+                '.mc-show-later', 
+                '.content-share-bar', 
+                '.content-ads', 
+                '.comments', 
+                '.tags', 
+                '.widget-news', 
+            ],
+            'empty': ['p', 'div',]
+        } if not context.get('el_to_decompose') else context.get('el_to_decompose')
+        [e.decompose() for e in soup.select(','.join(el_to_decompose['geral']))]
+        [e.decompose() for e in soup.select(','.join(el_to_decompose['empty']))]
         
         # TODO: B4S bug
         [e.previous_element.decompose() for e in soup.select('p + br + p')]
         
+        attrs_to_remove = [
+            'alt', 
+            'title', 
+            'class', 
+            'data-track-category', 
+            'data-track-links',
+            'width', 
+            'height', 
+            'style', 
+            'data-sizes', 
+            'rel', 
+            'data-width', 
+            'type',
+            'cellpadding', 
+            'cellspacing', 
+            'valign', 
+        ] if not context.get('attrs_to_remove') else context.get('attrs_to_remove')
         for e in soup.select('*'):
-            del e['class']
-            del e['data-track-category']
-            del e['data-track-links']
-            del e['width']
-            del e['height']
-            del e['style']
-            del e['data-sizes']
-            del e['rel']
-            del e['data-width']
-            del e['type']
+            [e.pop(a, None) for a in attrs_to_remove]
         
-        attrs_to_remove = ['alt', 'title']
-        for e in soup.select('img'):
-            for a in attrs_to_remove:
-                if e.get(a, '').strip(): del e[a]
-        
-        for e in soup.select('table, td'):
-            del e['cellpadding']
-            del e['cellspacing']
-            del e['valign']
+        for e in soup.select('td p s'):
+            e.parent.parent.string = e.string
         
         for comments in soup.findAll(text=lambda text:isinstance(text, Comment)):
             comments.extract()

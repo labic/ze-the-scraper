@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'ze-the-scraper',
-    version = '0.0.8.dev1',
+    version = '0.0.10.dev1',
     url = 'http://github.com/labic/ze-the-scraper',
     description = 'Scaper to lager portal of news in Brazil.',
     keywords = ['scrapy scraper spider crawler brazil news estadao veja folha-de-sp'],
