@@ -14,12 +14,14 @@ class BasePipeline(object):
 
     @classmethod
     def from_crawler(cls, crawler):
-        return cls(settings = crawler.settings)
+        return cls(settings=crawler.settings, stats=crawler.stats)
+        
+    def __init__(self, settings, stats): raise NotImplementError
 
 
 class MongoPipeline(BasePipeline):
 
-    def __init__(self, settings):
+    def __init__(self, settings, stats):
         self.mongo_uri = settings.get('MONGO_URI'),
         self.mongo_db = settings.get('MONGO_DATABASE', 'ze-the-scraper')
         self.client = None
@@ -50,7 +52,7 @@ class MongoPipeline(BasePipeline):
         return item
 
 
-class GooglePubSubPipeline(object):
+class GooglePubSubPipeline(BasePipeline):
 
     def __init__(self, settings, stats):
         self.google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
