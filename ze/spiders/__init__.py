@@ -41,9 +41,10 @@ class ZeSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = []
+        print(self.args)
         if self.args.get('url'):
             yield scrapy.Request(self.args.get('url'), callback=self.load_article_item)
-        if self.args['search']['engine'] in ['google']:
+        elif self.args['search']['engine'] in ['google']:
             urls = None
             for d in self.allowed_domains:
                 self.args['search']['query'] = '%s site:%s' % (
@@ -77,7 +78,7 @@ class ZeSpider(scrapy.Spider):
     
         def fix_urls(url):
             url = url.replace('/amp/', '') if '/amp/' in url else url
-            url = 'http://'.join(url) if 'http://' not in url else url
+            url = 'http://'.join((url)) if 'http://' not in url else url
             return url
         
         # TODO: implement quantity arg
