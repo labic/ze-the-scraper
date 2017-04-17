@@ -1,6 +1,6 @@
-from scrapy.loader import ItemLoader as IT
+from scrapy.loader import ItemLoader as ScrapyItemLoader
 
-class ItemLoader(IT):
+class ItemLoader(ScrapyItemLoader):
     
     def get_collected_values(self, field_name):
         return (self._values[field_name]
