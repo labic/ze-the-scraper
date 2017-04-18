@@ -7,8 +7,7 @@ class IgSpider(ZeSpider):
     name = 'ig'
     allowed_domains = ['ig.com.br']
     parses = [{
-        "ze.items.creativework.NewsArticleItem": {
-            "parse_method": "parse_news_article_item", 
+        "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [ 
                     "[itemprop=name]::text", 

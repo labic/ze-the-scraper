@@ -112,10 +112,10 @@ class ZeSpider(scrapy.Spider):
         for p in self.parses:
             for i, a in p.items():
                 ItemClass = ze.utils.import_class(i)
-                parse_method = getattr(self, a['parse_method'])
-                yield parse_method(response, ItemClass, a)
+                load_method = getattr(self, a.get('load_method', 'load_item'))
+                yield load_method(response, ItemClass, a)
 
-    def parse_news_article_item(self, response, ItemClass=None, args=None):
+    def load_item(self, response, ItemClass=None, args=None):
         il = ze.items.ItemLoader(item=ItemClass(), response=response)
         
         for field, selectors in args['fields'].items():

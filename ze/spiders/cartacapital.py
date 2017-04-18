@@ -7,8 +7,7 @@ class CartaCapitalSpider(ZeSpider):
     name = 'cartacapital'
     allowed_domains = ['cartacapital.com.br', 'cartaeducacao.com.br']
     parses = [{
-        "ze.items.creativework.NewsArticleItem": {
-            "parse_method": "parse_news_article_item", 
+        "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [ 
                     "[itemprop=name]::text", 

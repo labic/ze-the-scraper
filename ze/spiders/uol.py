@@ -2,13 +2,12 @@
 
 from ze.spiders import ZeSpider
 
-class EstadaoArticlesSpider(ZeSpider):
+class UolSpider(ZeSpider):
 
     name = 'uol'
     allowed_domains = ['uol.com.br']
     parses = [{
-        "ze.items.creativework.NewsArticleItem": {
-            "parse_method": "parse_news_article_item",
+        "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     "[itemprop=name]::text", 

@@ -7,8 +7,7 @@ class VejaSpider(ZeSpider):
     name = 'veja'
     allowed_domains = ['veja.abril.com.br']
     parses = [{
-        "ze.items.creativework.NewsArticleItem": {
-            "parse_method": "parse_news_article_item", 
+        "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [ 
                     "[itemprop=name]::text", 
