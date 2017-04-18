@@ -1,23 +1,39 @@
 # -*- coding: utf-8 -*-
 
-import ze
-from ze.items.article import NewsArticleItem
+from ze.spiders import ZeSpider
 
-class EstadaoArticlesSpider(ze.spiders.ZeSpider):
+class EstadaoArticlesSpider(ZeSpider):
 
     name = 'uol'
     allowed_domains = ['uol.com.br']
-
-    def load_article_item(self, response):
-        l = ze.items.ItemLoader(item=NewsArticleItem(), response=response)
-
-        l.add_css('name', 'h1::text')
-        l.add_css('author', '.autores::text')
-        l.add_css('description', '.definicao::text')
-        l.add_css('datePublished', '.data::text')
-        l.add_css('dateModified', '.data::text')
-        # l.add_css('keywords', '[itemprop=keywords] a::text')
-        l.add_css('articleBody', '.conteudo-materia')
-        l.add_value('url', response.url)
-
-        yield l.load_item()
+    parses = [{
+        "ze.items.creativework.NewsArticleItem": {
+            "parse_method": "parse_news_article_item",
+            "fields": {
+                "name": [
+                    "h1::text"
+                ], 
+                "image": [ 
+                    "[itemprop=image]::attr(content)" 
+                ], 
+                "description": [
+                    ".definicao::text"
+                ],
+                "author": [
+                    ".autores::text"
+                ],
+                "datePublished": [
+                    ".data::text"
+                ],
+                "dateModified": [
+                    ".data::text"
+                ],
+                "articleBody": [
+                    ".conteudo-materia"
+                ], 
+                "keywords": [
+                    "[itemprop=keywords] a::text"  
+                ]
+            }
+        }
+    }]

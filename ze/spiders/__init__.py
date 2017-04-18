@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
 import json
-try:
-    import urlparse
-    from urllib import urlencode
-except: # Python 3
-    import urllib.parse as urlparse
-    from urllib.parse import urlencode
+import urllib.parse
 import scrapy
 from scrapy.http import Request, HtmlResponse
-from scrapy.utils.spider import iterate_spider_output
-from ze.items.article import ArticleItem
+import ze
 
 import GoogleScraper
 
 class ZeSpider(scrapy.Spider):
     
     allowed_domains = []
+    parses = {}
     
     def __init__(self, name=None, **kwargs):
         self.args = kwargs
@@ -31,35 +26,29 @@ class ZeSpider(scrapy.Spider):
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
         for key, value in kwargs.items():
-            try:
-                kwargs[key] = json.loads(value)
-            except Exception:
-                # TODO: Add debug
-                pass
+            try: kwargs[key] = json.loads(value)
+            except Exception: pass # TODO: Add debug
+                
         spider = cls(*args, **kwargs)
         spider._set_crawler(crawler)
         return spider
 
     def start_requests(self):
         urls = []
-        print(self.args)
+        
         if self.args.get('url'):
-            yield scrapy.Request(self.args.get('url'), callback=self.load_article_item)
+            urls.append(self.args.get('url'))
         elif self.args['search']['engine'] in ['google']:
-            urls = None
             for d in self.allowed_domains:
-                self.args['search']['query'] = '%s site:%s' % (
-                    self.args['search']['query'], 
-                    d)
-                self.logger.info('PROFILING: ')
+                self.args['search']['query'] = '%s site:%s' % (self.args['search']['query'], d)
                 urls = self.get_urls_from_search_engine(self.args['search'])
-                
-            for url in urls:
-                yield scrapy.Request(url, callback=self.load_article_item)
         elif self.args['search']['engine'] == 'own':
             self.make_request_from_onw_search_engine()
         else:
             raise ValueError('search.provider is not valid, please search `google` or `own`')
+        
+        for u in urls:
+            yield scrapy.Request(u)
     
     def get_urls_from_search_engine(self, args={}):
         """
@@ -79,7 +68,7 @@ class ZeSpider(scrapy.Spider):
     
         def fix_urls(url):
             url = url.replace('/amp/', '') if '/amp/' in url else url
-            url = 'http://'.join((url)) if 'http://' not in url else url
+            url = urllib.parse.urljoin('http://', url) if 'http://' not in url else url
             return url
         
         # TODO: implement quantity arg
@@ -116,8 +105,23 @@ class ZeSpider(scrapy.Spider):
         
         return urls
 
-    def make_request_from_onw_search_engine(self, args=None):
+    def make_request_from_onw_search_engine(self, args={}):
         raise NotImplementedError
 
-    def load_article_item(self, response, item=ArticleItem):
-        raise NotImplementedError
+    def parse(self, response):
+        for p in self.parses:
+            for i, a in p.items():
+                ItemClass = ze.utils.import_class(i)
+                parse_method = getattr(self, a['parse_method'])
+                yield parse_method(response, ItemClass, a)
+
+    def parse_news_article_item(self, response, ItemClass=None, args=None):
+        il = ze.items.ItemLoader(item=ItemClass(), response=response)
+        
+        for field, selectors in args['fields'].items():
+            for i, s in enumerate(selectors):
+                il.add_css(field, s) if i == 0 else il.add_fallback_css(field, s)
+        
+        il.add_value('url', response.url)
+
+        return il.load_item()

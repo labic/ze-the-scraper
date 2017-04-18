@@ -1,35 +1,46 @@
 # -*- coding: utf-8 -*-
 
-import ze
-from ze.items.article import NewsArticleItem
+from ze.spiders import ZeSpider
 
-class FolhaDeSaoPauloSpider(ze.spiders.ZeSpider):
+class FolhaDeSaoPauloSpider(ZeSpider):
 
     name = 'folhadesp'
     allowed_domains = ['folha.uol.com.br']
-
-    def load_article_item(self, response):
-        l = ze.items.ItemLoader(item=NewsArticleItem(), response=response)
-
-        l.add_css('name', '[itemprop=headline]::text')
-        l.add_fallback_css('name', '[itemprop="alternativeHeadline"]::attr(content)')
-        l.add_fallback_css('name', 'article header h1::text')
-        l.add_css('image', '[itemprop="image"]::attr(content)')
-        l.add_css('author', '[itemprop=author]::text')
-        l.add_fallback_css('author', '.author p::text')
-        l.add_css('description', '[itemprop=description]::text')
-        l.add_css('datePublished', '[itemprop=datePublished]::text')
-        l.add_fallback_css('datePublished', 'article time::text')
-        l.add_css('dateModified', '[itemprop=dateModified]::text')
-        l.add_css('keywords', '[itemprop="keywords"]::attr(content)')
-        l.add_css('articleBody', '[itemprop=articleBody]')
-        l.add_fallback_css('articleBody', '.content')
-        # TODO: Add publisher
-        l.add_value('url', response.url)
-        
-        if 'blog' in response.url:
-            l.add_value('sources_types', ('portal', 'blog'))
-        else:
-            l.add_value('sources_types', ('portal'))
-
-        yield l.load_item()
+    parses = [{
+        "ze.items.creativework.NewsArticleItem": {
+            "parse_method": "parse_news_article_item", 
+            "fields": { 
+                "name": [ 
+                    "[itemprop=headline]::text", 
+                    "[itemprop=alternativeHeadline]::attr(content)", 
+                    "article header h1::text" 
+                ], 
+                "image": [ 
+                    "[itemprop=image]::attr(content)" 
+                ], 
+                "description": [ 
+                    "[itemprop=description]::text", 
+                    ".documentDescription::text" 
+                ], 
+                "author": [
+                    "[itemprop=author]::text", 
+                    ".author p::text"
+                ], 
+                "datePublished": [
+                    "[itemprop=datePublished]::text",
+                    "article time::text"
+                ], 
+                "dateModified": [
+                    "[itemprop=dateModified]::text"
+                ], 
+                "articleBody": [
+                    "[itemprop=articleBody]",
+                    ".content" 
+                ], 
+                "keywords": [
+                    "[itemprop=keywords]::text", 
+                    "[itemprop=keywords]::attr(content)"
+                ]
+            }
+        }
+    }]
