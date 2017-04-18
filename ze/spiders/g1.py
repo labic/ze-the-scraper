@@ -11,7 +11,7 @@ class EstadaoArticlesSpider(ZeSpider):
             "parse_method": "parse_news_article_item", 
             "fields": { 
                 "name": [ 
-                    "[itemprop=headline]::text", 
+                    "[itemprop=name]::text", 
                     ".content-head__title::text" 
                 ], 
                 "image": [ 

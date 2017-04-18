@@ -11,28 +11,35 @@ class EstadaoArticlesSpider(ZeSpider):
             "parse_method": "parse_news_article_item",
             "fields": {
                 "name": [
-                    "h1::text"
+                    "[itemprop=name]::text", 
+                    ".post-title::text", 
+                    "#main-content h1::text", 
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)" 
                 ], 
                 "description": [
-                    ".definicao::text"
+                    "[itemprop=description]::text", 
+                    ".post-sub-title::text"
                 ],
                 "author": [
-                    ".autores::text"
+                    "[itemprop=author]::text", 
+                    ".post-meta span::text", 
+                    ".autores::text", 
                 ],
                 "datePublished": [
-                    ".data::text"
+                    "[itemprop=datePublished]::text" 
                 ],
                 "dateModified": [
-                    ".data::text"
+                    "[itemprop=dateModified]::text" 
                 ],
                 "articleBody": [
-                    ".conteudo-materia"
+                    "[itemprop=articleBody]",
+                    ".entry"
                 ], 
                 "keywords": [
-                    "[itemprop=keywords] a::text"  
+                    "[itemprop=keywords] a::text", 
+                    "[class^=pagina-atual]" 
                 ]
             }
         }

@@ -11,7 +11,7 @@ class VejaSpider(ZeSpider):
             "parse_method": "parse_news_article_item", 
             "fields": { 
                 "name": [ 
-                    "[itemprop=headline]::text", 
+                    "[itemprop=name]::text", 
                     ".article-title::text" 
                 ], 
                 "image": [ 

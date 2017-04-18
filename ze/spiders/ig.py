@@ -11,7 +11,7 @@ class IgSpider(ZeSpider):
             "parse_method": "parse_news_article_item", 
             "fields": { 
                 "name": [ 
-                    "[itemprop=headline]::text", 
+                    "[itemprop=name]::text", 
                     "#noticia-titulo-h1::text" 
                 ], 
                 "image": [ 

@@ -11,7 +11,7 @@ class FolhaDeSaoPauloSpider(ZeSpider):
             "parse_method": "parse_news_article_item", 
             "fields": { 
                 "name": [ 
-                    "[itemprop=headline]::text", 
+                    "[itemprop=name]::text", 
                     "[itemprop=alternativeHeadline]::attr(content)", 
                     "article header h1::text" 
                 ], 
