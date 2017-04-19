@@ -3,12 +3,12 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'ze-the-scraper',
-    version = '0.0.17.dev1',
+    version = '0.0.19.dev1',
     url = 'http://github.com/labic/ze-the-scraper',
     description = 'Scaper to lager portal of news in Brazil.',
     keywords = ['scrapy scraper spider crawler brazil news estadao veja folha-de-sp'],
     author = '@gustavorps, @ligiaiv',
-    author_email = 'email+labic.net@gustavorps.net, ',
+    author_email = 'email+labic.net@gustavorps.net, ligiaiv@gmail.com',
     license = 'MIT',
     packages = find_packages(),
     entry_points = {'scrapy': ['settings = ze.settings']},
