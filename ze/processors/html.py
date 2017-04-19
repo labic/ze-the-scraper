@@ -67,6 +67,7 @@ class CleanHTML(object):
             '.content-intertitle', 
             '.td-post-content', 
             '.td-post-featured-image', 
+            '[data-block-type=unstyled]', 
             '[itemprop="articleBody"]', 
         ] if not context.get('el_to_uwrap') else context.get('el_to_uwrap')
         [e.unwrap() for e in html.select(','.join(el_to_uwrap))]
@@ -99,6 +100,7 @@ class CleanHTML(object):
             'alt', 
             'title', 
             'class', 
+            'data-block-type', 
             'data-track-category', 
             'data-track-links',
             'width', 
@@ -116,13 +118,11 @@ class CleanHTML(object):
             for a in attrs_to_remove:
                 if t.has_attr(a): del t[a] 
                 else: pass
-                
         
         for e in html.select('td p s'):
             e.parent.parent.string = e.string
         
-        for comments in html.findAll(text=lambda text:isinstance(text, Comment)):
-            comments.extract()
+        [c.extract() for c in html.findAll(text=lambda text:isinstance(text, Comment))]
         
         value = html.prettify()
         # print(value)
