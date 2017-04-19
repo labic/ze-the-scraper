@@ -39,8 +39,9 @@ class CartaCapitalSpider(ZeSpider):
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
-                    "[property=rnews:keywords] a::text", 
-                    "#category .link-category a::text" 
+                    "[property='rnews:keywords']::text", 
+                    "[rel='tag']::text", 
+                    "#category .link-category::text" 
                 ]
             }
         }
