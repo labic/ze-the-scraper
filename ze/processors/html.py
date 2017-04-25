@@ -10,9 +10,11 @@ logger = logging.getLogger(__name__)
 class CleanHTML(object):
     
     estadao_media_url = 'http://mdw-mm.estadao.com.br/middlewareAgile/rest/conteudo?tipo_midia={tipo}&idAgile={id}&produto=estadao'
-
+    
     def __call__(self, value, context={}):
+        self.stats = context.get('crawler_stats')
         html = BeautifulSoup(value, 'html.parser')
+        html_old = html.prettify()
         
         # cartacapital
         for el in html.select('.image-inline'):
@@ -96,9 +98,9 @@ class CleanHTML(object):
             
             el.replace_with(fg)
         
-        for el in html.select('.documento'):
-            [el.decompose() for el in el.select('span')]
-            el.select('h3')[0].name = 'strong'
+        # for el in html.select('.documento'):
+        #     [e.decompose() for eLin el.select('span')]
+        #     el.select('h3')[0].name = 'strong'
         
         # All
         for el in html.select('.wp-caption'):
@@ -157,7 +159,7 @@ class CleanHTML(object):
             'empty': ['p', 'div',]
         } if not context.get('el_to_decompose') else context.get('el_to_decompose')
         [el.decompose() for el in html.select(','.join(el_to_decompose['geral']))]
-        [el.decompose() for el in html.select(','.join(el_to_decompose['empty'])) if not el.string]
+        [el.decompose() for el in html.select(','.join(el_to_decompose['empty'])) if not el.contents]
         
         # TODO: B4S bug
         [el.previous_element.decompose() for el in html.select('p + br + p')]
@@ -195,4 +197,6 @@ class CleanHTML(object):
         
         [c.extract() for c in html.findAll(text=lambda text:isinstance(text, Comment))]
         
-        return html.prettify()
+        html_new = html.prettify()
+        
+        return html_new
