@@ -15,19 +15,6 @@ class VejaSpider(ZeSpider):
                 ],
                 "image": [
                     "[itemprop=image]::attr(content)",
-                    "[property='og:image']::attr(content)"
-                ],
-                "description": [
-                    "[itemprop=description]::text",
-                    ".article-subtitle::text",
-                ],
-            "fields": {
-                "name": [
-                    "[itemprop=name]::text",
-                    ".article-title::text"
-                ],
-                "image": [
-                    "[itemprop=image]::attr(content)",
                     "[property=og:image]::attr(content)"
                 ],
                 "description": [
@@ -57,5 +44,4 @@ class VejaSpider(ZeSpider):
                 ]
             }
         }
-    }
     }]
