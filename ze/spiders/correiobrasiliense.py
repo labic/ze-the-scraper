@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import math
-try:
-    import urlparse
-    from urllib import urlencode
-except: # Python 3
-    import urllib.parse as urlparse
-    from urllib.parse import urlencode
-import scrapy
-from scrapy.spiders import CrawlSpider, Rule
-from scrapy.loader import ItemLoader
-from scrapy.exceptions import CloseSpider
-from ze.items.article import ArticleItem, ArticleItemLoader
+<<<<<<< HEAD
 
-class CorreioBrasilienseSpider(scrapy.Spider):
-
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
     config = {
-        'defaultSearchlUrl': '',
+//3        'defaultSearchlUrl': '',
         'ajaxSearchUrl': '',
         'args': None
     }
@@ -139,3 +124,52 @@ class CorreioBrasilienseSpider(scrapy.Spider):
         url_parts[4] = urlencode(params)
 
         return urlparse.urlunparse(url_parts)
+=======
+from ze.spiders import ZeSpider
+
+class CorreioBrasilienseSpider(ZeSpider):
+
+    name = 'correiobraziliense'
+    allowed_domains = ['correiobraziliense.com.br']
+    parses = [{
+        "ze.items.creativework.ArticleItem": {
+            "fields": {
+                "name":[
+                    '[itemprop=headline]::text',
+                    '.title-post::text'
+                ],
+                "image":[
+                    # '[itemprop="image" img::attr(src)]',
+                    '.lazy::attr("data-lazy-src")'
+                ],
+                "description":[
+                    '[itemprop=description]::attr(content)',
+                    '[itemprop=description]::text'
+                ],
+                "author":[
+                    '[itemprop=author]::text',
+                    '.author a::text',
+                    '.autor_casa::text'
+                ],
+                "datePublished":[
+                    '[itemprop=datePublished]::attr(content)',
+                    '.entry-date::text'
+
+                ],
+                "dateModified":[
+                    '[itemprop=dateModified]::attr(content)'
+                ],
+                "articleBody":[
+                    '[itemprop=articleBody]',
+                    '.entry-content'
+
+                ],
+                "keywords":[
+                    '[itemprop=keywords] a::text',
+                    '[rel=tag]::text',
+                    '[onclick*=montaURL]::text'
+                ]
+            }
+        }
+    }]
+>>>>>>> develop

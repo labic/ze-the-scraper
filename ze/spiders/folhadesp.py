@@ -2,16 +2,17 @@
 
 from ze.spiders import ZeSpider
 
-class G1Spider(ZeSpider):
+class FolhaDeSaoPauloSpider(ZeSpider):
 
-    name = 'g1'
-    allowed_domains = ['g1.globo.com']
+    name = 'folhadesp'
+    allowed_domains = ['folha.uol.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [ 
                     "[itemprop=name]::text", 
-                    ".content-head__title::text" 
+                    "[itemprop=alternativeHeadline]::attr(content)", 
+                    "article header h1::text" 
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)", 
@@ -19,28 +20,26 @@ class G1Spider(ZeSpider):
                 ], 
                 "description": [ 
                     "[itemprop=description]::text", 
-                    "[itemprop=alternativeHeadline]::text", 
-                    ".content-head__subtitle::text" 
+                    ".documentDescription::text" 
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
-                    "[itemprop=creator]::text"
+                    ".author p::text"
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    "[itemprop=datePublished]::attr(datetime)"
+                    "article time::text"
                 ], 
                 "dateModified": [
-                    "[itemprop=dateModified]::text", 
-                    "[itemprop=dateModified]::attr(datetime)" 
+                    "[itemprop=dateModified]::text"
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".mc-body" 
+                    ".content" 
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
-                    ".entities__list-itemLink::text"
+                    "[itemprop=keywords]::attr(content)"
                 ]
             }
         }

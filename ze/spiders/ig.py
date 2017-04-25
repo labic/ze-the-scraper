@@ -2,16 +2,16 @@
 
 from ze.spiders import ZeSpider
 
-class G1Spider(ZeSpider):
+class IgSpider(ZeSpider):
 
-    name = 'g1'
-    allowed_domains = ['g1.globo.com']
+    name = 'ig'
+    allowed_domains = ['ig.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [ 
                     "[itemprop=name]::text", 
-                    ".content-head__title::text" 
+                    "#noticia-titulo-h1::text" 
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)", 
@@ -19,16 +19,18 @@ class G1Spider(ZeSpider):
                 ], 
                 "description": [ 
                     "[itemprop=description]::text", 
-                    "[itemprop=alternativeHeadline]::text", 
-                    ".content-head__subtitle::text" 
+                    "[property=description]::attr(content)", 
+                    "[property=og:description]::attr(content)" 
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
-                    "[itemprop=creator]::text"
+                    "[itemprop=creator] [itemprop=name]::text",
+                    "#authors-box::text",
+                    "#authors-box strong::text"
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    "[itemprop=datePublished]::attr(datetime)"
+                    "[property=article:published_time]::attr(content)"
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::text", 
@@ -36,11 +38,11 @@ class G1Spider(ZeSpider):
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".mc-body" 
+                    "#noticia" 
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
-                    ".entities__list-itemLink::text"
+                    "[name=news_keywords]::attr(content)"
                 ]
             }
         }

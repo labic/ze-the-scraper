@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import ze.utils.file
 
 # Scrapy settings for ze module
 #
@@ -9,6 +10,7 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
+PROJECT_NAME = 'ze-the-scraper'
 SPIDER_MODULES = ['ze.spiders']
 NEWSPIDER_MODULE = 'ze.spiders'
 
@@ -42,27 +44,44 @@ CONCURRENT_REQUESTS_PER_IP=16
 
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'ze.middlewares.MyCustomSpiderMiddleware': 543,
-#}
+# SPIDER_MIDDLEWARES = {
+#     'ze.middlewares.somemiddkeware': 100,
+# }
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'ze.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+#     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+#     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+}
 
+# ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
+
+GOOGLE_CLOUD_ENABLED = True
+# Google Cloud Application Credentions used for many pipelines
+GOOGLE_APPLICATION_CREDENTIALS_JSON = ''
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.telnet.TelnetConsole': None,
-#}
+EXTENSIONS = {
+    'ze.extensions.google.GoogleCloud': 10
+}
+
+# MongoDB pipeline configuration
+MONGO_URI = None
+MONGO_DATABASE = None
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'ze.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'ze.pipelines.GooglePubSubPipeline': 300,
+    # 'ze.pipelines.MongoPipeline': 310,
+}
+
+SPIDER_CONTRACTS = {
+    'scrapy.contracts.default.UrlContract': 10,
+    'scrapy.contracts.default.ReturnsContract': 20,
+    'scrapy.contracts.default.ScrapesContract': 30,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

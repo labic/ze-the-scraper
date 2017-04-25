@@ -2,16 +2,16 @@
 
 from ze.spiders import ZeSpider
 
-class G1Spider(ZeSpider):
+class CartaCapitalSpider(ZeSpider):
 
-    name = 'g1'
-    allowed_domains = ['g1.globo.com']
+    name = 'cartacapital'
+    allowed_domains = ['cartacapital.com.br', 'cartaeducacao.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [ 
                     "[itemprop=name]::text", 
-                    ".content-head__title::text" 
+                    ".documentFirstHeading::text" 
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)", 
@@ -19,28 +19,29 @@ class G1Spider(ZeSpider):
                 ], 
                 "description": [ 
                     "[itemprop=description]::text", 
-                    "[itemprop=alternativeHeadline]::text", 
-                    ".content-head__subtitle::text" 
+                    ".documentDescription::text" 
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
-                    "[itemprop=creator]::text"
+                    ".documentAuthor a::text"
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    "[itemprop=datePublished]::attr(datetime)"
+                    ".documentPublished::text"
                 ], 
                 "dateModified": [
-                    "[itemprop=dateModified]::text", 
-                    "[itemprop=dateModified]::attr(datetime)" 
+                    "[itemprop=dateModified]::text"
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".mc-body" 
+                    "#content-core",
+                    ".td-post-content",
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
-                    ".entities__list-itemLink::text"
+                    "[property='rnews:keywords']::text", 
+                    "[rel='tag']::text", 
+                    "#category .link-category::text" 
                 ]
             }
         }
