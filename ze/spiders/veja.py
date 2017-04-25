@@ -3,7 +3,7 @@
 from ze.spiders import ZeSpider
 
 class VejaSpider(ZeSpider):
-    
+
     name = 'veja'
     allowed_domains = ['veja.abril.com.br']
     parses = [{
@@ -22,24 +22,25 @@ class VejaSpider(ZeSpider):
                     ".article-subtitle::text",  
                 ], 
                 "author": [
-                    "[itemprop=author]::text", 
-                    ".article-author span strong::text", 
-                ], 
+                    "[itemprop=author]::text",
+                    ".article-author span strong::text",
+                ],
                 "datePublished": [
                     "[itemprop=datePublished]::text",
                     ".article-date span::text"
-                ], 
+                    ".entry-date::text"
+                ],
                 "dateModified": [
-                    "[itemprop=dateModified]::text", 
-                    ".article-date span::text" 
-                ], 
+                    "[itemprop=dateModified]::text",
+                    ".article-date span::text"
+                ],
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".article-content" 
-                ], 
+                    ".article-content"
+                ],
                 "keywords": [
-                    "[itemprop=keywords]::text", 
-                    ".article-tags a::text" 
+                    "[itemprop=keywords]::text",
+                    ".article-tags a::text"
                 ]
             }
         }
