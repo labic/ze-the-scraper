@@ -112,7 +112,7 @@ class ZeSpider(scrapy.Spider):
         for p in self.parses:
             for i, a in p.items():
                 ItemClass = ze.utils.import_class(i)
-                load_method = getattr(self, a.get('load_method', 'load_item'))
+                load_method = self[a.get('load_method')] if a.get('load_method') else self.load_item
                 yield load_method(response, ItemClass, a)
 
     def load_item(self, response, ItemClass=None, args=None):

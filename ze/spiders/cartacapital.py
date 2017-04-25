@@ -14,7 +14,8 @@ class CartaCapitalSpider(ZeSpider):
                     ".documentFirstHeading::text" 
                 ], 
                 "image": [ 
-                    "[itemprop=image]::attr(content)" 
+                    "[itemprop=image]::attr(content)", 
+                    "[property='og:image']::attr(content)" 
                 ], 
                 "description": [ 
                     "[itemprop=description]::text", 
@@ -38,8 +39,9 @@ class CartaCapitalSpider(ZeSpider):
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
-                    "[property=rnews:keywords] a::text", 
-                    "#category .link-category a::text" 
+                    "[property='rnews:keywords']::text", 
+                    "[rel='tag']::text", 
+                    "#category .link-category::text" 
                 ]
             }
         }

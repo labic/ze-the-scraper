@@ -15,7 +15,7 @@ class IgSpider(ZeSpider):
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)", 
-                    "[property=og:image]::attr(content)" 
+                    "[property='og:image']::attr(content)" 
                 ], 
                 "description": [ 
                     "[itemprop=description]::text", 
