@@ -8,14 +8,13 @@ from bs4 import BeautifulSoup, Comment
 logger = logging.getLogger(__name__)
 
 class CleanHTML(object):
-    
+
     estadao_media_url = 'http://mdw-mm.estadao.com.br/middlewareAgile/rest/conteudo?tipo_midia={tipo}&idAgile={id}&produto=estadao'
-    
+
     def __call__(self, value, context={}):
         self.stats = context.get('crawler_stats')
         html = BeautifulSoup(value, 'html.parser')
-        html_old = html.prettify()
-        
+
         # cartacapital
         for el in html.select('.image-inline'):
             fg = html.new_tag('figure')

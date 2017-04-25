@@ -8,19 +8,32 @@ class VejaSpider(ZeSpider):
     allowed_domains = ['veja.abril.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
-            "fields": { 
-                "name": [ 
-                    "[itemprop=name]::text", 
-                    ".article-title::text" 
-                ], 
-                "image": [ 
-                    "[itemprop=image]::attr(content)", 
-                    "[property='og:image']::attr(content)" 
-                ], 
-                "description": [ 
-                    "[itemprop=description]::text", 
-                    ".article-subtitle::text",  
-                ], 
+            "fields": {
+                "name": [
+                    "[itemprop=name]::text",
+                    ".article-title::text"
+                ],
+                "image": [
+                    "[itemprop=image]::attr(content)",
+                    "[property='og:image']::attr(content)"
+                ],
+                "description": [
+                    "[itemprop=description]::text",
+                    ".article-subtitle::text",
+                ],
+            "fields": {
+                "name": [
+                    "[itemprop=name]::text",
+                    ".article-title::text"
+                ],
+                "image": [
+                    "[itemprop=image]::attr(content)",
+                    "[property=og:image]::attr(content)"
+                ],
+                "description": [
+                    "[itemprop=description]::text",
+                    ".article-subtitle::text",
+                ],
                 "author": [
                     "[itemprop=author]::text",
                     ".article-author span strong::text",
@@ -44,4 +57,5 @@ class VejaSpider(ZeSpider):
                 ]
             }
         }
+    }
     }]

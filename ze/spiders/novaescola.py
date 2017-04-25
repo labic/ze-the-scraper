@@ -9,37 +9,35 @@ class NovaEscolaSpider(ZeSpider):
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
-                "name":[
+                "name": [
                     '[itemprop=headline]::text',
                     '.materia h1::text'
                 ],
-                "image":[
-                    # '[itemprop="image" img::attr(src)]',
-                    # '.wp-caption img::attr(src)'
+                "image": [
+                    '[itemprop="image"] img::attr(src)',
                     '.image img::attr(src)'
                 ],
-                "description":[
+                "description": [
                     '[itemprop=description]::attr(content)',
                     '[itemprop=description]::text',
                     '.resumo h2::text'
                 ],
-                "author":[
+                "author": [
                     '[itemprop=author]::text',
                     '.autor-nome::text'
                 ],
-                "datePublished":[
+                "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
                     '.data::text'
                 ],
-                "dateModified":[
+                "dateModified": [
                     '[itemprop=dateModified]::attr(content)'
                 ],
-                "articleBody":[
+                "articleBody": [
                     '[itemprop=articleBody]',
                     '.texto'
-
                 ],
-                "keywords":[
+                "keywords": [
                     '[itemprop=keywords] a::text',
                     '[rel=tag]::text',
                     '[onclick*=montaURL]::text'
