@@ -9,6 +9,7 @@ include/
 lib/
 logs/
 selenium/
+.scrapy/
 .scrapecache/
 scrapinghub.yml
 *.csv

@@ -2,13 +2,11 @@
 
 import os
 import json
+import logging; logger = logging.getLogger(__name__)
 from google.cloud import pubsub
 from pymongo import MongoClient
 import scrapy
 from scrapy.selector import Selector
-import logging
-logger = logging.getLogger(__name__)
-
 
 class BasePipeline(object):
 
@@ -79,7 +77,7 @@ class GooglePubSubPipeline(BasePipeline):
                 if not self.topic.exists():
                     self.topic.create()
             except Exception as e:
-                logger.error('Failed to get or create topic in Google Cloud Pub/Sub: %s' % e)
+                logger.warning('Failed to get or create topic in Google Cloud Pub/Sub: %s' % e)
 
 
     def process_item(self, item, spider):
