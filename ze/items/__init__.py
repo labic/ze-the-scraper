@@ -35,22 +35,16 @@ class ThingItem(Item):
     disambiguatingDescription = Field(
         output_processor=TakeFirst(),
     )
-    identifier = Field(
-        output_processor=TakeFirst(),
-    )
+    identifier = Field()
     image = Field()
-    mainEntityOfPage = Field(
-        output_processor=TakeFirst(),
-    )
+    mainEntityOfPage = Field()
     name = Field(
         output_processor=TakeFirst(),
     )
     potentialAction = Field(
         output_processor=TakeFirst(),
     )
-    sameAs = Field(
-        output_processor=TakeFirst(),
-    )
+    sameAs = Field()
     url = Field(
         output_processor=TakeFirst(),
     )
