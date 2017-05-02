@@ -7,6 +7,8 @@ from ze.items import CreativeWorkItem
 from ze.processors.article import ArticleProcessor
 from ze.processors.common import CommonProcessor
 from ze.processors.html import CleanHTML
+from ze.items import CreativeWorkItem
+
 
 class ArticleItem(CreativeWorkItem):
     
@@ -19,10 +21,14 @@ class ArticleItem(CreativeWorkItem):
                 self[k] = v
 
     articleBody = Field(
-        input_processor=MapCompose(
-            CleanHTML(),
-        ),
-        output_processor=TakeFirst(),
+        serializer=dict, 
+        input_processor=MapCompose(CleanHTML(),),
+        output_processor=TakeFirst(), 
+        schemas={
+            'avro': {
+                'field_type': 'STRING', 
+            }, 
+        }
     )
     articleSection = Field()
     pageEnd = Field()

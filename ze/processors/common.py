@@ -26,10 +26,10 @@ class CommonProcessor():
             return dateparser.parse(value, 
                         date_formats=['%d %B %Y %H:%M'], 
                         languages=['pt']) \
-                        .isoformat()
+                        .strftime('%Y-%m-%d %H:%M')
         except Exception as e:
             logger.warning('Date %s not processed with none of formats: %s' % (value, ', '.join(date_formats)))
-            pass
+            return None
 
         return value
 

@@ -70,11 +70,14 @@ EXTENSIONS = {
 MONGO_URI = None
 MONGO_DATABASE = None
 
+# Google BigQuery pipeline configuration
+GC_BIGQUERY_DATASET = ''
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'ze.pipelines.GooglePubSubPipeline': 300,
-    # 'ze.pipelines.MongoPipeline': 310,
+    # 'ze.pipelines.GooglePubSubPipeline': 300,
+    'ze.pipelines.GoogleBigQueryPipeline': 400,
+    # 'ze.pipelines.MongoPipeline': 500,
 }
 
 SPIDER_CONTRACTS = {
