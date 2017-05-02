@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os, logging; logger = logging.getLogger(__name__)
-# from google.cloud.bigquery.schema import SchemaField
-
+from scrapy.utils.project import data_path
 
 class GoogleCloud(object):
-    credentials_json_file = '../service-account.json'
+    credentials_json_path = ''.join((data_path('auth/', True), 'google-service-account.json'))
     
     @classmethod
     def from_crawler(cls, crawler):
@@ -17,10 +16,11 @@ class GoogleCloud(object):
         if self.google_cloud_enabled:
             credentials_json = settings.get('GOOGLE_APPLICATION_CREDENTIALS_JSON')
             if credentials_json:
-                with open(self.credentials_json_file, 'w') as outfile:
-                    outfile.write(credentials_json)
+                if not os.path.isfile(self.credentials_json_path):
+                    with open(self.credentials_json_path, 'w') as outfile:
+                        outfile.write(credentials_json)
                     
-                os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.credentials_json_file
+                os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.credentials_json_path
                 logger.info('Google Cloud extensions inited with success')
             else:
                 logger.error('GOOGLE_APPLICATION_CREDENTIALS_JSON not is set in settings')
@@ -30,4 +30,4 @@ class GoogleCloud(object):
 
     def close_spider(self, spider):
         if self.google_cloud_enabled:
-            os.remove(self.credentials_json_file)
+            os.remove(self.credentials_json_path)

@@ -123,7 +123,7 @@ class GoogleBigQueryPipeline(BasePipeline):
                     
                     self.tables[table_name] = table
                 
-                errors = table.insert_data([[item.get(c.name, None) for c in table_schema]])
+                errors = table.insert_data([[item.get(c.name, None) for c in table.schema]])
                 
                 self.stats.inc_value('google/bigquery/insert_count') if not errors else None
                 self.stats.inc_value('google/bigquery/erros_count') if errors else None

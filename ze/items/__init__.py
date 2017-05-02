@@ -20,6 +20,21 @@ class ItemLoader(ScrapyItemLoader):
     def add_fallback_xpath(self, field_name, css, *processors, **kw):
         if not any(self.get_collected_values(field_name)):
             self.add_xpath(field_name, css, *processors, **kw)
+    
+    def load_item(self):
+        item = self.item
+        
+        for field_name in tuple(self._values):
+            value = self.get_output_value(field_name)
+            if value is not None:
+                item[field_name] = value
+        
+        for field_name in self.item.fields:
+            default_value = self.item.fields[field_name].get('default')
+            if not item.get(field_name) and default_value:
+                item[field_name] = self.item.fields[field_name].get('default')
+
+        return item
 
 
 class ThingItem(Item):
@@ -45,10 +60,10 @@ class ThingItem(Item):
         output_processor=TakeFirst(),
     )
     image = Field(
+        default=['null'], 
         schemas={
             'avro': {
                 'field_type': 'STRING', 
-                'mode': 'REPEATED', 
             }, 
         }
     )
@@ -108,6 +123,7 @@ class CreativeWorkItem(ThingItem):
     audience = Field()
     audio = Field()
     author = Field(
+        default=[{'type': None, 'name': None}], 
         input_processor=MapCompose(
             ArticleProcessor.process_authors
         ), 

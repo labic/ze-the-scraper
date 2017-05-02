@@ -15,13 +15,13 @@ class ArticleItem(CreativeWorkItem):
     def __init__(self, *args, **kwargs):
         self._values = {}
         # TODO: Refactor this!
-        self.__class__.__name__ = 'article'
+        self.__class__.__name__ = 'articles'
         if args or kwargs:  # avoid creating dict for most common case
             for k, v in six.iteritems(dict(*args, **kwargs)):
                 self[k] = v
 
     articleBody = Field(
-        serializer=dict, 
+        default=None, 
         input_processor=MapCompose(CleanHTML(),),
         output_processor=TakeFirst(), 
         schemas={
