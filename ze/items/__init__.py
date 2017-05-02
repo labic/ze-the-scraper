@@ -1,9 +1,10 @@
 from scrapy import Item, Field
 from scrapy.loader import ItemLoader as ScrapyItemLoader
-from scrapy.loader.processors import TakeFirst, MapCompose
+from scrapy.loader.processors import Join, TakeFirst, MapCompose
 from ze.processors.article import ArticleProcessor
 from ze.processors.common import CommonProcessor
 from ze.processors.html import CleanHTML
+from ze.processors.schema import AuthorProcessor
 
 class ItemLoader(ScrapyItemLoader):
     
@@ -31,6 +32,11 @@ class ThingItem(Item):
     )
     description = Field(
         output_processor=TakeFirst(),
+        schemas={
+            'avro': {
+                'field_type': 'STRING', 
+            }, 
+        }
     )
     disambiguatingDescription = Field(
         output_processor=TakeFirst(),
@@ -38,25 +44,56 @@ class ThingItem(Item):
     identifier = Field(
         output_processor=TakeFirst(),
     )
-    image = Field()
+    image = Field(
+        schemas={
+            'avro': {
+                'field_type': 'STRING', 
+                'mode': 'REPEATED', 
+            }, 
+        }
+    )
     mainEntityOfPage = Field(
         output_processor=TakeFirst(),
     )
     name = Field(
         output_processor=TakeFirst(),
+        schemas ={
+            'avro': {
+                'field_type': 'STRING', 
+            }, 
+        }
     )
     potentialAction = Field(
         output_processor=TakeFirst(),
     )
     sameAs = Field(
         output_processor=TakeFirst(),
+        # schemas = {
+        #     'avro': {
+        #         'field_type': 'STRING',
+        #         'mode': 'REPEATED',
+        #     }, 
+        # }
     )
     url = Field(
         output_processor=TakeFirst(),
+        schemas={
+            'avro': {
+                'field_type': 'STRING', 
+            }, 
+        }
     )
 
+
 class CreativeWorkItem(ThingItem):
-    about = Field()
+    about = Field(
+        # schemas={
+        #     'avro': {
+        #         'field_type': 'STRING', 
+        #         'mode': 'REPEATED', 
+        #     }, 
+        # }
+    )
     accessMode = Field()
     accessModeSufficient = Field()
     accessibilityAPI = Field()
@@ -73,14 +110,33 @@ class CreativeWorkItem(ThingItem):
     author = Field(
         input_processor=MapCompose(
             ArticleProcessor.process_authors
-        )
+        ), 
+        output_processor=AuthorProcessor(),
+        schemas = {
+            'avro': {
+                'field_type': 'RECORD', 
+                'mode': 'REPEATED', 
+                'fields': ({
+                    'name': 'name', 
+                    'field_type': 'STRING', 
+                },{
+                    'name': 'type', 
+                    'field_type': 'STRING', 
+                })
+            }, 
+        }
     )
     award = Field()
     character = Field()
     citation = Field()
     comment = Field()
     commentCount = Field(
-        output_processor=TakeFirst(),
+        output_processor = TakeFirst(),
+        # schemas={
+        #     'avro': {
+        #         'field_type': 'INTEGER', 
+        #     }, 
+        # }
     )
     contentLocation = Field()
     contentRating = Field()
@@ -88,18 +144,34 @@ class CreativeWorkItem(ThingItem):
     copyrightHolder = Field()
     copyrightYear = Field()
     creator = Field()
-    dateCreated = Field()
+    dateCreated = Field(
+        # schemas = {
+        #     'avro': {
+        #         'field_type': 'TIMESTAMP', 
+        #     }, 
+        # }
+    )
     dateModified = Field(
         input_processor=MapCompose(
             CommonProcessor.process_date_time
         ),
         output_processor=TakeFirst(),
+        # schemas = {
+        #     'avro': {
+        #         'field_type': 'TIMESTAMP', 
+        #     }, 
+        # }
     )
     datePublished = Field(
         input_processor=MapCompose(
             CommonProcessor.process_date_time
         ),
         output_processor=TakeFirst(),
+        schemas={
+            'avro': {
+                'field_type': 'TIMESTAMP',
+            }
+        }
     )
     discussionUrl = Field()
     editor = Field()
@@ -113,7 +185,38 @@ class CreativeWorkItem(ThingItem):
     hasPart = Field()
     headline = Field()
     inLanguage = Field()
-    interactionStatistic = Field()
+    interactionStatistic = Field(
+        # schemas={
+        #     'avro': {
+        #         'field_type': 'RECORD',
+        #         'mode': 'REPEATED',
+        #         'fields': [{ 
+        #                 'name': 'interactionType',
+        #                 'field_type': 'STRING',
+        #             },{
+        #                 'name': 'userInteractionCount',
+        #                 'field_type': 'INTEGER',
+        #             },{ 
+        #                 'name': 'type',
+        #                 'field_type': 'STRING',
+        #             },{
+        #                 'name': 'interactionService',
+        #                 'field_type': 'RECORD',
+        #                 'mode': 'REPEATED',
+        #                 'fields': [{ 
+        #                         'name': 'url',
+        #                         'field_type': 'STRING',
+        #                     },{ 
+        #                         'name': 'name',
+        #                         'field_type': 'STRING',
+        #                     },{ 
+        #                         'name': 'type',
+        #                         'field_type': 'STRING',
+        #                 }]
+        #         }]
+        #     }
+        # }
+    )
     interactivityType = Field()
     isAccessibleForFree = Field()
     isBasedOn = Field()
@@ -122,7 +225,13 @@ class CreativeWorkItem(ThingItem):
     keywords = Field(
         input_processor=MapCompose(
             ArticleProcessor.process_keywords
-        )
+        ),
+        output_processor=Join(','),
+        schemas={
+            'avro': {
+                'field_type': 'STRING'
+            }
+        }
     )
     learningResourceType = Field()
     license = Field()

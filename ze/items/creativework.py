@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 
 from scrapy import Field
-from ze.items import CreativeWorkItem
 from scrapy.loader.processors import TakeFirst, MapCompose
 from ze.processors.article import ArticleProcessor
 from ze.processors.common import CommonProcessor
 from ze.processors.html import CleanHTML
+from ze.items import CreativeWorkItem
+
 
 class ArticleItem(CreativeWorkItem):
 
     articleBody = Field(
-        input_processor=MapCompose(
-            CleanHTML(),
-        ),
-        output_processor=TakeFirst(),
+        serializer=dict, 
+        input_processor=MapCompose(CleanHTML(),),
+        output_processor=TakeFirst(), 
+        schemas={
+            'avro': {
+                'field_type': 'STRING', 
+            }, 
+        }
     )
     articleSection = Field()
     pageEnd = Field()
