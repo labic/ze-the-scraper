@@ -1,17 +1,16 @@
-# -*- coding: utf-8 -*-
 from ze.spiders import ZeSpider
 
 class ValorEconomicoSpider(ZeSpider):
 
-    name = 'valor'
-    allowed_domains = ['valor.com.br']
+    name = 'atarde'
+    allowed_domains = ['atarde.uol.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
                     '.materia h1::text',
-                    '.title1::text'
+                    'h3.tituloMateria::text'
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
@@ -20,12 +19,12 @@ class ValorEconomicoSpider(ZeSpider):
                 "description": [
                     '[itemprop=description]::attr(content)',
                     '[itemprop=description]::text',
-                    '.resumo h2::text'
+                    '.conteudoMateria figure figcaption::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
                     '.autor-nome::text',
-                    '.node-author-inner strong::text'
+                    'span.credito::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
@@ -40,7 +39,7 @@ class ValorEconomicoSpider(ZeSpider):
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.node-body'
+                    '.conteudoMateria'
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
@@ -51,3 +50,4 @@ class ValorEconomicoSpider(ZeSpider):
             }
         }
     }]
+

@@ -1,36 +1,32 @@
-# -*- coding: utf-8 -*-
 from ze.spiders import ZeSpider
 
 class ValorEconomicoSpider(ZeSpider):
 
-    name = 'valor'
-    allowed_domains = ['valor.com.br']
+    name = 'zh'
+    allowed_domains = ['zh.clicrbs.com.br/']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.materia h1::text',
-                    '.title1::text'
+                    '.materia-manchete::text',
+
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
-                    '.image img::attr(src)'
+                    '.materia-foto img::attr(src)'
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text',
-                    '.resumo h2::text'
+                    '.materia-subtitulo::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '.autor-nome::text',
-                    '.node-author-inner strong::text'
+                    '.meta__tool::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.data::text',
-                    'span.date::text',
+                    '.meta__date::text',
 
                 ],
                 "dateModified": [
@@ -40,7 +36,7 @@ class ValorEconomicoSpider(ZeSpider):
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.node-body'
+                    '.materia-corpo'
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
