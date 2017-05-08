@@ -61,6 +61,7 @@ class ThingItem(Item):
     )
     image = Field(
         default=['null'], 
+        indexed=False, 
         schemas={
             'avro': {
                 'field_type': 'STRING', 
@@ -92,6 +93,7 @@ class ThingItem(Item):
     )
     url = Field(
         output_processor=TakeFirst(),
+        indexed=False, 
         schemas={
             'avro': {
                 'field_type': 'STRING', 
@@ -128,6 +130,7 @@ class CreativeWorkItem(ThingItem):
             ArticleProcessor.process_authors
         ), 
         output_processor=AuthorProcessor(),
+        indexed=False, 
         schemas = {
             'avro': {
                 'field_type': 'RECORD', 
@@ -140,6 +143,12 @@ class CreativeWorkItem(ThingItem):
                     'field_type': 'STRING', 
                 })
             }, 
+            'datastore': {
+                'field_type': 'arrayValue', 
+                'values': {
+                    'field_type': 'entityValue'
+                }
+            }
         }
     )
     award = Field()

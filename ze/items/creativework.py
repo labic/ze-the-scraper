@@ -24,6 +24,7 @@ class ArticleItem(CreativeWorkItem):
         default=None, 
         input_processor=MapCompose(CleanHTML(),),
         output_processor=TakeFirst(), 
+        indexed=False, 
         schemas={
             'avro': {
                 'field_type': 'STRING', 

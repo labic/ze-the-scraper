@@ -6,6 +6,7 @@ import logging; logger = logging.getLogger(__name__)
 from collections import namedtuple
 from google.cloud import bigquery
 from google.cloud.bigquery.schema import SchemaField
+from google.cloud import datastore
 from google.cloud import pubsub
 from google.cloud.exceptions import BadRequest
 from pymongo import MongoClient
@@ -164,3 +165,62 @@ class GoogleBigQueryPipeline(BasePipeline):
                         table_schema.append(_parse_schema_fields(schema_field))
         
         return table_schema
+
+
+class GoogleDatastorePipeline(BasePipeline):
+    
+    def __init__(self, settings, stats):
+        self.settings = {
+            'enabled': settings.getbool('GC_DATASTORE_ENABLED'), 
+            'google_cloud_enabled': settings.getbool('GOOGLE_CLOUD_ENABLED'), 
+        }
+        
+        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
+            self.client = datastore.Client()
+            # self.batch = self.client.batch()
+            
+            self.stats = stats
+            self.stats.set_value('google/datastore/insert_count', 0)
+            self.stats.set_value('google/datastore/erros_count', 0)
+            logger.info('Google Cloud Datastore client initiated with success')
+        else:
+            logger.warning('Google Cloud Datastore is not enabled, check Google Cloud extension configuration')
+        
+    def process_item(self, item, spider):
+            
+        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
+            try:
+                key = self.client.key(item.__class__.__name__)
+                
+                exclude_from_indexes = [k for k in item.fields \
+                    if item.fields[k].get('indexed', True) is False]
+                
+                entity = datastore.Entity(key, exclude_from_indexes)
+                
+                entity.update(self.seriealize(item))
+                
+                self.client.put(entity)
+                self.stats.inc_value('google/datastore/insert_count')
+            except Exception as e:
+                self.stats.inc_value('google/datastore/erros_count')
+                raise e
+        
+        return item
+    
+    def seriealize(self, item):
+        
+        for k in item.fields.keys():
+            schemas = item.fields[k].get('schemas', {})
+            datastore_schema = schemas.get('datastore')
+            if datastore_schema:
+                if datastore_schema['field_type'] is 'arrayValue':
+                    if datastore_schema['values']['field_type'] is 'entityValue':
+                        entity_values = []
+                        for p, it in enumerate(item[k]):
+                            e_key = self.client.key(''.join((k, str(p))))
+                            entity_value = datastore.Entity(e_key)
+                            entity_value.update(it)
+                            entity_values.append(entity_value)
+                        item[k] = entity_values
+        
+        return item
