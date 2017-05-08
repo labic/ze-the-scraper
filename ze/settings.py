@@ -51,8 +51,8 @@ CONCURRENT_REQUESTS_PER_IP=16
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-#     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
-#     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+    # 'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    # 'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
 }
 
 # ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
@@ -67,12 +67,17 @@ EXTENSIONS = {
 }
 
 # MongoDB pipeline configuration
+MONGO_ENABLED = False
 MONGO_URI = None
 MONGO_DATABASE = None
 
-# Google BigQuery pipeline configuration
-GC_BIGQUERY_DATASET = ''
-GC_DATASTORE_ENABLED = False
+# Google Cloud BigQuery pipeline configuration
+GOOGLE_CLOUD_BIGQUERY_ENABLED = False
+GOOGLE_CLOUD_BIGQUERY_DATASET = ''
+# Google Cloud Datastore pipeline configuration
+GOOGLE_CLOUD_DATASTORE_ENABLED = False
+# Google Cloud Pub/Sub pipeline configuration
+GOOGLE_CLOUD_PUBSUB_ENABLED = False
 # Configure item pipelines
 ITEM_PIPELINES = {
     # 'ze.pipelines.MongoPipeline': 200,
@@ -81,11 +86,11 @@ ITEM_PIPELINES = {
     # 'ze.pipelines.GoogleBigQueryPipeline': 500,
 }
 
-SPIDER_CONTRACTS = {
-    'scrapy.contracts.default.UrlContract': 10,
-    'scrapy.contracts.default.ReturnsContract': 20,
-    'scrapy.contracts.default.ScrapesContract': 30,
-}
+# SPIDER_CONTRACTS = {
+#     'scrapy.contracts.default.UrlContract': 10,
+#     'scrapy.contracts.default.ReturnsContract': 20,
+#     'scrapy.contracts.default.ScrapesContract': 30,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

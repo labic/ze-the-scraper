@@ -23,30 +23,41 @@ class BasePipeline(object):
 class MongoPipeline(BasePipeline):
 
     def __init__(self, settings, stats):
-        self.mongo_uri = settings.get('MONGO_URI'),
-        self.mongo_db = settings.get('MONGO_DATABASE', 'ze-the-scraper')
-        self.client = None
+        self.settings = {
+            'enabled': settings.getbool('MONGO_ENABLED'), 
+        }
         
-        self.stats = stats
-        self.stats.set_value('items/mongodb/insert_count', 0)
-        self.stats.set_value('items/mongodb/insert_erros_count', 0)
+        if self.settings['enabled']:
+            self.mongo_uri = settings.get('MONGO_URI'),
+            self.mongo_db = settings.get('MONGO_DATABASE', 'ze-the-scraper')
+            self.client = None
+            
+            self.stats = stats
+            self.stats.set_value('items/mongodb/insert_count', 0)
+            self.stats.set_value('items/mongodb/insert_erros_count', 0)
+        else:
+            logger.warning('MongoDB is not enabled, check MongoDB on settings')
+        
 
     def open_spider(self, spider):
-        self.client = MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
-        self.stats.set_value('items/mongodb/database_name', self.db.name)
+        if self.settings['enabled']:
+            self.client = MongoClient(self.mongo_uri)
+            self.db = self.client[self.mongo_db]
+            self.stats.set_value('items/mongodb/database_name', self.db.name)
 
     def close_spider(self, spider):
-        self.client.close()
+        if self.settings['enabled']:
+            self.client.close()
 
     def process_item(self, item, spider):
-        try:
-            self.db[item.__class__.__name__].insert(dict(item))
-            self.stats.inc_value('items/mongodb/insert_count')
-        except Exception as e:
-            logger.error('Failed insert item to MongoDB: %s', e)
-            self.stats.inc_value('items/mongodb/insert_erros_count')
-            pass
+        if self.settings['enabled']:
+            try:
+                self.db[item.__class__.__name__].insert(dict(item))
+                self.stats.inc_value('items/mongodb/insert_count')
+            except Exception as e:
+                logger.error('Failed insert item to MongoDB: %s', e)
+                self.stats.inc_value('items/mongodb/insert_erros_count')
+                pass
         
         return item
 
@@ -54,21 +65,28 @@ class MongoPipeline(BasePipeline):
 class GooglePubSubPipeline(BasePipeline):
 
     def __init__(self, settings, stats):
-        self.google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
+        self.settings = {
+            'google_cloud_enabled': settings.getbool('GOOGLE_CLOUD_ENABLED'), 
+            'enabled': settings.getbool('GOOGLE_CLOUD_PUBSUB_ENABLED'), 
+            # TODO: This work?
+            # 'enabled': settings.getbool('GOOGLE_CLOUD_ENABLED') 
+            #           and settings.getbool('GOOGLE_CLOUD_PUBSUB_ENABLED')), 
+        }
         self.topics = {}
         
         self.stats = stats
         self.stats.set_value('google/pubsub/published_count', 0)
         self.stats.set_value('google/pubsub/erros_count', 0)
-
-        if self.google_cloud_enabled:
+        
+        # TODO: This is the better way?
+        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
             self.client = pubsub.Client()
             logger.info('Google Cloud Pub/Sub client initiated with success')
         else:
             logger.warning('Google Cloud is not enabled, check Google Cloud extension configuration')
 
     def process_item(self, item, spider):
-        if self.google_cloud_enabled:
+        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
             try:
                 topic_name = 'ze-the-scraper.%s' % item.__class__.__name__
                 topic = None
@@ -95,11 +113,14 @@ class GooglePubSubPipeline(BasePipeline):
 class GoogleBigQueryPipeline(BasePipeline):
     
     def __init__(self, settings, stats):
-        self.google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
+        self.settings = {
+            'google_cloud_enabled': settings.getbool('GOOGLE_CLOUD_ENABLED'), 
+            'enabled': settings.getbool('GOOGLE_CLOUD_BIGQUERY_ENABLED'), 
+        }
         
-        if self.google_cloud_enabled:
+        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
             self.client = bigquery.Client()
-            self.dataset = self.client.dataset(settings.get('GC_BIGQUERY_DATASET'))
+            self.dataset = self.client.dataset(settings.get('GOOGLE_CLOUD_BIGQUERY_DATASET'))
             self.tables = {}
             self.schemas = {}
             
@@ -111,7 +132,7 @@ class GoogleBigQueryPipeline(BasePipeline):
             logger.warning('Google Cloud BigQuery is not enabled, check Google Cloud extension configuration')
     
     def process_item(self, item, spider):
-        if self.google_cloud_enabled:
+        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
             try:
                 table_name = item.__class__.__name__
                 table = self.tables.get(table_name)
@@ -171,8 +192,8 @@ class GoogleDatastorePipeline(BasePipeline):
     
     def __init__(self, settings, stats):
         self.settings = {
-            'enabled': settings.getbool('GC_DATASTORE_ENABLED'), 
             'google_cloud_enabled': settings.getbool('GOOGLE_CLOUD_ENABLED'), 
+            'enabled': settings.getbool('GOOGLE_CLOUD_DATASTORE_ENABLED'), 
         }
         
         if self.settings['google_cloud_enabled'] and self.settings['enabled']:

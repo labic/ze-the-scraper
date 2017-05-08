@@ -20,7 +20,7 @@ class GoogleCloud(object):
                     with open(self.credentials_json_path, 'w') as outfile:
                         outfile.write(credentials_json)
                     
-                os.environ['GOOGLE_APPLICATION_CREDENTIALS  '] = self.credentials_json_path
+                os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.credentials_json_path
                 logger.info('Google Cloud extensions inited with success')
             else:
                 logger.error('GOOGLE_APPLICATION_CREDENTIALS_JSON not is set in settings')
@@ -29,5 +29,6 @@ class GoogleCloud(object):
             logger.info('GOOGLE_CLOUD_ENABLED is False')
 
     def close_spider(self, spider):
-        if self.google_cloud_enabled:
+        if self.google_cloud_enabled \
+        and os.path.isfile(self.credentials_json_path):
             os.remove(self.credentials_json_path)
