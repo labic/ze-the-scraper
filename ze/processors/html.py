@@ -16,149 +16,185 @@ class CleanHTML(object):
         html = BeautifulSoup(value, 'html.parser')
 
         # cartacapital
-        for el in html.select('.image-inline'):
-            fg = html.new_tag('figure')
-            fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
-            fc = html.new_tag('figcaption')
-            fc.string = el.select('.image-caption')[0].string
-            fg.append(fc)
-            
-            el.replace_with(fg)
+        try:
+            selector = '.image-inline'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('.image-caption')[0].string
+                fg.append(fc)
+                
+                el.replace_with(fg)
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
-        for i, el in enumerate(html.select('.tile-rights')):
-            fg = html.new_tag('figure')
-            img = html.select('.canvasImg img')[i]
-            fg.append(html.new_tag('img', src=img['data-src']))
-            fc = html.new_tag('figcaption')
-            fc.string = el.select('span')[0].string
-            fg.append(fc)
-            
-            el.replace_with(fg)
-            img.parent.decompose()
+        try:
+            selector = '.tile-rights'
+            for i, el in enumerate(html.select(selector)):
+                fg = html.new_tag('figure')
+                img = html.select('.canvasImg img')[i]
+                fg.append(html.new_tag('img', src=img['data-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('span')[0].string
+                fg.append(fc)
+                
+                el.replace_with(fg)
+                img.parent.decompose()
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
         # veja
-        for el in html.select('.featured-image'):
-            fg = html.new_tag('figure')
-            fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
-            fc = html.new_tag('figcaption')
-            fc.string = el.select('p')[0].string
-            fg.append(fc)
+        try:
+            selector = '.featured-image'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('p')[0].string
+                fg.append(fc)
+                
+                el.replace_with(fg)
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
             
-            el.replace_with(fg)
-            
-        for el in html.select('p span iframe[src*="https://www.youtubel.com/embed"]'):    
-            video_id = el['data-lazy-src'].split('/')[4]
-            fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
-                width='1280', height='720', frameborder='0', allowfullscreen='true')
+        try:
+            selector = 'p span iframe[src*="https://www.youtubel.com/embed"]'
+            for el in html.select(selector): 
+                video_id = el['data-lazy-src'].split('/')[4]
+                fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
+                    width='1280', height='720', frameborder='0', allowfullscreen='true')
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
         # g1
-        for el in html.select('[data-block-type="backstage-photo"]'):
-            fg = html.new_tag('figure')
-            fg.append(html.new_tag('img', src=el.select('img.content-media__image')[0]['data-src']))
-            fc = html.new_tag('figcaption')
-            fc.string = el.select('img.content-media__image')[0]['alt']
-            fg.append(fc)
-            
-            el.replace_with(fg)
+        try:
+            selector = '[data-block-type="backstage-photo"]'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img.content-media__image')[0]['data-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('.content-media__description__caption')[0].get_text()
+                fg.append(fc)
+                
+                el.replace_with(fg)
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
-        for el in html.select('[data-block-type="backstage-video"]'):
-            video_id = el.select('[data-video-id]')[0]['data-video-id']
-            fg = html.new_tag('figure')
-            fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
-            fc = html.new_tag('figcaption')
-            fc.string = el.select('[itemprop="caption"]')[0]['contents']
-            fg.append(fc)
-            a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
-            a.append(fg)
-            
-            el.replace_with(a)
+        try:
+            selector = '[data-block-type="backstage-video"]'
+            for el in html.select(selector): 
+                video_id = el.select('[data-video-id]')[0]['data-video-id']
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('[itemprop="caption"]')[0].get_text()
+                fg.append(fc)
+                a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
+                a.append(fg)
+                
+                el.replace_with(a)
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
         # estadao
-        for el in html.select('[data-config]'):
-            media_doc = json.loads(el['data-config'])
-            media_url =  self.estadao_media_url if not context.get('media_img_url') else context.get('media_img_url')
-            media_url = media_url.format(**media_doc)
-            results = requests.get(media_url).json()['resultadoConteudo']['conteudos']
-            
-            img_src = ''
-            for presset in results[0]['pressets']:
-                if presset['class'] == 'full':
-                    img_src = presset['file']
-                    break
-            
-            fg = html.new_tag('figure')
-            fg.append(html.new_tag('img', src=img_src))
-            fc = html.new_tag('figcaption')
-            fc.string = '{} '.format(results[0]['titulo'])
-            s = html.new_tag('small', rel='credits') 
-            s.string = results[0]['credito']
-            fc.append(s)
-            fg.append(fc)
-            
-            el.replace_with(fg)
+        try:
+            selector = '[data-config]'
+            for el in html.select(selector):
+                media_doc = json.loads(el['data-config'])
+                media_url =  self.estadao_media_url if not context.get('media_img_url') else context.get('media_img_url')
+                media_url = media_url.format(**media_doc)
+                results = requests.get(media_url).json()['resultadoConteudo']['conteudos']
+                
+                img_src = ''
+                for presset in results[0]['pressets']:
+                    if presset['class'] == 'full':
+                        img_src = presset['file']
+                        break
+                
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=img_src))
+                fc = html.new_tag('figcaption')
+                fc.string = '{} '.format(results[0]['titulo'])
+                s = html.new_tag('small', rel='credits') 
+                s.string = results[0]['credito']
+                fc.append(s)
+                fg.append(fc)
+                
+                el.replace_with(fg)
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
         # for el in html.select('.documento'):
         #     [e.decompose() for eLin el.select('span')]
         #     el.select('h3')[0].name = 'strong'
         
         # All
-        for el in html.select('div.wp-caption'):
-            fg = html.new_tag('figure')
-            fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
-            fc = html.new_tag('figcaption')
-            fc.string = el.select('.wp-caption-text')[0].string
-            fg.append(fc)
-            
-            el.replace_with(fg)
+        try:
+            selector = 'div.wp-caption'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('.wp-caption-text')[0].string
+                fg.append(fc)
+                
+                el.replace_with(fg)
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
-        for el in html.select('p iframe[data-lazy-src*="https://www.youtubel.com/embed"]'):
-            # TODO: Use Regex?
-            video_id = el['data-lazy-src'].split('/')[4]
-            fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
-                width='1280', height='720', frameborder='0', allowfullscreen='true')
-            
-            el.parent.replace_with(fm)
+        try:
+            selector = 'p iframe[data-lazy-src*="https://www.youtubel.com/embed"]'
+            for el in html.select(selector):
+                # TODO: Use Regex?
+                video_id = el['data-lazy-src'].split('/')[4]
+                fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
+                    width='1280', height='720', frameborder='0', allowfullscreen='true')
+                
+                el.parent.replace_with(fm)
+        except Exception as e:
+            logger.error('Failed to replace %s: %s', selector, e)
         
         el_to_uwrap = [ 
-            'main', 
-            'p span', 
-            'p em span', 
-            '#content-core', 
-            '#mobile1stparagraph', 
-            '#textstructured', 
-            '.content', 
-            '.content-text', 
             '.article-content', 
-            '.content-intertitle', 
+            '.content', 
+            '#content-core', 
+            '.content-text', 
+            '.content-intertitle',
+            '[data-block-type=unstyled]',
+            '[itemprop="articleBody"]', 
+            'main',  
+            '#mobile1stparagraph', 
+            'p span', 
+            'p em span',  
             '.td-post-content', 
             '.td-post-featured-image', 
+            '#textstructured', 
             '.video-container', 
-            '[data-block-type=unstyled]', 
-            '[itemprop="articleBody"]', 
         ] if not context.get('el_to_uwrap') else context.get('el_to_uwrap')
-        [el.unwrap() for el in html.select(','.join(el_to_uwrap))]
+        [el.unwrap() for el in html.select(', '.join(el_to_uwrap))]
             
         el_to_decompose = {
             'geral': [
-                'style', 
-                'script', 
-                '#column-middle', 
-                '#liveblog-container', 
+                '#column-middle',  
+                '.content-ads', 
                 '.content-head', 
+                '.content-know-more', 
                 '.content-share-bar', 
+                '.comments', 
                 '[data-block-type="related-articles"]', 
+                '#liveblog-container',
                 '.mc-side-item__container', 
                 '.mc-show-later', 
-                '.content-share-bar', 
-                '.content-ads', 
-                '.comments', 
                 '.tags', 
+                'script', 
+                'style', 
                 '.widget-news', 
             ],
             'empty': ['p', 'div',]
         } if not context.get('el_to_decompose') else context.get('el_to_decompose')
-        [el.decompose() for el in html.select(','.join(el_to_decompose['geral']))]
-        [el.decompose() for el in html.select(','.join(el_to_decompose['empty'])) \
+        [el.decompose() for el in html.select(', '.join(el_to_decompose['geral']))]
+        [el.decompose() for el in html.select(', '.join(el_to_decompose['empty'])) \
             if not el.contents or el.contents == '&nbsp;']
         
         # TODO: B4S bug
@@ -185,7 +221,7 @@ class CleanHTML(object):
             'valign', 
             'width', 
         ] if not context.get('attrs_to_remove') else context.get('attrs_to_remove')
-        for t in html.find_all():
+        for t in html.find_all(True):
             for a in attrs_to_remove:
                 if t.has_attr(a): del t[a] 
                 else: pass
