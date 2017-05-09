@@ -102,7 +102,7 @@ class CleanHTML(object):
         #     el.select('h3')[0].name = 'strong'
         
         # All
-        for el in html.select('.wp-caption'):
+        for el in html.select('div.wp-caption'):
             fg = html.new_tag('figure')
             fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
             fc = html.new_tag('figcaption')
@@ -158,28 +158,32 @@ class CleanHTML(object):
             'empty': ['p', 'div',]
         } if not context.get('el_to_decompose') else context.get('el_to_decompose')
         [el.decompose() for el in html.select(','.join(el_to_decompose['geral']))]
-        [el.decompose() for el in html.select(','.join(el_to_decompose['empty'])) if not el.contents]
+        [el.decompose() for el in html.select(','.join(el_to_decompose['empty'])) \
+            if not el.contents or el.contents == '&nbsp;']
         
         # TODO: B4S bug
         [el.previous_element.decompose() for el in html.select('p + br + p')]
         
         attrs_to_remove = [
             'alt', 
-            'title', 
-            'class', 
-            'data-block-type', 
-            'data-track-category', 
-            'data-track-links',
-            'width', 
-            'height', 
-            'style', 
-            'data-sizes', 
-            'rel', 
-            'data-width', 
-            'type',
             'cellpadding', 
             'cellspacing', 
+            'class', 
+            'data-block-type', 
+            'data-sizes', 
+            'data-track-category', 
+            'data-track-links',
+            'data-width', 
+            'height', 
+            'rel', 
+            'sizes', 
+            # TODO: What do with srcset? Get the largest image?
+            # 'srcset', 
+            'style', 
+            'title', 
+            'type',
             'valign', 
+            'width', 
         ] if not context.get('attrs_to_remove') else context.get('attrs_to_remove')
         for t in html.find_all():
             for a in attrs_to_remove:
