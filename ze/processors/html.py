@@ -189,10 +189,11 @@ class CleanHTML(object):
         for el in html.select('td p s'):
             el.parent.parent.string = el.string
         
-        for el in html.select('p > strong'):
-            h2 = html.new_tag('h2')
-            h2.string = el.string
-            el.parent.replace_with(h2)
+        # TODO: What do with more than one strong in p?
+        # for el in html.select('p > strong'):
+        #     h2 = html.new_tag('h2')
+        #     h2.string = el.string
+        #     el.parent.replace_with(h2)
         
         [c.extract() for c in html.findAll(text=lambda text:isinstance(text, Comment))]
         
