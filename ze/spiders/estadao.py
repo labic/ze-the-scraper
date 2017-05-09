@@ -36,6 +36,7 @@ class EstadaoSpider(ZeSpider):
                     "[itemprop=articleBody]",
                     ".main-news .content",
                     ".conteudo-materia",
+                    ".content",
                 ], 
                 "keywords": [
                     "[itemprop=keywords] a::text", 
