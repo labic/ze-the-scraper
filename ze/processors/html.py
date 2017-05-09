@@ -72,9 +72,10 @@ class CleanHTML(object):
             selector = '[data-block-type="backstage-photo"]'
             for el in html.select(selector):
                 fg = html.new_tag('figure')
-                fg.append(html.new_tag('img', src=el.select('img.content-media__image')[0]['data-src']))
+                img_src = el.select_one('img.content-media__image').get('data-src')
+                fg.append(html.new_tag('img', src=img_src))
                 fc = html.new_tag('figcaption')
-                fc.string = el.select('.content-media__description__caption')[0].get_text()
+                fc.string = el.select_one('.content-media__description__caption').get_text()
                 fg.append(fc)
                 
                 el.replace_with(fg)
