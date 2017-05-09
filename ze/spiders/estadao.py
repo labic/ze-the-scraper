@@ -11,7 +11,8 @@ class EstadaoSpider(ZeSpider):
             "fields": { 
                 "name": [ 
                     "[itemprop=name]::text", 
-                    ".titulo-principal::text" 
+                    ".titulo-principal::text", 
+                    ".titulo::text", 
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)", 
@@ -19,15 +20,16 @@ class EstadaoSpider(ZeSpider):
                 ], 
                 "description": [ 
                     "[itemprop=description]::text", 
-                    ".linha-fina::text" 
+                    ".linha-fina::text", 
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
-                    ".autor::text"
+                    ".autor::text", 
+                    ".author::text", 
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    ".data::text"
+                    ".data::text", 
                 ],
                 "dateModified": [
                     "[itemprop=dateModified]::text"
@@ -36,12 +38,12 @@ class EstadaoSpider(ZeSpider):
                     "[itemprop=articleBody]",
                     ".main-news .content",
                     ".conteudo-materia",
-                    ".content",
+                    ".content", 
                 ], 
                 "keywords": [
                     "[itemprop=keywords] a::text", 
                     ".tags a::text", 
-                    ".tags a span::text" 
+                    ".tags a span::text", 
                 ]
             }
         }
