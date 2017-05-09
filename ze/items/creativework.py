@@ -22,6 +22,7 @@ class ArticleItem(CreativeWorkItem):
 
     articleBody = Field(
         default=None, 
+        required=True,
         input_processor=MapCompose(CleanHTML(),),
         output_processor=TakeFirst(), 
         indexed=False, 
@@ -32,6 +33,16 @@ class ArticleItem(CreativeWorkItem):
         }
     )
     articleSection = Field()
+    headline = Field(
+        CreativeWorkItem.fields['headline'],
+        # TODO: Change to True, this involve change item fields on spiders
+        required=False,
+    )
+    name = Field(
+        CreativeWorkItem.fields['name'],
+        # TODO: Change to False, this involve change item fields on spiders
+        required=True,
+    )
     pageEnd = Field()
     pageStart = Field()
     pagination = Field()

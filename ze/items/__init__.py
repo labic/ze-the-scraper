@@ -72,8 +72,9 @@ class ThingItem(Item):
         output_processor=TakeFirst(),
     )
     name = Field(
+        required=True,
         output_processor=TakeFirst(),
-        schemas ={
+        schemas={
             'avro': {
                 'field_type': 'STRING', 
             }, 

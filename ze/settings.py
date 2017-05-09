@@ -79,6 +79,7 @@ GOOGLE_CLOUD_DATASTORE_ENABLED = False
 GOOGLE_CLOUD_PUBSUB_ENABLED = False
 # Configure item pipelines
 ITEM_PIPELINES = {
+    'ze.pipelines.DropItemsPipeline': 10,
     'ze.pipelines.databases.MongoPipeline': 200,
     'ze.pipelines.google.cloud.GooglePubSubPipeline': 300,
     'ze.pipelines.google.cloud.GoogleDatastorePipeline': 400,
