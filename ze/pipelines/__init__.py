@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from scrapy.exceptions import DropItem
+from ze.exceptions import EmptyFields
 
 
 class BasePipeline(object):
@@ -18,7 +18,9 @@ class DropItemsPipeline(object):
                         if item.fields[k].get('required', False)}
         
         if any(empty_fields): 
-            raise DropItem('Item with some empty fields "%s" in url: %s' \
-                            % (empty_fields, item['url']))
+            raise EmptyFields(
+                'Item with empty fields "%s" in url: %s' % \
+                    ([k for k in empty_fields.keys() if empty_fields[k]], 
+                    item['url']))
         else:
             return item
