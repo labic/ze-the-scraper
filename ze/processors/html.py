@@ -66,7 +66,7 @@ class CleanHTML(object):
             fg = html.new_tag('figure')
             fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
             fc = html.new_tag('figcaption')
-            fc.string = el.select('[itemprop="caption"]')[0]['content']
+            fc.string = el.select('[itemprop="caption"]')[0]['contents']
             fg.append(fc)
             a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
             a.append(fg)
