@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import logging; logger = logging.getLogger(__name__)
+
+from scrapy.exceptions import NotConfigured
 from pymongo import MongoClient
+
 
 class BasePipeline(object):
 
@@ -28,27 +31,23 @@ class MongoPipeline(BasePipeline):
             self.stats.set_value('items/mongodb/insert_count', 0)
             self.stats.set_value('items/mongodb/insert_erros_count', 0)
         else:
-            logger.warning('MongoDB is not enabled, check MongoDB on settings')
-        
+            raise NotConfigured('MongoDB is not enabled, check settings values')
 
     def open_spider(self, spider):
-        if self.settings['enabled']:
-            self.client = MongoClient(self.mongo_uri)
-            self.db = self.client[self.mongo_db]
-            self.stats.set_value('items/mongodb/database_name', self.db.name)
+        self.client = MongoClient(self.mongo_uri)
+        self.db = self.client[self.mongo_db]
+        self.stats.set_value('items/mongodb/database_name', self.db.name)
 
     def close_spider(self, spider):
-        if self.settings['enabled']:
-            self.client.close()
+        self.client.close()
 
     def process_item(self, item, spider):
-        if self.settings['enabled']:
-            try:
-                self.db[item.__class__.__name__].insert(dict(item))
-                self.stats.inc_value('items/mongodb/insert_count')
-            except Exception as e:
-                logger.error('Failed insert item to MongoDB: %s', e)
-                self.stats.inc_value('items/mongodb/insert_erros_count')
-                pass
+        try:
+            self.db[item.__class__.__name__].insert(dict(item))
+            self.stats.inc_value('items/mongodb/insert_count')
+        except Exception as e:
+            logger.error('Failed insert item to MongoDB: %s', e)
+            self.stats.inc_value('items/mongodb/insert_erros_count')
+            pass
         
         return item

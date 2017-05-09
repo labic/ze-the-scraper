@@ -2,6 +2,8 @@
 
 import json
 import logging; logger = logging.getLogger(__name__)
+
+from scrapy.exceptions import NotConfigured
 from ze.pipelines import BasePipeline
 from google.cloud import bigquery
 from google.cloud.bigquery.schema import SchemaField
@@ -20,40 +22,38 @@ class GooglePubSubPipeline(BasePipeline):
             # 'enabled': settings.getbool('GOOGLE_CLOUD_ENABLED') 
             #           and settings.getbool('GOOGLE_CLOUD_PUBSUB_ENABLED')), 
         }
-        self.topics = {}
-        
-        self.stats = stats
-        self.stats.set_value('google/pubsub/published_count', 0)
-        self.stats.set_value('google/pubsub/erros_count', 0)
-        
         # TODO: This is the better way?
         if self.settings['google_cloud_enabled'] and self.settings['enabled']:
+            self.stats = stats
+            self.stats.set_value('google/pubsub/published_count', 0)
+            self.stats.set_value('google/pubsub/erros_count', 0)
+            
             self.client = pubsub.Client()
+            self.topics = {}
             logger.info('Google Cloud Pub/Sub client initiated with success')
         else:
-            logger.warning('Google Cloud is not enabled, check Google Cloud extension configuration')
+            raise NotConfigured('Google Cloud is not enabled, check settings values')
 
     def process_item(self, item, spider):
-        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
-            try:
-                topic_name = 'ze-the-scraper.%s' % item.__class__.__name__
-                topic = None
+        try:
+            topic_name = 'ze-the-scraper.%s' % item.__class__.__name__
+            topic = None
+            
+            if topic_name in self.topics:
+                topic = self.topics[topic_name] 
+            else:
+                self.topics[topic_name] = self.client.topic(topic_name)
                 
-                if topic_name in self.topics:
-                    topic = self.topics[topic_name] 
-                else:
-                    self.topics[topic_name] = self.client.topic(topic_name)
-                    
-                    if not self.topics[topic_name].exists():
-                        self.topics[topic_name].create()
-                    
-                    topic = self.topics[topic_name]
+                if not self.topics[topic_name].exists():
+                    self.topics[topic_name].create()
                 
-                topic.publish(json.dumps(dict(item)))
-                self.stats.inc_value('google/pubsub/published_count')
-            except Exception as e:
-                logger.error('Failed publish item to Google Cloud Pub/Sub: %s', e)
-                self.stats.inc_value('google/pubsub/erros_count')
+                topic = self.topics[topic_name]
+            
+            topic.publish(json.dumps(dict(item)))
+            self.stats.inc_value('google/pubsub/published_count')
+        except Exception as e:
+            logger.error('Failed publish item to Google Cloud Pub/Sub: %s', e)
+            self.stats.inc_value('google/pubsub/erros_count')
         
         return item
 
@@ -67,42 +67,41 @@ class GoogleBigQueryPipeline(BasePipeline):
         }
         
         if self.settings['google_cloud_enabled'] and self.settings['enabled']:
+            self.stats = stats
+            self.stats.set_value('google/bigquery/insert_count', 0)
+            self.stats.set_value('google/bigquery/erros_count', 0)
+            
             self.client = bigquery.Client()
             self.dataset = self.client.dataset(settings.get('GOOGLE_CLOUD_BIGQUERY_DATASET'))
             self.tables = {}
             self.schemas = {}
-            
-            self.stats = stats
-            self.stats.set_value('google/bigquery/insert_count', 0)
-            self.stats.set_value('google/bigquery/erros_count', 0)
             logger.info('Google Cloud BigQuery client initiated with success')
         else:
-            logger.warning('Google Cloud BigQuery is not enabled, check Google Cloud extension configuration')
+            raise NotConfigured('Google Cloud BigQuery is not enabled, check settings values')
     
     def process_item(self, item, spider):
-        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
-            try:
-                table_name = item.__class__.__name__
-                table = self.tables.get(table_name)
-                if not table:
-                    table_schema = self.build_table_schema(item)
-                    table = self.dataset.table(table_name, table_schema)
-                    
-                    if not table.exists():
-                        table.create()
-                    
-                    self.tables[table_name] = table
+        try:
+            table_name = item.__class__.__name__
+            table = self.tables.get(table_name)
+            if not table:
+                table_schema = self.build_table_schema(item)
+                table = self.dataset.table(table_name, table_schema)
                 
-                errors = table.insert_data([[item.get(c.name, None) for c in table.schema]])
+                if not table.exists():
+                    table.create()
                 
-                self.stats.inc_value('google/bigquery/insert_count') if not errors else None
-                self.stats.inc_value('google/bigquery/erros_count') if errors else None
-                if errors: 
-                    logger.error(errors)
-                    raise BadRequest
-            except Exception as e:
-                logger.error('Failed publish item to Google Cloud BigQuery: %s', e)
-                self.stats.inc_value('google/bigquery/erros_count')
+                self.tables[table_name] = table
+            
+            errors = table.insert_data([[item.get(c.name, None) for c in table.schema]])
+            
+            self.stats.inc_value('google/bigquery/insert_count') if not errors else None
+            self.stats.inc_value('google/bigquery/erros_count') if errors else None
+            if errors: 
+                logger.error(errors)
+                raise BadRequest
+        except Exception as e:
+            logger.error('Failed publish item to Google Cloud BigQuery: %s', e)
+            self.stats.inc_value('google/bigquery/erros_count')
         
         return item
     
@@ -153,10 +152,9 @@ class GoogleDatastorePipeline(BasePipeline):
             self.stats.set_value('google/datastore/erros_count', 0)
             logger.info('Google Cloud Datastore client initiated with success')
         else:
-            logger.warning('Google Cloud Datastore is not enabled, check Google Cloud extension configuration')
+            raise NotConfigured('Google Cloud Datastore is not enabled, check settings values')
         
     def process_item(self, item, spider):
-            
         if self.settings['google_cloud_enabled'] and self.settings['enabled']:
             try:
                 key = self.client.key(item.__class__.__name__)
@@ -177,7 +175,6 @@ class GoogleDatastorePipeline(BasePipeline):
         return item
     
     def seriealize(self, item):
-        
         for k in item.fields.keys():
             schemas = item.fields[k].get('schemas', {})
             datastore_schema = schemas.get('datastore')
