@@ -35,7 +35,8 @@ class UolSpider(ZeSpider):
                 ],
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".entry"
+                    ".entry", 
+                    "#texto-noticia", 
                 ], 
                 "keywords": [
                     "[itemprop=keywords] a::text", 
