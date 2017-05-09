@@ -59,7 +59,7 @@ DOWNLOADER_MIDDLEWARES = {
 
 GOOGLE_CLOUD_ENABLED = True
 # Google Cloud Application Credentions used for many pipelines
-GOOGLE_APPLICATION_CREDENTIALS_JSON = ''
+GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON = ''
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 EXTENSIONS = {
