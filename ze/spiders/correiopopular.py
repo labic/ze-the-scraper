@@ -4,6 +4,7 @@
 from ze.spiders import ZeSpider
 
 class CorreioPopular(ZeSpider):
+    #tudo parece OK
 
     name = 'correiopopular'
     allowed_domains = ['correio.rac.com.br']
