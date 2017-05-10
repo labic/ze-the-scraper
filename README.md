@@ -35,6 +35,7 @@ https://cloud.google.com/bigtable/docs/schema-design
 | INEP | NEWS:EDUCACAO (V1 03/01/15):558.40 | 
 
 Use this:
+- https://blog.scrapinghub.com/2016/04/20/scrapy-tips-from-the-pros-april-2016-edition/
 - https://helpdesk.scrapinghub.com/support/solutions/articles/22000200401-dotscrapy-persistence-addon
 - https://helpdesk.scrapinghub.com/support/solutions/articles/22000200418-magic-fields-addon
 - https://helpdesk.scrapinghub.com/support/solutions/articles/22000200411-delta-fetch-addon

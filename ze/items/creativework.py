@@ -3,7 +3,7 @@
 import six
 from scrapy import Field
 from scrapy.loader.processors import TakeFirst, MapCompose
-from ..processors.html import CleanHTML
+from ..processors.html import ImproveHTML
 from ..items import CreativeWorkItem
 
 
@@ -20,7 +20,7 @@ class ArticleItem(CreativeWorkItem):
     articleBody = Field(
         default=None, 
         required=True,
-        input_processor=MapCompose(CleanHTML(),),
+        input_processor=MapCompose(ImproveHTML(),),
         output_processor=TakeFirst(), 
         indexed=False, 
         schemas={

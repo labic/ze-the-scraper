@@ -20,5 +20,4 @@ class AuthorParse():
 class KeywordsParse():
 
     def __call__(self, values, loader_context):
-        print(values)
         return values.strip().lower()

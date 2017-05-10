@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup, Comment
 
 logger = logging.getLogger(__name__)
 
-class CleanHTML(object):
+class ImproveHTML(object):
 
     estadao_media_url = 'http://mdw-mm.estadao.com.br/middlewareAgile/rest/conteudo?tipo_midia={tipo}&idAgile={id}&produto=estadao'
 
@@ -26,7 +26,7 @@ class CleanHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception as e:
+            except Exception:
                 logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
         
             try:
@@ -41,7 +41,7 @@ class CleanHTML(object):
                     
                     el.replace_with(fg)
                     img.parent.decompose()
-            except Exception as e:
+            except Exception:
                 logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
         
         if spider_name is 'veja':
@@ -55,7 +55,7 @@ class CleanHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception as e:
+            except Exception:
                 logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
                 
             try:
@@ -64,7 +64,7 @@ class CleanHTML(object):
                     video_id = el['data-lazy-src'].split('/')[4]
                     fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
                         width='1280', height='720', frameborder='0', allowfullscreen='true')
-            except Exception as e:
+            except Exception:
                 logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
         
         if spider_name is 'g1':
@@ -79,7 +79,7 @@ class CleanHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception as e:
+            except Exception:
                 logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
             
             try:
@@ -95,7 +95,7 @@ class CleanHTML(object):
                     a.append(fg)
                     
                     el.replace_with(a)
-            except Exception as e:
+            except Exception:
                 logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
         
         if spider_name is 'estadao':
@@ -123,12 +123,45 @@ class CleanHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception as e:
+            except Exception:
                 logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
             
             # for el in html.select('.documento'):
             #     [e.decompose() for eLin el.select('span')]
             #     el.select('h3')[0].name = 'strong'
+        
+        if spider_name is 'folhadesp':
+            try:
+                selector = '.gallery'
+                for el in html.select(selector):
+                    href = el.select_one('a')['href'].rsplit('#')[0]
+                    result = requests.get(''.join((href, '.json'))).json()
+                    
+                    section = html.new_tag('section')
+                    h1 = html.new_tag('h1')
+                    h1.string = result['gallery']['title']
+                    section.append(h1)
+                    h2 = html.new_tag('h2')
+                    h2.string = result['gallery']['description']
+                    section.append(h2)
+                    
+                    for image in result['images']:
+                        fg = html.new_tag('figure')
+                        
+                        img = html.new_tag('img', src=image['image_gallery'])
+                        fg.append(img)
+                        fc = html.new_tag('figcaption')
+                        fc.string = image['legend']
+                        small = html.new_tag('small')
+                        small.string = image['author']
+                        fc.insert(1, small)
+                        fg.append(fc)
+                        
+                        section.append(fg)
+                    
+                    el.replace_with(section)
+            except Exception:
+                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
         
         # all spiders
         try:
@@ -141,7 +174,7 @@ class CleanHTML(object):
                 fg.append(fc)
                 
                 el.replace_with(fg)
-        except Exception as e:
+        except Exception:
             logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
         
         try:
@@ -153,7 +186,7 @@ class CleanHTML(object):
                     width='1280', height='720', frameborder='0', allowfullscreen='true')
                 
                 el.parent.replace_with(fm)
-        except Exception as e:
+        except Exception:
             logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
         
         el_to_uwrap = loader_context.get('el_to_uwrap')
