@@ -17,7 +17,7 @@ class DropItemsPipeline(object):
         empty_fields = { k: not item.get(k, False) for k in item.fields.keys() \
                         if item.fields[k].get('required', False)}
         
-        if any(empty_fields): 
+        if any(empty_fields.values()): 
             raise EmptyFields(
                 'Item with empty fields "%s" in url: %s' % \
                     ([k for k in empty_fields.keys() if empty_fields[k]], 
