@@ -20,7 +20,7 @@ class IgSpider(ZeSpider):
                 "description": [ 
                     "[itemprop=description]::text", 
                     "[property=description]::attr(content)", 
-                    "[property=og:description]::attr(content)" 
+                    "[property='og:description']::attr(content)" 
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
@@ -30,7 +30,7 @@ class IgSpider(ZeSpider):
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    "[property=article:published_time]::attr(content)"
+                    "[property='article:published_time']::attr(content)"
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::text", 
