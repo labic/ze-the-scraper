@@ -3,41 +3,25 @@
 import dateparser
 import logging
 logger = logging.getLogger(__name__)
-
-class CommonProcessor():
-
-    @staticmethod
-    def process_date_time(value):
-
-        value = value.replace('Atualizado:', '') \
+    
+class ParseDate(object):
+    
+    def __call__(self, value, loader_context):
+        value = value.strip() \
+                    .replace('Atualizado:', '') \
                     .replace(' | ', ' ') \
                     .replace('h', ':') \
                     .replace('h ', ':') \
                     .replace(', ', '') \
-                    .replace('  ', ' ') \
-                    .strip()
-        date_formats = (
-            '%d %B %Y %H:%M',
-            '%d de %B de %Y %Hh%M',
-            '%d/%m/%Y %H:%M',
-        )
+                    .replace('  ', ' ')
         
         try:
-            return dateparser.parse(value, 
-                        date_formats=['%d %B %Y %H:%M'], 
-                        languages=['pt']) \
-                        .strftime('%Y-%m-%d %H:%M')
+            return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+                        # date_formats=['%d %B %Y %H:%M'], 
+                        # languages=['pt']) \
+                        # .strftime('%Y-%m-%d %H:%M')
         except Exception as e:
-            logger.warning('Date %s not processed with none of formats: %s' % (value, ', '.join(date_formats)))
+            logger.warning('Date not processed: %s' % value)
             return None
-
+        
         return value
-
-    # @staticmethod
-    # def process_clean(value):
-    #     values_to_clean = {
-    #         ,
-    #         ',': '',
-    #         ' - ': '',
-    #         'por ': '',
-    #     }

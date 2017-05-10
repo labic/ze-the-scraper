@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
+
+from datetime import datetime
 from scrapy import Item, Field
 from scrapy.loader import ItemLoader as ScrapyItemLoader
 from scrapy.loader.processors import Join, TakeFirst, MapCompose
-from ze.processors.article import ArticleProcessor
-from ze.processors.common import CommonProcessor
-from ze.processors.html import CleanHTML
-from ze.processors.schema import AuthorProcessor
+from w3lib.html import remove_tags
+from ..processors.common import ParseDate
+from ..processors.schema import AuthorParse, KeywordsParse
 
 class ItemLoader(ScrapyItemLoader):
     
@@ -33,11 +35,18 @@ class ItemLoader(ScrapyItemLoader):
             default_value = self.item.fields[field_name].get('default')
             if not item.get(field_name) and default_value:
                 item[field_name] = self.item.fields[field_name].get('default')
-
+        
+        item['dateCreated'] = datetime.utcnow()
+        
         return item
 
 
-class ThingItem(Item):
+class BaseItem(Item):
+    
+    meta = Field()
+
+
+class ThingItem(BaseItem):
     
     additionalType = Field(
         output_processor=TakeFirst(),
@@ -127,10 +136,7 @@ class CreativeWorkItem(ThingItem):
     audio = Field()
     author = Field(
         default=[{'type': None, 'name': None}], 
-        input_processor=MapCompose(
-            ArticleProcessor.process_authors
-        ), 
-        output_processor=AuthorProcessor(),
+        input_processor=MapCompose(remove_tags, AuthorParse()), 
         indexed=False, 
         schemas = {
             'avro': {
@@ -171,27 +177,23 @@ class CreativeWorkItem(ThingItem):
     copyrightYear = Field()
     creator = Field()
     dateCreated = Field(
-        # schemas = {
-        #     'avro': {
-        #         'field_type': 'TIMESTAMP', 
-        #     }, 
-        # }
+        schemas = {
+            'avro': {
+                'field_type': 'TIMESTAMP', 
+            }, 
+        }
     )
     dateModified = Field(
-        input_processor=MapCompose(
-            CommonProcessor.process_date_time
-        ),
+        input_processor=MapCompose(ParseDate()),
         output_processor=TakeFirst(),
-        # schemas = {
-        #     'avro': {
-        #         'field_type': 'TIMESTAMP', 
-        #     }, 
-        # }
+        schemas = {
+            'avro': {
+                'field_type': 'TIMESTAMP', 
+            }, 
+        }
     )
     datePublished = Field(
-        input_processor=MapCompose(
-            CommonProcessor.process_date_time
-        ),
+        input_processor=MapCompose(ParseDate()),
         output_processor=TakeFirst(),
         schemas={
             'avro': {
@@ -250,7 +252,7 @@ class CreativeWorkItem(ThingItem):
     isPartOf = Field()
     keywords = Field(
         input_processor=MapCompose(
-            ArticleProcessor.process_keywords
+            KeywordsParse()
         ),
         output_processor=Join(','),
         schemas={

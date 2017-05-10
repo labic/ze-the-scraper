@@ -116,7 +116,10 @@ class ZeSpider(scrapy.Spider):
                 yield load_method(response, ItemClass, a)
 
     def load_item(self, response, ItemClass=None, args=None):
-        il = ze.items.ItemLoader(item=ItemClass(), response=response)
+        il = ze.items.ItemLoader(
+            item=ItemClass(), 
+            response=response, 
+            spider_name=self.name)
         
         for field, selectors in args['fields'].items():
             for i, s in enumerate(selectors):

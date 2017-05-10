@@ -3,11 +3,8 @@
 import six
 from scrapy import Field
 from scrapy.loader.processors import TakeFirst, MapCompose
-from ze.items import CreativeWorkItem
-from ze.processors.article import ArticleProcessor
-from ze.processors.common import CommonProcessor
-from ze.processors.html import CleanHTML
-from ze.items import CreativeWorkItem
+from ..processors.html import CleanHTML
+from ..items import CreativeWorkItem
 
 
 class ArticleItem(CreativeWorkItem):
