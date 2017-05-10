@@ -27,12 +27,12 @@ class G1Spider(ZeSpider):
                     "[itemprop=creator]::text"
                 ], 
                 "datePublished": [
-                    "[itemprop=datePublished]::text",
-                    "[itemprop=datePublished]::attr(datetime)"
+                    "[itemprop=datePublished]::attr(datetime)", 
+                    "[itemprop=datePublished]::text", 
                 ], 
                 "dateModified": [
+                    "[itemprop=dateModified]::attr(datetime)" , 
                     "[itemprop=dateModified]::text", 
-                    "[itemprop=dateModified]::attr(datetime)" 
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",

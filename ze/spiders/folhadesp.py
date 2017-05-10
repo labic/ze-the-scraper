@@ -9,33 +9,33 @@ class FolhaDeSaoPauloSpider(ZeSpider):
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
-                "name": [ 
+                "name": [
+                    ".news header h1::text", 
                     "[itemprop=name]::text", 
-                    "[itemprop=alternativeHeadline]::attr(content)", 
-                    "article header h1::text" 
+                    "[itemprop=alternativeHeadline]::attr(content)"
                 ], 
-                "image": [ 
+                "image": [
                     "[itemprop=image]::attr(content)", 
-                    "[property='og:image']::attr(content)" 
+                    "[property='og:image']::attr(content)"
                 ], 
-                "description": [ 
-                    "[itemprop=description]::text", 
-                    ".documentDescription::text" 
+                "description": [
+                    ".documentDescription::text", 
+                    "[itemprop=description]::text"
                 ], 
                 "author": [
-                    "[itemprop=author]::text", 
-                    ".author p::text"
+                    ".news .author p", 
+                    "[itemprop=author]::text"
                 ], 
                 "datePublished": [
-                    "[itemprop=datePublished]::text",
-                    "article time::text"
+                    ".news time::attr(datetime)", 
+                    "[itemprop=datePublished]::text"
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::text"
                 ], 
                 "articleBody": [
-                    "[itemprop=articleBody]",
-                    ".content" 
+                    ".news .content", 
+                    "[itemprop=articleBody]"
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
