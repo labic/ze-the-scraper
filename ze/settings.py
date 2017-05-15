@@ -13,6 +13,7 @@ import ze.utils.file
 BOT_NAME = 'ze-the-scraper'
 SPIDER_MODULES = ['ze.spiders']
 NEWSPIDER_MODULE = 'ze.spiders'
+COMMANDS_MODULE = 'ze.commands'
 
 DUPEFILTER_DEBUG = True
 
