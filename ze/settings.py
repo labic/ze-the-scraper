@@ -10,7 +10,7 @@ import ze.utils.file
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-PROJECT_NAME = 'ze-the-scraper'
+BOT_NAME = 'ze-the-scraper'
 SPIDER_MODULES = ['ze.spiders']
 NEWSPIDER_MODULE = 'ze.spiders'
 
@@ -56,7 +56,6 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 # ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
-
 GOOGLE_CLOUD_ENABLED = True
 # Google Cloud Application Credentions used for many pipelines
 GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON = ''
