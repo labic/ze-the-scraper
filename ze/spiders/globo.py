@@ -2,10 +2,10 @@
 
 from ze.spiders import ZeSpider
 
-class G1Spider(ZeSpider):
+class GloboSpider(ZeSpider):
 
-    name = 'g1'
-    allowed_domains = ['g1.com.br']
+    name = 'globo'
+    allowed_domains = ['globo.com']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
