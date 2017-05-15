@@ -20,7 +20,7 @@ scrapy crawl [SPIDER] -a search="-a search='{ \
 
 #### Crawlling With All Spiders
 ```shell
-scrapy crawlmany all -a search='{ "query": "Celpe-Bras OR \"Certificado * Proficiência * Língua Portuguesa\"", "engine": "google", "last_update": "d", "pages": 2, "results_per_page": 50 }' 
+crawlmany estadao -a search='{ "query": " Enem OR \"Exame Nacional * Ensino Médio\"", "engine": "google", "last_update": "d", "pages": 2, "results_per_page": 50 }'
 ```
 ## References
 

@@ -1,5 +1,7 @@
 setuptools==35.0.2
+beautifulsoup4==4.6.0
 dateparser==0.6.0
+croniter==0.3.16
 google-cloud-bigquery==0.24.0
 google-cloud-datastore==1.0.0
 google-cloud-pubsub==0.24.0
