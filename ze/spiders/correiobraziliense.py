@@ -14,7 +14,7 @@ class CorreioBrasilienseSpider(ZeSpider):
                     '.title-post::text'
                 ],
                 "image": [
-                    '[itemprop="image" img::attr(src)]', 
+                    '[itemprop="image"] img::attr(src)', 
                     '.lazy::attr("data-lazy-src")'
                 ],
                 "description": [
