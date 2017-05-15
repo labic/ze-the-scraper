@@ -103,7 +103,7 @@ class ImproveHTML(object):
                 selector = '[data-config]'
                 for el in html.select(selector):
                     media_doc = json.loads(el['data-config'])
-                    media_url =  self.estadao_media_url if not loader_context.get('media_img_url') else context.get('media_img_url')
+                    media_url =  self.estadao_media_url if not loader_context.get('media_img_url') else loader_context.get('media_img_url')
                     media_url = media_url.format(**media_doc)
                     results = requests.get(media_url).json()['resultadoConteudo']['conteudos']
                     
@@ -216,16 +216,20 @@ class ImproveHTML(object):
             el_to_decompose = {
                 'geral': [
                     '.advertising', 
-                    '#column-middle',  
+                    '#column-middle', 
                     '.content-ads', 
                     '.content-head', 
                     '.content-know-more', 
                     '.content-share-bar', 
                     '.comments', 
+                    '#comentarios', 
+                    '.clear', 
                     '[data-block-type="related-articles"]', 
-                    '#liveblog-container',
+                    '#liveblog-container', 
                     '.mc-side-item__container', 
                     '.mc-show-later', 
+                    '.publicidade-content', 
+                    '#taboola-below-article-thumbnails', 
                     '.tags', 
                     '.specialContainer', 
                     'script', 

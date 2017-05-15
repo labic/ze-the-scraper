@@ -5,7 +5,7 @@ from scrapy import Item, Field
 from scrapy.loader import ItemLoader as ScrapyItemLoader
 from scrapy.loader.processors import Join, TakeFirst, MapCompose
 from w3lib.html import remove_tags
-from ..processors.common import ParseDate
+from ..processors.common import CleanString, ParseDate
 from ..processors.schema import AuthorParse, KeywordsParse
 
 class ItemLoader(ScrapyItemLoader):
@@ -55,6 +55,7 @@ class ThingItem(BaseItem):
         output_processor=TakeFirst(),
     )
     description = Field(
+        input_processor=MapCompose(CleanString()),
         output_processor=TakeFirst(),
         schemas={
             'avro': {
@@ -82,6 +83,7 @@ class ThingItem(BaseItem):
     )
     name = Field(
         required=True,
+        input_processor=MapCompose(CleanString()),
         output_processor=TakeFirst(),
         schemas={
             'avro': {
