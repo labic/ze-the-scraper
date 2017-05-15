@@ -13,6 +13,7 @@ class UolSpider(ZeSpider):
                     "[itemprop=name]::text", 
                     ".post-title::text", 
                     "#main-content h1::text", 
+                    ".conteudo-pagina h1::text", 
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)", 
@@ -20,7 +21,8 @@ class UolSpider(ZeSpider):
                 ], 
                 "description": [
                     "[itemprop=description]::text", 
-                    ".post-sub-title::text"
+                    ".post-sub-title::text",
+                    ".definicao::text"
                 ],
                 "author": [
                     "[itemprop=author]::text", 
@@ -37,6 +39,7 @@ class UolSpider(ZeSpider):
                     "[itemprop=articleBody]",
                     ".entry", 
                     "#texto-noticia", 
+                    ".conteudo-materia" 
                 ], 
                 "keywords": [
                     "[itemprop=keywords] a::text", 
