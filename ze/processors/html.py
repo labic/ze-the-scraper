@@ -26,8 +26,9 @@ class ImproveHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                    selector, spider_name, e)
         
             try:
                 selector = '.tile-rights'
@@ -41,8 +42,9 @@ class ImproveHTML(object):
                     
                     el.replace_with(fg)
                     img.parent.decompose()
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                    selector, spider_name, e)
         
         if spider_name is 'veja':
             try:
@@ -55,8 +57,9 @@ class ImproveHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                    selector, spider_name, e)
                 
             try:
                 selector = 'p span iframe[src*="https://www.youtubel.com/embed"]'
@@ -64,8 +67,9 @@ class ImproveHTML(object):
                     video_id = el['data-lazy-src'].split('/')[4]
                     fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
                         width='1280', height='720', frameborder='0', allowfullscreen='true')
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                    selector, spider_name, e)
         
         if spider_name is 'g1':
             try:
@@ -79,8 +83,9 @@ class ImproveHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                    selector, spider_name, e)
             
             try:
                 selector = '[data-block-type="backstage-video"]'
@@ -95,8 +100,9 @@ class ImproveHTML(object):
                     a.append(fg)
                     
                     el.replace_with(a)
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                    selector, spider_name, e)
         
         if spider_name is 'estadao':
             try:
@@ -123,8 +129,8 @@ class ImproveHTML(object):
                     fg.append(fc)
                     
                     el.replace_with(fg)
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', selector, spider_name, e)
             
             # for el in html.select('.documento'):
             #     [e.decompose() for eLin el.select('span')]
@@ -160,8 +166,9 @@ class ImproveHTML(object):
                         section.append(fg)
                     
                     el.replace_with(section)
-            except Exception:
-                logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                    selector, spider_name, e)
         
         # all spiders
         try:
@@ -174,8 +181,9 @@ class ImproveHTML(object):
                 fg.append(fc)
                 
                 el.replace_with(fg)
-        except Exception:
-            logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+        except Exception as e:
+            logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                selector, spider_name, e)
         
         try:
             selector = 'p iframe[data-lazy-src*="https://www.youtubel.com/embed"]'
@@ -186,8 +194,9 @@ class ImproveHTML(object):
                     width='1280', height='720', frameborder='0', allowfullscreen='true')
                 
                 el.parent.replace_with(fm)
-        except Exception:
-            logger.error('Failed to replace "%s" selector from %s', selector, spider_name)
+        except Exception as e:
+            logger.error('Failed to replace "%s" selector from %s:\n%s', 
+                selector, spider_name, e)
         
         el_to_uwrap = loader_context.get('el_to_uwrap')
         if not el_to_uwrap:
