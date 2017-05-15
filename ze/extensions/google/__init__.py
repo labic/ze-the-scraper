@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os, logging; logger = logging.getLogger(__name__)
+from scrapy.exceptions import NotConfigured
 from scrapy.utils.project import data_path
 
 class GoogleCloud(object):
@@ -23,8 +24,10 @@ class GoogleCloud(object):
                 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.credentials_json_path
                 logger.info('Google Cloud extensions inited with success')
             else:
-                logger.error('GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON not is set in settings')
                 settings.set('GOOGLE_CLOUD_ENABLED', False)
+                raise NotConfigured('GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON '
+                                    'not is set in settings')
+                
         else:
             logger.info('GOOGLE_CLOUD_ENABLED is False')
 
