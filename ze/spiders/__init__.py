@@ -27,7 +27,8 @@ class ZeSpider(scrapy.Spider):
     def from_crawler(cls, crawler, *args, **kwargs):
         for key, value in kwargs.items():
             try: kwargs[key] = json.loads(value)
-            except Exception: pass # TODO: Add debug
+            # FIXME find a better way to convert JSON input
+            except ValueError: pass
                 
         spider = cls(*args, **kwargs)
         spider._set_crawler(crawler)
@@ -38,12 +39,13 @@ class ZeSpider(scrapy.Spider):
         
         if self.args.get('url'):
             urls.append(self.args.get('url'))
-        elif self.args['search']['engine'] in ['google']:
-            for d in self.allowed_domains:
-                self.args['search']['query'] = '%s site:%s' % (self.args['search']['query'], d)
-                urls = self.get_urls_from_search_engine(self.args['search'])
-        elif self.args['search']['engine'] == 'own':
-            self.make_request_from_onw_search_engine()
+        elif self.args.get('search'):
+            if self.args['search']['engine'] == 'google':
+                for d in self.allowed_domains:
+                    self.args['search']['query'] = '%s site:%s' % (self.args['search']['query'], d)
+                    urls = self.get_urls_from_search_engine(self.args['search'])
+            elif self.args['search']['engine'] == 'own':
+                self.make_request_from_onw_search_engine()
         else:
             raise ValueError('search.provider is not valid, please search `google` or `own`')
         
