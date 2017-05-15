@@ -18,6 +18,10 @@ scrapy crawl [SPIDER] -a search="-a search='{ \
  g1
 ```
 
+#### Crawlling With All Spiders
+```shell
+scrapy crawlmany all -a search='{ "query": "Celpe-Bras OR \"Certificado * Proficiência * Língua Portuguesa\"", "engine": "google", "last_update": "d", "pages": 2, "results_per_page": 50 }' 
+```
 ## References
 
  - http://xpo6.com/list-of-english-stop-words/
