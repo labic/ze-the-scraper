@@ -11,11 +11,9 @@ setup(
     author_email = 'email+labic.net@gustavorps.net, ligiaiv@gmail.com',
     license = 'MIT',
     packages = find_packages(),
-    scripts      = ['bin/cmdline.py'],
     entry_points = {
         'scrapy': ['settings = ze.settings'],
         'scrapy.commands': [
-            'crawlmany=ze.commands.crawlmany:Command',
             'generate=ze.commands.generate:Command',
         ],
     },

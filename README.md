@@ -18,9 +18,9 @@ scrapy crawl [SPIDER] -a search="-a search='{ \
  g1
 ```
 
-#### Crawlling With All Spiders
+#### Crawlling All Spiders
 ```shell
-crawlmany estadao -a search='{ "query": "Enem OR \"Exame Nacional * Ensino Médio\"", "engine": "google", "last_update": "d", "pages": 2, "results_per_page": 50 }'
+scrapy crawl all -a search='{ "query": "Enem OR \"Exame Nacional * Ensino Médio\"", "engine": "google", "last_update": "d", "pages": 2, "results_per_page": 50 }'
 ```
 ## References
 
