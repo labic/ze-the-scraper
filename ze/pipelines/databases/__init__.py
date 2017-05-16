@@ -4,15 +4,7 @@ import logging; logger = logging.getLogger(__name__)
 
 from scrapy.exceptions import NotConfigured
 from pymongo import MongoClient
-
-
-class BasePipeline(object):
-
-    @classmethod
-    def from_crawler(cls, crawler):
-        return cls(settings=crawler.settings, stats=crawler.stats)
-        
-    def __init__(self, settings, stats): raise NotImplementError
+from ze.pipelines import BasePipeline
 
 
 class MongoPipeline(BasePipeline):

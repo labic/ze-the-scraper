@@ -57,6 +57,9 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 # ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
+DROP_ITEM_PIPELINE_ENABLED = True
+DROP_ITEM_PIPELINE_FILTERS = []
+# Google Cloud Application
 GOOGLE_CLOUD_ENABLED = True
 # Google Cloud Application Credentions used for many pipelines
 GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON = ''
