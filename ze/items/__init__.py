@@ -178,6 +178,7 @@ class CreativeWorkItem(ThingItem):
     copyrightHolder = Field()
     copyrightYear = Field()
     creator = Field()
+    # TODO: User array with multiple dates to chose the best
     dateCreated = Field(
         schemas = {
             'avro': {
@@ -185,6 +186,7 @@ class CreativeWorkItem(ThingItem):
             }, 
         }
     )
+    # TODO: User array with multiple dates to chose the best
     dateModified = Field(
         input_processor=MapCompose(ParseDate()),
         output_processor=TakeFirst(),
@@ -194,6 +196,7 @@ class CreativeWorkItem(ThingItem):
             }, 
         }
     )
+    # TODO: User array with multiple dates to chose the best
     datePublished = Field(
         input_processor=MapCompose(ParseDate()),
         output_processor=TakeFirst(),
