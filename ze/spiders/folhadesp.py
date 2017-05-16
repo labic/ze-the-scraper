@@ -12,6 +12,7 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                 "name": [
                     ".news header h1::text", 
                     "[itemprop=name]::text", 
+                    "[itemprop='headline']::text", 
                     "[itemprop=alternativeHeadline]::attr(content)"
                 ], 
                 "image": [
