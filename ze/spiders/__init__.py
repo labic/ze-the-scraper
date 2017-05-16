@@ -1,27 +1,17 @@
 # -*- coding: utf-8 -*-
+from copy import copy
 import json
-import urllib.parse
 import scrapy
+from scrapy.spiderloader import SpiderLoader
 from scrapy.http import Request, HtmlResponse
 import ze
+from ze.utils.searchengine import SearchEngine
 
-import GoogleScraper
 
 class ZeSpider(scrapy.Spider):
     
     allowed_domains = []
-    parses = {}
-    
-    def __init__(self, name=None, **kwargs):
-        self.args = kwargs
-        
-        if name is not None:
-            self.name = name
-        elif not getattr(self, 'name', None):
-            raise ValueError("%s must have a name" % type(self).__name__)
-        self.__dict__.update(kwargs)
-        if not hasattr(self, 'start_urls'):
-            self.start_urls = []
+    parses = []
     
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
@@ -29,87 +19,30 @@ class ZeSpider(scrapy.Spider):
             try: kwargs[key] = json.loads(value)
             # FIXME find a better way to convert JSON input
             except ValueError: pass
-                
+        
         spider = cls(*args, **kwargs)
         spider._set_crawler(crawler)
         return spider
-
+    
     def start_requests(self):
-        urls = []
-        
-        if self.args.get('url'):
-            urls.append(self.args.get('url'))
-        elif self.args.get('search'):
-            if self.args['search']['engine'] == 'google':
+        if hasattr(self, 'url'):
+            self.start_urls.append(self.url)
+        elif hasattr(self, 'search'):
+            if self.search['engine'] == 'google':
                 for d in self.allowed_domains:
-                    self.args['search']['query'] = '%s site:%s' % (self.args['search']['query'], d)
-                    urls = self.get_urls_from_search_engine(self.args['search'])
-            elif self.args['search']['engine'] == 'own':
+                    search = copy(self.search)
+                    search['query'] = '%s site:%s' % (search['query'], d)
+                    self.start_urls = self.start_urls + SearchEngine.search_for_urls(search)
+            elif self.search['engine'] == 'own':
                 self.make_request_from_onw_search_engine()
+            else:
+                raise ValueError('search.engine is not valid, use `google` or `own`')
         else:
-            raise ValueError('search.provider is not valid, please search `google` or `own`')
-        
-        for u in urls:
-            yield scrapy.Request(u)
+            raise ValueError('Must provide "url" or "search" argument')
     
-    def get_urls_from_search_engine(self, args={}):
-        """
-        args['config']['last_update']
-            Applications: tbm=app
-            Blogs: tbm=blg
-            Books: tbm=bks
-            Discussions: tbm=dsc
-            Images: tbm=isch
-            News: tbm=nws
-            Patents: tbm=pts
-            Places: tbm=plcs
-            Recipes: tbm=rcp
-            Shopping: tbm=shop
-            Video: tbm=vid
-        """ 
+        for url in self.start_urls:
+            yield self.make_requests_from_url(url)
     
-        def fix_urls(url):
-            url = url.replace('/amp/', '') if '/amp/' in url else url
-            url = urllib.parse.urljoin('http://', url) if 'http://' not in url else url
-            return url
-        
-        # TODO: implement quantity arg
-        if args.get('engine', 'google') == 'google':
-            config = {
-                'use_own_ip': 'True',
-                'keywords': [args['query']],
-                'google_search_url': 'https://www.google.com/search?tbs=qdr:%s&' % args.get('last_update', 'w'),
-                'num_results_per_page': args.get('results_per_page', 50),
-                'num_pages_for_keyword': args.get('pages', 2),
-                'num_workers': 1,
-                'search_engines': ['google',],
-                'search_type': 'normal',
-                'scrape_method': 'http',
-                'do_caching': False,
-                'print_results': None,
-            }
-        else:
-            raise NotImplementedError('Only Google serch engine is supported at momment')
-        
-        self.logger.info('Google Search scrapping start with this configuration: %s' % config)
-        
-        try:
-            search = GoogleScraper.scrape_with_config(config)
-        except GoogleScraper.GoogleSearchError as e:
-            self.logger.error(str(e))
-        
-        urls = []
-        for serp in search.serps:
-            [urls.append(fix_urls(r.link)) for r in serp.links]
-        
-        self.logger.info('Google Search scrapped with success: %d links extracted' % len(urls))
-        self.logger.info('List of link extracted from Google Search: %s' % urls)
-        
-        return urls
-
-    def make_request_from_onw_search_engine(self, args={}):
-        raise NotImplementedError
-
     def parse(self, response):
         for p in self.parses:
             for i, a in p.items():
@@ -130,3 +63,58 @@ class ZeSpider(scrapy.Spider):
         il.add_value('url', response.url)
 
         return il.load_item()
+
+    def make_request_from_onw_search_engine(self, args={}):
+        raise NotImplementedError
+
+
+class AllSpiders(ZeSpider):
+
+    name = 'all'
+    allowed_domains = []
+    domains_parses = {}
+    
+    def start_requests(self):
+        spider_loader = SpiderLoader.from_settings(self.settings)
+        
+        spider_names = spider_loader.list()
+        spider_names.remove(self.name)
+        
+        for spider_name in spider_names:
+            Spider = spider_loader.load(spider_name)
+            
+            for domain in Spider.allowed_domains:
+                self.domains_parses[domain] = Spider.parses
+            
+            self.allowed_domains = self.allowed_domains + Spider.allowed_domains
+        
+        if hasattr(self, 'url'):
+            self.start_urls.append(self.url)
+        elif hasattr(self, 'search'):
+            if self.search['engine'] == 'google':
+                for d in self.allowed_domains:
+                    search = copy(self.search)
+                    search['query'] = '%s site:%s' % (search['query'], d)
+                    self.start_urls = self.start_urls + SearchEngine.search_for_urls(search)
+            elif self.search['engine'] == 'own':
+                self.make_request_from_onw_search_engine()
+            else:
+                raise ValueError('search.provider is not valid, please search `google` or `own`')
+        else:
+            raise ValueError('Must provide "url" or "search" argument')
+        
+        for url in self.start_urls:
+            yield self.make_requests_from_url(url)
+    
+    def parse(self, response):
+        domain_parse = None
+        for domain, parses in self.domains_parses.items():
+            if domain in response.url:
+                domain_parse = domain
+                break
+        
+        for domain_parse in self.domains_parses[domain]:
+            for i, a in domain_parse.items():
+                ItemClass = ze.utils.import_class(i)
+                load_method = self[a.get('load_method')] if a.get('load_method') else self.load_item
+                yield load_method(response, ItemClass, a)
