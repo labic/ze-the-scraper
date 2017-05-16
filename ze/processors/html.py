@@ -2,10 +2,9 @@
 
 import json
 import requests
-import logging
+import logging; logger = logging.getLogger(__name__)
 from bs4 import BeautifulSoup, Comment
 
-logger = logging.getLogger(__name__)
 
 class ImproveHTML(object):
 
