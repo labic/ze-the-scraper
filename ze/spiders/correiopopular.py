@@ -1,51 +1,50 @@
 # -*- coding: utf-8 -*-
 
+#TODO:articleBody datePublished dateModified
 from ze.spiders import ZeSpider
 
-class CorreioBrasilienseSpider(ZeSpider):
+class CorreioPopular(ZeSpider):
 
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
+    name = 'correiopopular'
+    allowed_domains = ['correio.rac.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.title-post::text'
+                    '.news-title::text'
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
-                    '.lazy::attr("data-lazy-src")'
+                    '#foto_auto img::attr(src)'
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text'
+                    '[itemprop=description]::text',
+                    '.resumo h2::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '[class*=autor]::text',
-                    '.autor_casa::text',
-                    '.author a::text',
-                    '[onclick*=malito] span::text'
-
+                    '.publish-by b::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.entry-date::text'
+                    '.publish-time::text',#dateModified ta junto
 
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)'
+                    '[itemprop=dateModified]::attr(content)',
+                    '.node-body p em::text'#ta com datePublished
+
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.entry-content'
-
+                    '.article-container'#get text from all div.fe-content
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
-                    '[rel=tag]::text',
-                    '[onclick*=montaURL]::text'
+                    '.tags-container a::text',
+
                 ]
             }
         }

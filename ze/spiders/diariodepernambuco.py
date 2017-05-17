@@ -1,51 +1,54 @@
-# -*- coding: utf-8 -*-
-
 from ze.spiders import ZeSpider
 
-class CorreioBrasilienseSpider(ZeSpider):
+class DiariodePernambuco(ZeSpider):
 
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
+    name = 'diariodepernambuco'
+    allowed_domains = ['diariodepernambuco.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.title-post::text'
+                    '.h1::text',
+                    'div.et_pb_text_align_center::text'
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
-                    '.lazy::attr("data-lazy-src")'
+                    'table.image tbody tr td img::attr(src)'
+                    # '.image img::attr(src)'
+
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text'
+                    # '[itemprop=description]::text',
+                    # '[property="og:discription"]::attr(content)',
+
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '[class*=autor]::text',
-                    '.autor_casa::text',
-                    '.author a::text',
-                    '[onclick*=malito] span::text'
-
+                    '.yellowlight::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.entry-date::text'
+                    '.data::text',
+                    '[property="article:published_time"]::attr(content)',
 
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)'
+                    '[itemprop=dateModified]::attr(content)',
+                    '[property="article:modified_time"]::attr(content)',
+
+
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.entry-content'
-
+                    '[id = abanoticia] '
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
                     '[rel=tag]::text',
-                    '[onclick*=montaURL]::text'
+                    '[onclick*=montaURL]::text',
+                    '.tags_noticias a::text'
                 ]
             }
         }

@@ -14,7 +14,13 @@ class CorreioBrasilienseSpider(ZeSpider):
                     '.title-post::text'
                 ],
                 "image": [
+<<<<<<< 1bc6637ab7cf9af0ddafd8622ea360169673e826:ze/spiders/correiobraziliense.py
+                    '[itemprop="image"] img::attr(src)', 
+||||||| merged common ancestors
+                    '[itemprop="image" img::attr(src)]', 
+=======
                     '[itemprop="image"] img::attr(src)',
+>>>>>>> merged with upstream:ze/spiders/correiobrasiliense.py
                     '.lazy::attr("data-lazy-src")'
                 ],
                 "description": [
@@ -24,6 +30,7 @@ class CorreioBrasilienseSpider(ZeSpider):
                 "author": [
                     '[itemprop=author]::text',
                     '[class*=autor]::text',
+
                     '.autor_casa::text',
                     '.author a::text',
                     '[onclick*=malito] span::text'
