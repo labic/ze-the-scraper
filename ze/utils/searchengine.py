@@ -52,13 +52,6 @@ class SearchEngine(object):
         try:
             google_search = GoogleScraper.scrape_with_config(config)
             
-            logger.debug('##############################')
-            logger.debug('##############################')
-            logger.debug('##############################')
-            logger.debug('##############################')
-            logger.debug('##############################')
-            print(google_search)
-            
             urls_without_fix = []
             urls = []
             for serp in google_search.serps:
