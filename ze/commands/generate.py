@@ -2,7 +2,7 @@
 import sys
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime
 from scrapy.commands import ScrapyCommand
 from croniter import croniter
 
