@@ -1,11 +1,10 @@
+# -*- coding: utf-8 -*-
 import sys
 import json
 import re
 from datetime import datetime, timezone
 from scrapy.commands import ScrapyCommand
 from croniter import croniter
-
-# -*- coding: utf-8 -*-
 
 jobs = [{
     'schedules': (
