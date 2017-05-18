@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+import re
 import logging; logger = logging.getLogger(__name__)
 from scrapy.exceptions import NotConfigured
-from ze.exceptions import EmptyFields
+from ze.exceptions import EmptyFields, MissingSearchQueryKeywords
 
 
 class BasePipeline(object):
@@ -25,6 +26,7 @@ class DropItemsPipeline(BasePipeline):
             raise NotConfigured('Drop Item Pepeline is not enabled, check settings values')
     
     def process_item(self, item, spider):
+        # FIXME when use spider all, get the real name of the spiders that load item
         empty_fields = { k: not item.get(k, False) for k in item.fields.keys() \
                         if item.fields[k].get('required', False)}
         
@@ -34,5 +36,12 @@ class DropItemsPipeline(BasePipeline):
                 self.stats.inc_value('item_dropped_reasons_count/EmptyFields/%s/%s' % \
                                     (spider.name, field_name))
             raise EmptyFields('Item with empty fields "%s" in url: %s' % (fields_name, item['url']))
-        else:
-            return item
+        
+        if hasattr(spider, 'search'):
+            if spider.search.get('regex'):
+                if not re.search(spider.search['regex'], item.get('articleBody', '')) \
+                and not re.search(spider.search['regex'], item.get('name', '')):
+                    raise MissingSearchQueryKeywords('Item of url %s don\'t have search query keyword %s' % \
+                                                    (item['url'], spider.search['query']))
+        
+        return item

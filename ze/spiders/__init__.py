@@ -50,13 +50,14 @@ class ZeSpider(scrapy.Spider):
                 load_method = self[a.get('load_method')] if a.get('load_method') else self.load_item
                 yield load_method(response, ItemClass, a)
 
-    def load_item(self, response, ItemClass=None, args=None):
+    def load_item(self, response, ItemClass, parse):
+        spider_name = self.name if not parse.get('spider_name') else parse.get('spider_name')
         il = ze.items.ItemLoader(
             item=ItemClass(), 
             response=response, 
-            spider_name=self.name)
+            spider_name=spider_name)
         
-        for field, selectors in args['fields'].items():
+        for field, selectors in parse['fields'].items():
             for i, s in enumerate(selectors):
                 il.add_css(field, s) if i == 0 else il.add_fallback_css(field, s)
         
@@ -77,13 +78,21 @@ class AllSpiders(ZeSpider):
     def start_requests(self):
         spider_loader = SpiderLoader.from_settings(self.settings)
         
-        spider_names = spider_loader.list()
-        spider_names.remove(self.name)
+        if hasattr(self, 'spiders'):
+            spider_names = self.spiders.split(',')
+        else:
+            spider_names = spider_loader.list()
+            spider_names.remove(self.name)
         
         for spider_name in spider_names:
             Spider = spider_loader.load(spider_name)
             
             for domain in Spider.allowed_domains:
+                parses = []
+                for i, parse in enumerate(Spider.parses):
+                    for item_class, properties in parse.items():
+                        properties['spider_name'] = spider_name
+                        Spider.parses[i][item_class] = properties
                 self.domains_parses[domain] = Spider.parses
             
             self.allowed_domains = self.allowed_domains + Spider.allowed_domains
@@ -114,7 +123,7 @@ class AllSpiders(ZeSpider):
                 break
         
         for domain_parse in self.domains_parses[domain]:
-            for i, a in domain_parse.items():
-                ItemClass = ze.utils.import_class(i)
-                load_method = self[a.get('load_method')] if a.get('load_method') else self.load_item
-                yield load_method(response, ItemClass, a)
+            for item_class, parse in domain_parse.items():
+                ItemClass = ze.utils.import_class(item_class)
+                load_method = self[parse.get('load_method')] if parse.get('load_method') else self.load_item
+                yield load_method(response, ItemClass, parse)

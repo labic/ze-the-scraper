@@ -5,6 +5,6 @@ class EmptyFields(DropItem):
     """Drop item from the item pipeline with empty fields"""
     pass
 
-class DesiredTermsMissing(DropItem):
-    """Drop item from the item pipeline with empty fields"""
+class MissingSearchQueryKeywords(DropItem):
+    """Drop item from the item don't have the none of keywords in the fields"""
     pass
