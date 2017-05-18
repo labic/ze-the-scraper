@@ -1,33 +1,46 @@
+## Usage
 
-## Using
-
-### Spider
+### Crawlling using a single spider an single url
 ```shell
-scrapy crawl [SPIDER] -a search="-a search='{ \
+scrapy crawl <spider_name> -a url=http(s):someurl.com?query1=a&query2=b
+```
+
+### Crawlling using a single spider with urls extrected from Google
+```shell
+scrapy crawl <spider_name> -a search='{ \
+  "query": "Enem OR \"Exame Nacional * Ensino Médio\"", \
+  'regex': "(?i)Enem|Exame.{0,}Nacional.{0,}Ensino.{0,}Mé?e?dio" \
   "engine": "google", \
-  "query": "educação", \
-  "last_update": "24H",\
+  "last_update": "d",\
   "results_per_page": 50,\
   "pages": 2 \
-}'" 
-
-[SPIDER]
- g1
- ig 
- veja
- g1
+}' 
 ```
 
-#### Crawlling All Spiders
+### Crawlling using all spiders with urls extrected from Google
 ```shell
-scrapy crawl all -a search='{ "query": "Enem OR \"Exame Nacional * Ensino Médio\"", "engine": "google", "last_update": "d", "pages": 2, "results_per_page": 50 }'
+scrapy crawl all -a search='{ \
+  "query": "Enem OR \"Exame Nacional * Ensino Médio\"", \
+  "regex": "(?i)Enem|Exame.{0,}Nacional.{0,}Ensino.{0,}Mé?e?dio"
+  "engine": "google", \
+  "last_update": "d", \
+  "results_per_page": 50, \
+  "pages": 2 \
+}'
 ```
+
 ## References
 
  - http://xpo6.com/list-of-english-stop-words/
  - [Scrapy - Docs | Jobs: pausing and resuming crawls](https://doc.scrapy.org/en/latest/topics/jobs.html?highlight=scheduler)
  - [scrapy.extensions.memusage][https://github.com/scrapy/scrapy/blob/master/scrapy/extensions/memusage.py]
    It's a good code to extend, overide `_send_report_` function to send to another services than only mail
+
+
+## TODO:
+
+- [ ] Implement DeltaFetch midleware
+
 
 ## Ideas
 
@@ -39,7 +52,7 @@ https://cloud.google.com/bigtable/docs/schema-design
 | INEP | NEWS:EDUCACAO (V1 03/01/15):558.40 | 
 
 Use this:
-- codernitydb ****
+- TinyDB CodernityDB
 - https://blog.scrapinghub.com/2016/04/20/scrapy-tips-from-the-pros-april-2016-edition/
 - https://helpdesk.scrapinghub.com/support/solutions/articles/22000200401-dotscrapy-persistence-addon
 - https://helpdesk.scrapinghub.com/support/solutions/articles/22000200418-magic-fields-addon
