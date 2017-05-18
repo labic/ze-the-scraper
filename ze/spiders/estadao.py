@@ -13,6 +13,8 @@ class EstadaoSpider(ZeSpider):
                     "[itemprop=name]::text", 
                     ".titulo-principal::text", 
                     ".titulo::text", 
+                    ".n--noticia__title::text", 
+                    "article h1::text", 
                 ], 
                 "image": [ 
                     "[itemprop=image]::attr(content)", 
@@ -21,6 +23,8 @@ class EstadaoSpider(ZeSpider):
                 "description": [ 
                     "[itemprop=description]::text", 
                     ".linha-fina::text", 
+                    ".n--noticia__subtitle::text", 
+                    "article p::text", 
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
