@@ -9,9 +9,9 @@ scrapy crawl <spider_name> -a url=http(s):someurl.com?query1=a&query2=b
 ```shell
 scrapy crawl <spider_name> -a search='{ \
   "query": "Enem OR \"Exame Nacional * Ensino Médio\"", \
-  'regex': "(?i)Enem|Exame.{0,}Nacional.{0,}Ensino.{0,}Mé?e?dio" \
+  "regex": "(?i)Enem|Exame.{0,}Nacional.{0,}Ensino.{0,}Mé?e?dio" \
   "engine": "google", \
-  "last_update": "d",\
+  "dateRestrict": "d1",\
   "results_per_page": 50,\
   "pages": 2 \
 }' 
@@ -23,10 +23,17 @@ scrapy crawl all -a search='{ \
   "query": "Enem OR \"Exame Nacional * Ensino Médio\"", \
   "regex": "(?i)Enem|Exame.{0,}Nacional.{0,}Ensino.{0,}Mé?e?dio"
   "engine": "google", \
-  "last_update": "d", \
+  "dateRestrict": "d1", \
   "results_per_page": 50, \
   "pages": 2 \
 }'
+
+scrapy crawl all \
+-a search=google \
+-a query="Enem OR \"Exame Nacional * Ensino Médio\"" \
+-a regex="(?i)Enem|Exame.{0,}Nacional.{0,}Ensino.{0,}Mé?e?dio" \
+-a dateRestrict=d1
+
 ```
 
 ## References
@@ -40,7 +47,7 @@ scrapy crawl all -a search='{ \
 ## TODO:
 
 - [ ] Implement DeltaFetch midleware
-
+- [ ] decompose class `.n--noticia__newsletter` to spider estadao
 
 ## Ideas
 
