@@ -37,11 +37,11 @@ class DropItemsPipeline(BasePipeline):
                                     (spider.name, field_name))
             raise EmptyFields('Item with empty fields "%s" in url: %s' % (fields_name, item['url']))
         
-        if hasattr(spider, 'search'):
-            if spider.search.get('regex'):
-                if not re.search(spider.search['regex'], item.get('articleBody', '')) \
-                and not re.search(spider.search['regex'], item.get('name', '')):
-                    raise MissingSearchQueryKeywords('Item of url %s don\'t have search query keyword %s' % \
-                                                    (item['url'], spider.search['query']))
+        # TODO add Validatable attr to item fields 
+        if hasattr(spider, 'regex'):
+            if not re.search(spider.regex, item.get('articleBody', '')) \
+            and not re.search(spider.regex, item.get('name', '')):
+                raise MissingSearchQueryKeywords('Item of url %s don\'t have search query keyword %s' % \
+                                                (item['url'], spider.search['query']))
         
         return item

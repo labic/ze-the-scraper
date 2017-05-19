@@ -12,16 +12,6 @@ class ZeSpider(scrapy.Spider):
     
     allowed_domains = []
     parses = []
-        
-    @classmethod
-    def from_crawler(cls, crawler, *args, **kwargs):
-        for key, value in kwargs.items():
-            try: kwargs[key] = json.loads(value)
-            # FIXME find a better way to convert JSON input
-            except ValueError: pass
-        spider = cls(*args, **kwargs)
-        spider._set_crawler(crawler)
-        return spider
     
     def start_requests(self):
         if hasattr(self, 'url'):
