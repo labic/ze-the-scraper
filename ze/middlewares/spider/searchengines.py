@@ -6,6 +6,7 @@ import urllib
 import requests
 from weakref import WeakKeyDictionary
 import logging; logger = logging.getLogger(__name__)
+from scrapy.exceptions import NotConfigured
 from scrapy import signals
 from scrapy.utils.project import data_path
 import GoogleScraper
@@ -20,13 +21,17 @@ class GoogleSearchMiddleware(object):
 
     def __init__(self, crawler):
         self.stats = crawler.stats
-        self.lib = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_LIB', 'google_rest')
-        self.api_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_API_KEY')
-        self.custom_search_engine_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID')
-        self.cache_enabled = crawler.settings.getbool('GOOGLE_SEARCH_MIDDLEWARE_CACHE_ENABLE')
-        self._cc_parsed = WeakKeyDictionary()
         
-        crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
+        if crawler.settings.getbool('GOOGLE_SEARCH_MIDDLEWARE_ENABLED'):
+            self.lib = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_LIB', 'google_rest')
+            self.api_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_API_KEY')
+            self.custom_search_engine_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID')
+            self.cache_enabled = crawler.settings.getbool('GOOGLE_SEARCH_MIDDLEWARE_CACHE_ENABLE')
+            self._cc_parsed = WeakKeyDictionary()
+            
+            crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
+        else:
+            raise NotConfigured('Search Engine is not enabled, check settings values')
 
     def spider_opened(self, spider):
         # FIXME legacie code
