@@ -45,7 +45,7 @@ CONCURRENT_REQUESTS_PER_IP=16
 
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-GOOGLE_SEARCH_MIDDLEWARE_ENABLED=False
+GOOGLE_SEARCH_MIDDLEWARE_ENABLED=True
 GOOGLE_SEARCH_MIDDLEWARE_LIB='google_rest'
 GOOGLE_SEARCH_MIDDLEWARE_API_KEY=None
 GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID=None
@@ -68,8 +68,11 @@ SPIDER_MIDDLEWARES = {
 # }
 
 # ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
-DROP_ITEM_PIPELINE_ENABLED=True
-DROP_ITEM_PIPELINE_FILTERS=[]
+DROP_ITEM_PIPELINE_ENABLED=False
+DROP_ITEM_PIPELINE_VALIDATION_METHODS=[
+    'drop_items_with_empty_fields',
+    'drop_items_that_not_match_regex',
+]
 # Google Cloud Application
 GOOGLE_CLOUD_ENABLED=True
 # Google Cloud Application Credentions used for many pipelines

@@ -53,7 +53,7 @@ class AllSpiders(ZeSpider):
     domains_parses = {}
     start_urls = []
     
-    def start_requests(self):
+    def prepare_domains_parses(self):
         spider_loader = SpiderLoader.from_settings(self.settings)
         
         if hasattr(self, 'spiders'):
@@ -66,17 +66,22 @@ class AllSpiders(ZeSpider):
             Spider = spider_loader.load(spider_name)
             
             for domain in Spider.allowed_domains:
-                parses = []
                 for i, parse in enumerate(Spider.parses):
                     for item_class, properties in parse.items():
                         properties['spider_name'] = spider_name
                         Spider.parses[i][item_class] = properties
+                
                 self.domains_parses[domain] = Spider.parses
             
-            self.allowed_domains = self.allowed_domains + Spider.allowed_domains
+            self.allowed_domains += Spider.allowed_domains
+        
+        self.allowed_domains.sort(key=len,reverse=True)
+    
+    def start_requests(self):
+        self.prepare_domains_parses()
         
         for url in self.start_urls:
-            yield Request(url)
+            yield Request(url, dont_filter=False)
     
     def parse(self, response):
         try:
