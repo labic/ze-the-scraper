@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import math
+from time import sleep
 from datetime import datetime
-from pprint import pprint
+from collections import Counter
 import urllib
 import requests
-from weakref import WeakKeyDictionary
 import logging; logger = logging.getLogger(__name__)
 from scrapy.exceptions import NotConfigured
 from scrapy import signals
@@ -15,6 +15,7 @@ import GoogleScraper
 class GoogleSearchMiddleware(object):
     
     api_rest_base_url = 'https://www.googleapis.com/customsearch/v1?'
+    
     @classmethod
     def from_crawler(cls, crawler):
         return cls(crawler)
@@ -26,14 +27,13 @@ class GoogleSearchMiddleware(object):
             self.lib = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_LIB', 'google_rest')
             self.api_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_API_KEY')
             self.custom_search_engine_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID')
-            self.cache_enabled = crawler.settings.getbool('GOOGLE_SEARCH_MIDDLEWARE_CACHE_ENABLE')
-            self._cc_parsed = WeakKeyDictionary()
-            
+            self.max_index = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_MAX_INDEX', 20)
             crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
         else:
             raise NotConfigured('Search Engine is not enabled, check settings values')
 
     def spider_opened(self, spider):
+        
         # FIXME legacie code
         # elif hasattr(self, 'search'):
         #     if self.search['engine'] == 'google':
@@ -42,45 +42,52 @@ class GoogleSearchMiddleware(object):
         #             search['query'] = '%s site:%s' % (search['query'], d)
         #             self.start_urls = self.start_urls + SearchEngine.search_for_urls(search)
         if hasattr(spider, 'search'):
+            logger.info('Making requests to Google Custom Search')
+            
             query_paraments = {
                 'key': self.api_key,
                 'cx': self.custom_search_engine_key,
                 'fields': 'items(cacheId,link,snippet,title),queries',
                 'start': 1,
                 'q': spider.query,
-                'dateRestrict': getattr(spider, 'dateRestrict', 'd1'),
+                'sort': 'date:r:{date}:{date}'.format(date=datetime.now().strftime('%Y%m%d'))
             }
             
-            if self.cache_enabled:
-                self.retrive_search_results(spider, query_paraments)
-            
-            search_items = self.search_via_api_rest(query_paraments)
-            spider.start_urls = search_items
+            search_items_ruls = self.search_urls_via_api_rest(query_paraments)
+            logger.debug('search_items_ruls counter: %s'%search_items_ruls)
+            spider.start_urls = search_items_ruls
         else:
             logger.info('Spider %s don\'t has search argument'%spider.name)
     
-    def search_via_api_rest(self, query_paraments, search_items=[]):
+    def search_urls_via_api_rest(self, query_paraments, search_items=[], search_items_urls=[]):
+        self.stats.inc_value('google/custom_search/requests_count')
+        
         query_paraments_encoded = urllib.parse.urlencode(query_paraments)
         google_custom_search_url = ''.join((self.api_rest_base_url, query_paraments_encoded))
         
         search_results = requests.get(google_custom_search_url).json()
-        # logger.debug('search.search_search:\n%s'%pprint(search_results))
-        self.stats.inc_value('google/custom_search/requests')
         
         if 'items' in search_results:
-            search_items += search_results['items']
-        search_request = search_results['queries']['request'][0]
+            current_search_itens = search_results['items']
+            search_items += current_search_itens
+            search_items_urls += [i['link'] for i in current_search_itens]
         
+        search_request = search_results['queries']['request'][0]
         search_total_results = int(search_request['totalResults'])
-        self.stats.set_value('google/custom_search/total_results', search_total_results)
         search_total_pages = math.ceil(search_total_results/ 10)
         search_start_index = int(search_request['startIndex'])
         
-        if search_total_pages < search_start_index:
+        # FIXME Bug on Google Custom Search API keep 
+        if search_total_pages > search_start_index \
+        and search_start_index < self.max_index:
+            # sleep(1)
             query_paraments['start'] += 1
-            self.search_via_api_rest(query_paraments, search_items)
+            self.search_urls_via_api_rest(query_paraments, search_items, search_items_urls)
         
-        return [i['link'] for i in search_items]
+        self.stats.set_value('google/custom_search/results_count', search_total_results)
+        self.stats.set_value('google/custom_search/urls_count', len(search_items_urls))
+        
+        return search_items_urls
     
     def search_via_googler(self, query_paraments):
         """

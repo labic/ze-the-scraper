@@ -102,4 +102,5 @@ class AllSpiders(ZeSpider):
                     load_method = self[parse.get('load_method')] if parse.get('load_method') else self.load_item
                     yield load_method(response, ItemClass, parse)
         else:
-            self.logger.warning('Don\'t exist a parse on spiders with allowrd domain that match this url: %s'%response.url)
+            self.crawler.stats.inc_value('spider/all/url_without_parse_count')
+            self.logger.warning('Don\'t exist a parse on spiders with allowed domain that match this url: %s'%response.url)
