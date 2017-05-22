@@ -15,15 +15,10 @@ from google.cloud.exceptions import BadRequest
 class GooglePubSubPipeline(BasePipeline):
 
     def __init__(self, settings, stats):
-        self.settings = {
-            'google_cloud_enabled': settings.getbool('GOOGLE_CLOUD_ENABLED'), 
-            'enabled': settings.getbool('GOOGLE_CLOUD_PUBSUB_ENABLED'), 
-            # TODO: This work?
-            # 'enabled': settings.getbool('GOOGLE_CLOUD_ENABLED') 
-            #           and settings.getbool('GOOGLE_CLOUD_PUBSUB_ENABLED')), 
-        }
-        # TODO: This is the better way?
-        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
+        google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
+        enabled = settings.getbool('GOOGLE_CLOUD_PUBSUB_ENABLED')
+        
+        if google_cloud_enabled and enabled:
             self.stats = stats
             self.stats.set_value('google/pubsub/published_count', 0)
             self.stats.set_value('google/pubsub/erros_count', 0)
@@ -61,12 +56,10 @@ class GooglePubSubPipeline(BasePipeline):
 class GoogleBigQueryPipeline(BasePipeline):
     
     def __init__(self, settings, stats):
-        self.settings = {
-            'google_cloud_enabled': settings.getbool('GOOGLE_CLOUD_ENABLED'), 
-            'enabled': settings.getbool('GOOGLE_CLOUD_BIGQUERY_ENABLED'), 
-        }
+        google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
+        enabled = settings.getbool('GOOGLE_CLOUD_BIGQUERY_ENABLED')
         
-        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
+        if google_cloud_enabled and enabled:
             self.stats = stats
             self.stats.set_value('google/bigquery/insert_count', 0)
             self.stats.set_value('google/bigquery/erros_count', 0)
@@ -138,12 +131,11 @@ class GoogleBigQueryPipeline(BasePipeline):
 class GoogleDatastorePipeline(BasePipeline):
     
     def __init__(self, settings, stats):
-        self.settings = {
-            'google_cloud_enabled': settings.getbool('GOOGLE_CLOUD_ENABLED'), 
-            'enabled': settings.getbool('GOOGLE_CLOUD_DATASTORE_ENABLED'), 
-        }
+        google_cloud_enabled = settings.getbool('GOOGLE_CLOUD_ENABLED')
+        enabled = settings.getbool('GOOGLE_CLOUD_DATASTORE_ENABLED')
+        self.namespace = '__{0}__'.format(settings.get('ENVIROMENT', 'development')),
         
-        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
+        if google_cloud_enabled and enabled:
             self.client = datastore.Client()
             # self.batch = self.client.batch()
             
@@ -152,25 +144,24 @@ class GoogleDatastorePipeline(BasePipeline):
             self.stats.set_value('google/datastore/erros_count', 0)
             logger.info('Google Cloud Datastore client initiated with success')
         else:
-            raise NotConfigured('Google Cloud Datastore is not enabled, check settings values')
+            raise NotConfigured('Google Cloud Datastore or Google Cloud or both is not enabled, check settings values')
         
     def process_item(self, item, spider):
-        if self.settings['google_cloud_enabled'] and self.settings['enabled']:
-            try:
-                key = self.client.key(item.__class__.__name__)
-                
-                exclude_from_indexes = [k for k in item.fields \
-                    if item.fields[k].get('indexed', True) is False]
-                
-                entity = datastore.Entity(key, exclude_from_indexes)
-                
-                entity.update(self.seriealize(item))
-                
-                self.client.put(entity)
-                self.stats.inc_value('google/datastore/insert_count')
-            except Exception as e:
-                self.stats.inc_value('google/datastore/erros_count')
-                raise e
+        try:
+            key = self.client.key(item.__class__.__name__, self.namespace)
+            
+            exclude_from_indexes = [k for k in item.fields \
+                if item.fields[k].get('indexed', True) is False]
+            
+            entity = datastore.Entity(key, exclude_from_indexes)
+            
+            entity.update(self.seriealize(item))
+            
+            self.client.put(entity)
+            self.stats.inc_value('google/datastore/insert_count')
+        except Exception as e:
+            self.stats.inc_value('google/datastore/erros_count')
+            raise e
         
         return item
     
