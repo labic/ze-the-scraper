@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from slugify import Slugify; slugify = Slugify(to_lower=True)
+
 
 class AuthorParse():
 
@@ -20,4 +22,6 @@ class AuthorParse():
 class KeywordsParse():
 
     def __call__(self, values, loader_context):
-        return values.strip().lower()
+        if loader_context['spider_name'] == 'folhadesp':
+            values = values.replace('{tags|encode:html_reserved}', '')
+        return [slugify(v) for v in values.split(',')]

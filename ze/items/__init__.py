@@ -259,7 +259,6 @@ class CreativeWorkItem(ThingItem):
         input_processor=MapCompose(
             KeywordsParse()
         ),
-        output_processor=Join(','),
         schemas={
             'avro': {
                 'field_type': 'STRING'
