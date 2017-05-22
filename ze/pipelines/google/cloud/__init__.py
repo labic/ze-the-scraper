@@ -148,7 +148,8 @@ class GoogleDatastorePipeline(BasePipeline):
         
     def process_item(self, item, spider):
         try:
-            key = self.client.key(item.__class__.__name__, self.namespace)
+            # TODO implement key namespace
+            key = self.client.key(item.__class__.__name__)
             
             exclude_from_indexes = [k for k in item.fields \
                 if item.fields[k].get('indexed', True) is False]
