@@ -39,6 +39,7 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                     "[itemprop=articleBody]"
                 ], 
                 "keywords": [
+                    "meta[name=keywords]::attr(content)", 
                     "[itemprop=keywords]::text", 
                     "[itemprop=keywords]::attr(content)"
                 ]
