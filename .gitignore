@@ -11,6 +11,7 @@ logs/
 selenium/
 .scrapy/
 .scrapecache/
+ze/settings.py
 scrapinghub.yml
 *.csv
 *.db
