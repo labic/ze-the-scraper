@@ -67,6 +67,11 @@ class GoogleSearchMiddleware(object):
         
         search_results = requests.get(google_custom_search_url).json()
         
+        search_error = search_results.get('error')
+        if search_error:
+            logger.error(search_error)
+            return []
+        
         if 'items' in search_results:
             current_search_itens = search_results['items']
             search_items += current_search_itens
