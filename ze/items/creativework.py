@@ -12,7 +12,7 @@ class ArticleItem(CreativeWorkItem):
     def __init__(self, *args, **kwargs):
         self._values = {}
         # TODO: Refactor this!
-        self.__class__.__name__ = 'Article'
+        self.__class__.__name__ = 'Articles'
         if args or kwargs:  # avoid creating dict for most common case
             for k, v in six.iteritems(dict(*args, **kwargs)):
                 self[k] = v
