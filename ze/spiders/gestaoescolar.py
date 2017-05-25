@@ -15,32 +15,33 @@ class GestaoEscolarSpider(ZeSpider):
                 ],
                 "image":[
                     '[itemprop="image"] img::attr(src)',
-                    '.wp-caption img::attr(src)'
+                    '.wp-caption img::attr(src)',
+                    '.image img::attr(src)'
                 ],
                 "description": [
-                    '[itemprop=description]::attr(content)', 
-                    '[itemprop=description]::text', 
+                    '[itemprop=description]::attr(content)',
+                    '[itemprop=description]::text',
                     '.resumo h2::text'
                 ],
                 "author": [
-                    '[itemprop=author]::text', 
+                    '[itemprop=author]::text',
                     '.autor-nome::text'
                 ],
                 "datePublished": [
-                    '[itemprop=datePublished]::attr(content)', 
+                    '[itemprop=datePublished]::attr(content)',
                     '.data::text'
                 ],
                 "dateModified": [
                     '[itemprop=dateModified]::attr(content)'
                 ],
                 "articleBody": [
-                    '[itemprop=articleBody]', 
+                    '[itemprop=articleBody]',
                     '.texto'
 
                 ],
                 "keywords": [
-                    '[itemprop=keywords] a::text', 
-                    '[rel=tag]::text', 
+                    '[itemprop=keywords] a::text',
+                    '[rel=tag]::text',
                     '[onclick*=montaURL]::text'
                 ]
             }

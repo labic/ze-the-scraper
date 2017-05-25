@@ -1,51 +1,48 @@
-# -*- coding: utf-8 -*-
-
 from ze.spiders import ZeSpider
 
-class CorreioBrasilienseSpider(ZeSpider):
+class ValorEconomicoSpider(ZeSpider):
 
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
+    name = 'zh'
+    allowed_domains = ['zh.clicrbs.com.br/']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.title-post::text'
+                    '.materia-manchete::text',
+
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
-                    '.lazy::attr("data-lazy-src")'
+                    '.materia-foto img::attr(src)'
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text'
+                    '.materia-subtitulo::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '[class*=autor]::text',
-                    '.autor_casa::text',
-                    '.author a::text',
-                    '[onclick*=malito] span::text'
-
+                    '.meta__tool::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.entry-date::text'
+                    '.meta__date::text',
 
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)'
+                    '[itemprop=dateModified]::attr(content)',
+                    '.node-body p em::text'
+
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.entry-content'
-
+                    '.materia-corpo'
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
                     '[rel=tag]::text',
-                    '[onclick*=montaURL]::text'
+                    '[onclick*=montaURL]::text',
+                    '.tags a::text'
                 ]
             }
         }

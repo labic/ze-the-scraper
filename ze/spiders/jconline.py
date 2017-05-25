@@ -1,37 +1,42 @@
 # -*- coding: utf-8 -*-
 
+#TODO articleBody
+
 from ze.spiders import ZeSpider
 
-class CorreioBrasilienseSpider(ZeSpider):
+class JCOnlineSpider(ZeSpider):
 
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
+    name = 'jconline'
+    allowed_domains = ['jconline.ne10.uol.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.title-post::text'
+                    '.titulo-materia::text',
+                    '.titulo-noticia a::attr(title)'
                 ],
                 "image": [
-                    '[itemprop="image"] img::attr(src)',
-                    '.lazy::attr("data-lazy-src")'
+                    '[itemprop="image"]::attr(src)',
+                    '#noticia img.bordaimg::attr(src)',
+                    '[class*= "wp-image"]::attr(src)'
+
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text'
+                    '[itemprop=description]::text',
+                    'p.mg_sutia::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '[class*=autor]::text',
-                    '.autor_casa::text',
-                    '.author a::text',
-                    '[onclick*=malito] span::text'
+                    '.author a::text',#não tem autor da matéria no site
+                    '[id*= "post"] header strong::text',#'pra blog'
 
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.entry-date::text'
+                    '.data-materia::text',
+                    '.data-post div::text'
 
                 ],
                 "dateModified": [
@@ -39,13 +44,12 @@ class CorreioBrasilienseSpider(ZeSpider):
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.entry-content'
-
+                    '#noticia_corpodanoticia'#pegar o que ta entre <p></p>,
+                    '#texto-noticia'#fazer negocio de pegar xhr
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
-                    '[rel=tag]::text',
-                    '[onclick*=montaURL]::text'
+                    'li.keywords a::text'
                 ]
             }
         }
