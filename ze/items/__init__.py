@@ -256,7 +256,7 @@ class CreativeWorkItem(ThingItem):
     isFamilyFriendly = Field()
     isPartOf = Field()
     keywords = Field(
-        input_processor=MapCompose(
+        output_processor=MapCompose(
             KeywordsParse()
         ),
         schemas={

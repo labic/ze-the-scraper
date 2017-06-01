@@ -22,6 +22,9 @@ class AuthorParse():
 class KeywordsParse():
 
     def __call__(self, values, loader_context):
-        if loader_context['spider_name'] == 'folhadesp':
+        spider_name = loader_context['spider_name']
+        
+        if spider_name == 'folhadesp':
             values = values.replace('{tags|encode:html_reserved}', '')
-        return [slugify(v) for v in values.split(',')]
+        
+        return set([v.lower() for v in values.split(',')])
