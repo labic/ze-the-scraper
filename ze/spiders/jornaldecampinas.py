@@ -1,52 +1,56 @@
-# -*- coding: utf-8 -*-
-
+#TODO articleBody limpar, pegar o que está entre <p></p>
 from ze.spiders import ZeSpider
 
-class CorreioBrasilienseSpider(ZeSpider):
+class JornaldeCampinasSpider(ZeSpider):
 
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
+
+    name = 'jornaldecampinas'
+    allowed_domains = ['jornaldecampinas.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.title-post::text'
+                    'h2.post a::text'
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
-                    '.lazy::attr("data-lazy-src")'
+                    # '.wp-image-5984::attr(src)',
+                    '[class*= "wp-image"]::attr(src)',
+                    '.main-single::attr(src)'
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text'
+                    '.entry p i::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '[class*=autor]::text',
-                    '.autor_casa::text',
-                    '.author a::text',
-                    '[onclick*=malito] span::text'
-
+                    '.autor-nome::text',
+                    '.node-author-inner strong::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.entry-date::text'
+                    '.data::text',
+                    'p.meta::text',
 
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)'
+                    '[itemprop=dateModified]::attr(content)',
+                    '.node-body p em::text'
+
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.entry-content'
+                    '.entry'
 
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
                     '[rel=tag]::text',
-                    '[onclick*=montaURL]::text'
+                    '[onclick*=montaURL]::text',
+                    '.tags a::text'
                 ]
             }
         }
     }]
+#.wp-image-5984

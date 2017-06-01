@@ -1,51 +1,52 @@
 # -*- coding: utf-8 -*-
-
 from ze.spiders import ZeSpider
 
-class CorreioBrasilienseSpider(ZeSpider):
+class ValorEconomicoSpider(ZeSpider):
 
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
+    name = 'valor'
+    allowed_domains = ['valor.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.title-post::text'
+                    '.materia h1::text',
+                    '.title1::text'
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
-                    '.lazy::attr("data-lazy-src")'
+                    '.image img::attr(src)'
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text'
+                    '[itemprop=description]::text',
+                    '.resumo h2::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '[class*=autor]::text',
-                    '.autor_casa::text',
-                    '.author a::text',
-                    '[onclick*=malito] span::text'
-
+                    '.autor-nome::text',
+                    '.node-author-inner strong::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.entry-date::text'
+                    '.data::text',
+                    'span.date::text',
 
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)'
+                    '[itemprop=dateModified]::attr(content)',
+                    '.node-body p em::text'
+
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.entry-content'
-
+                    '.node-body'
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
                     '[rel=tag]::text',
-                    '[onclick*=montaURL]::text'
+                    '[onclick*=montaURL]::text',
+                    '.tags a::text'
                 ]
             }
         }

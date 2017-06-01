@@ -1,52 +1,55 @@
-# -*- coding: utf-8 -*-
-
 from ze.spiders import ZeSpider
 
-class CorreioBrasilienseSpider(ZeSpider):
+class ATarde(ZeSpider):
 
-    name = 'correiobraziliense'
-    allowed_domains = ['correiobraziliense.com.br']
+    name = 'atarde'
+    allowed_domains = ['atarde.uol.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
                     '[itemprop=headline]::text',
-                    '.title-post::text'
+                    '.materia h1::text',
+                    'h3.tituloMateria::text',
+                    '.page-title::text'
                 ],
                 "image": [
                     '[itemprop="image"] img::attr(src)',
-                    '.lazy::attr("data-lazy-src")'
+                    '.conteudoMateria figure img::attr(src)',
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
-                    '[itemprop=description]::text'
+                    '[itemprop=description]::text',
+                    '.conteudoMateria figure figcaption::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
-                    '[class*=autor]::text',
-                    '.autor_casa::text',
-                    '.author a::text',
-                    '[onclick*=malito] span::text'
-
+                    '.autor-nome::text',
+                    'p.credito::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
-                    '.entry-date::text'
+                    '.data::text',
+                    'p.data::text',
+                    '.post-date::text'
 
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)'
+                    '[itemprop=dateModified]::attr(content)',
+                    '.node-body p em::text'
+
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.entry-content'
-
+                    '.conteudoMateria'
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
                     '[rel=tag]::text',
-                    '[onclick*=montaURL]::text'
+                    '[onclick*=montaURL]::text',
+                    '.tags a::text'
                 ]
             }
         }
     }]
+

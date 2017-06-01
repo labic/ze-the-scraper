@@ -14,8 +14,8 @@ class NovaEscolaSpider(ZeSpider):
                     '.materia h1::text'
                 ],
                 "image": [
-                    '[itemprop="image"] img::attr(src)',
-                    '.image img::attr(src)'
+                    # '[itemprop="image"] img::attr(src)',
+                    # '.image img::attr(src)'
                 ],
                 "description": [
                     '[itemprop=description]::attr(content)',
@@ -35,7 +35,7 @@ class NovaEscolaSpider(ZeSpider):
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.texto'
+                    '.texto p::text'#ta dando algo errado aqui. não consigo pegar todos os <p>s
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
