@@ -81,37 +81,37 @@ jobs = [{
     },{
         'name': 'Revalida',
         'query': 'Revalida OR "Exame Nacional * Revalidação * Diplomas Médicos"',
-        'tags': ('Educação Superio', 'Revalida'),
+        'tags': ('Educação Superior', 'Revalida'),
         'regex': '(?i)Revalida|Exame.{0,}Nacional.{0,}Revalidação.{0,}Diplomas?.{0,}Mé?e?dicos?',
     },{
         'name': 'AnaSEM',
         'query': 'AnaSEM OR "Avaliação Nacional Seriada * Estudantes * Medicina"',
-        'tags': ('Educação Superio', 'AnaSEM'),
+        'tags': ('Educação Superior', 'AnaSEM'),
         'regex': '(?i)AnaSEM|Avaliaç?c?ã?a?o.{0,}Nacional.{0,}Seriada.{0,}Estudantes?.{0,}Medicina',
     },{
         'name': 'ENADE',
         'query': 'ENADE OR "Exame Nacional * Desempenho * Estudantes"',
-        'tags': ('Educação Superio', 'ENADE'),
+        'tags': ('Educação Superior', 'ENADE'),
         'regex': '(?i)ENADE|Exame.{0,}Nacional.{0,}Desempenho.{0,}Estudantes?',
     },{
         'name': 'Sinaes',
         'query': 'Sinaes OR "Sistema Nacional * Avaliação * Educação Superior"',
-        'tags': ('Educação Superio', 'Sinaes'),
+        'tags': ('Educação Superior', 'Sinaes'),
         'regex': '(?i)Sinaes|Sistema.{0,}Nacional.{0,}Avaliaç?c?ã?a?o.{0,}Educaç?c?ã?a?o.{0,}Superio',
     },{
         'name': 'BASIs',
         'query': 'BASIs OR "Banco * Avaliadores * Sistema Nacional * Avaliação * Educação Superior" OR "Banco * Avaliadores"',
-        'tags': ('Educação Superio', 'BASIs'),
+        'tags': ('Educação Superior', 'BASIs'),
         'regex': '(?i)BASIs|Banco.{0,}Avaliadores.{0,}Sistema.{0,}Nacional.{0,}Avaliaç?c?ã?a?o.{0,}Educaç?c?ã?a?o.{0,}Superior|Banco.{0,}Avaliadores',
     },{
         'name': 'Avaliação de Cursos de Gradução',
         'query': '"Avaliação * Curso* * Graduação"',
-        'tags': ('Educação Superio', 'Termo', 'Avaliação * Curso* * Graduação'),
+        'tags': ('Educação Superior', 'Termo', 'Avaliação * Curso* * Graduação'),
         'regex': '(?i)Avaliaç?c?ã?a?o.{0,}Curso.{0,}Graduaç?c?ã?a?o',
     },{
         'name': 'Censo da Educação Superior',
         'query': '"Censo * Educação Superior"',
-        'tags': ('Educação Superio', 'Censo * Educação Superio'),
+        'tags': ('Educação Superior', 'Censo * Educação Superior'),
         'regex': '(?i)Censo.{0,}Educaç?c?ã?a?o.{0,}Superio',
     },{
         'name': 'Inep',
@@ -195,7 +195,7 @@ echo LABIC - Cliper Crawller\n\n"""))
 # echo running %s/%s: %s_$current_date_time && tput cuu 1 && tput el
             jobs_script_template = \
 """echo running %s/%s: %s_$current_date_time
-scrapy crawl all -a search='%s' -o ./data/clipping_crawller-$current_date_time-%s.csv &>> ./data/clipping_crawller_$current_date_time.log"""
+scrapy crawl all -a search='%s' -a query='%s' -a regex='%s' -a dateRestrict='%s' -a tags='%s' -o ./data/clipping_crawller-$current_date_time-%s.csv &>> ./data/clipping_crawller_$current_date_time.log"""
         
         for job in jobs:
             search_arg_keywords = job['search_arg_keywords']
@@ -209,10 +209,20 @@ scrapy crawl all -a search='%s' -o ./data/clipping_crawller-$current_date_time-%
                 number_of_jobs = len(search_arg_keywords)
                 for i, keyword in enumerate(search_arg_keywords):
                     job_dict = self.generate_job_dict('all', keyword)
+                    # job_template = jobs_script_template % (
+                    #               i+1, number_of_jobs,
+                    #               keyword['name'].strip().lower().replace(' ', '_'),
+                    #               json.dumps(job_dict['spider_args']['search'], ensure_ascii=False), 
+                    #               keyword['name'].strip().lower().replace(' ', '_'))
+                    # jobs_script.writelines((job_template, '\n\n'))
                     job_template = jobs_script_template % (
                                    i+1, number_of_jobs,
                                    keyword['name'].strip().lower().replace(' ', '_'),
-                                   json.dumps(job_dict['spider_args']['search'], ensure_ascii=False), 
+                                   job_dict['spider_args']['search'], 
+                                   job_dict['spider_args']['query'], 
+                                   job_dict['spider_args']['regex'], 
+                                   job_dict['spider_args']['dateRestrict'], 
+                                   json.dumps(job_dict['spider_args']['tags'], ensure_ascii=False), 
                                    keyword['name'].strip().lower().replace(' ', '_'))
                     jobs_script.writelines((job_template, '\n\n'))
                 jobs_script.writelines(('echo END'))
@@ -263,14 +273,11 @@ scrapy crawl all -a search='%s' -o ./data/clipping_crawller-$current_date_time-%
         spider = {
             'name': spider_name,
             'spider_args': {
-                'search': {
-                    'query': keyword['query'],
-                    'regex': keyword['regex'], 
-                    'engine': 'google', 
-                    'last_update': 'd', 
-                    'results_per_page': 50, 
-                    'pages': 2,
-                }
+                'search': 'google',
+                'query': keyword['query'],
+                'regex': keyword['regex'], 
+                'dateRestrict': 'd1', 
+                'tags': keyword['tags']
             },
             'priority': 2,
         }
