@@ -10,6 +10,8 @@ class DiariodePernambuco(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     '[itemprop=headline]::text',
                     '.h1::text',
                     'div.et_pb_text_align_center::text',
@@ -18,18 +20,18 @@ class DiariodePernambuco(ZeSpider):
                     '.entry-heading a::text'
                 ],
                 "image": [
+                    'meta[property="og:image"]::attr(content)',
                     '[itemprop="image"] img::attr(src)',
                     'table.image tbody tr td img::attr(src)',
                     # '.image img::attr(src)'
                     #blog
                     '.entry-content img::attr(src)'
-
                 ],
                 "description": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
                     '[itemprop=description]::attr(content)',
-                    # '[itemprop=description]::text',
-                    # '[property="og:discription"]::attr(content)',
-
+                    '[itemprop=description]::text'
                 ],
                 "author": [
                     '[itemprop=author]::text',
@@ -44,13 +46,10 @@ class DiariodePernambuco(ZeSpider):
                     #para blog
                     '.entry-date::attr(datetime)',
                     '.date::text'
-
                 ],
                 "dateModified": [
                     '[itemprop=dateModified]::attr(content)',
                     '[property="article:modified_time"]::attr(content)',
-
-
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
@@ -66,7 +65,6 @@ class DiariodePernambuco(ZeSpider):
                     '.tags_noticias a::text',
                     #blog
                     '.entry-meta a::text'
-
                 ]
             }
         }

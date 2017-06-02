@@ -10,12 +10,17 @@ class FolhaDeSaoPauloSpider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     ".news header h1::text", 
                     "[itemprop=name]::text", 
                     "[itemprop='headline']::text", 
                     "[itemprop=alternativeHeadline]::attr(content)"
                 ], 
                 "image": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
+                    'meta[property="og:image"]::attr(content)',
                     "[itemprop=image]::attr(content)", 
                     "[property='og:image']::attr(content)"
                 ], 

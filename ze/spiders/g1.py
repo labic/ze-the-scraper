@@ -10,16 +10,21 @@ class G1Spider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": { 
                 "name": [ 
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     "[itemprop=name]::text", 
                     ".content-head__title::text", 
                     ".materia-titulo h1::text", 
                     ".entry-title::text" 
                 ], 
                 "image": [ 
+                    'meta[property="og:image"]::attr(content)',
                     "[itemprop=image]::attr(content)", 
                     "[property='og:image']::attr(content)"
                 ], 
                 "description": [ 
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
                     "[itemprop=description]::text", 
                     "[itemprop=alternativeHeadline]::text", 
                     ".content-head__subtitle::text", 
@@ -33,7 +38,8 @@ class G1Spider(ZeSpider):
                 "datePublished": [
                     "[itemprop=datePublished]::attr(datetime)", 
                     "[itemprop=datePublished]::text", 
-                    "time[datetime]::text" 
+                    "time[datetime]::text", 
+                    "time::attr(datetime)" 
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::attr(datetime)" , 

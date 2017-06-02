@@ -10,14 +10,19 @@ class VejaSpider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     "[itemprop=name]::text",
                     ".article-title::text"
                 ],
                 "image": [
+                    'meta[property="og:image"]::attr(content)',
                     "[itemprop=image]::attr(content)",
                     "[property=og:image]::attr(content)"
                 ],
                 "description": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
                     "[itemprop=description]::text",
                     ".article-subtitle::text",
                 ],

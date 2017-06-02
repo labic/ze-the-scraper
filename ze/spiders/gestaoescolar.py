@@ -10,15 +10,20 @@ class GestaoEscolarSpider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     '[itemprop=headline]::text',
                     '.materia h1::text'
                 ],
                 "image":[
+                    'meta[property="og:image"]::attr(content)',
                     '[itemprop="image"] img::attr(src)',
                     '.wp-caption img::attr(src)',
                     '.image img::attr(src)'
                 ],
                 "description": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
                     '[itemprop=description]::attr(content)',
                     '[itemprop=description]::text',
                     '.resumo h2::text'
@@ -37,7 +42,6 @@ class GestaoEscolarSpider(ZeSpider):
                 "articleBody": [
                     '[itemprop=articleBody]',
                     '.texto'
-
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',

@@ -10,14 +10,19 @@ class CorreioBrasilienseSpider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     '[itemprop=headline]::text',
                     '.title-post::text'
                 ],
                 "image": [
+                    'meta[property="og:image"]::attr(content)',
                     '[itemprop="image"] img::attr(src)',
                     '.lazy::attr("data-lazy-src")'
                 ],
                 "description": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
                     '[itemprop=description]::attr(content)',
                     '[itemprop=description]::text'
                 ],
@@ -27,12 +32,10 @@ class CorreioBrasilienseSpider(ZeSpider):
                     '.autor_casa::text',
                     '.author a::text',
                     '[onclick*=malito] span::text'
-
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
                     '.entry-date::text'
-
                 ],
                 "dateModified": [
                     '[itemprop=dateModified]::attr(content)'
@@ -40,7 +43,6 @@ class CorreioBrasilienseSpider(ZeSpider):
                 "articleBody": [
                     '[itemprop=articleBody]',
                     '.entry-content'
-
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',

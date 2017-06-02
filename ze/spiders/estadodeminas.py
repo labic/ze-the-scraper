@@ -10,11 +10,16 @@ class EstadodeMinasSpider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     '[itemprop=headline]::text',
                     '.title-post::text',
                     '.entry-title::text'
                 ],
                 "image": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
+                    'meta[property="og:image"]::attr(content)',
                     '[itemprop="image"]::attr(src)',
                     '.lazy::attr("data-lazy-src")'
                 ],
@@ -33,7 +38,6 @@ class EstadodeMinasSpider(ZeSpider):
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
                     '.entry-date::text'
-
                 ],
                 "dateModified": [
                     '[itemprop=dateModified]::attr(content)'

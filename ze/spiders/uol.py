@@ -10,16 +10,21 @@ class UolSpider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     "[itemprop=name]::text", 
                     ".post-title::text", 
                     "#main-content h1::text", 
                     ".conteudo-pagina h1::text", 
                 ], 
                 "image": [ 
+                    'meta[property="og:image"]::attr(content)',
                     "[itemprop=image]::attr(content)", 
                     "[property='og:image']::attr(content)" 
                 ], 
                 "description": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
                     "[itemprop=description]::text", 
                     ".post-sub-title::text",
                     ".definicao::text"

@@ -10,6 +10,8 @@ class EstadaoSpider(ZeSpider):
         "ze.items.creativework.ArticleItem": {
             "fields": {
                 "name": [
+                    "meta[property='og:title']::attr(content)",
+                    "meta[name=title]::attr(content)",
                     "[itemprop=name]::text", 
                     ".titulo-principal::text", 
                     ".titulo::text", 
@@ -17,6 +19,9 @@ class EstadaoSpider(ZeSpider):
                     "article h1::text", 
                 ],
                 "image": [
+                    "meta[property='og:description']::attr(content)",
+                    "meta[name=description]::attr(content)",
+                    'meta[property="og:image"]::attr(content)',
                     "[itemprop=image]::attr(content)",
                     "[property='og:image']::attr(content)"
                 ],
