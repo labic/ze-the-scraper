@@ -34,13 +34,6 @@ class GoogleSearchMiddleware(object):
 
     def spider_opened(self, spider):
         
-        # FIXME legacie code
-        # elif hasattr(self, 'search'):
-        #     if self.search['engine'] == 'google':
-        #         for d in self.allowed_domains:
-        #             search = copy(self.search)
-        #             search['query'] = '%s site:%s' % (search['query'], d)
-        #             self.start_urls = self.start_urls + SearchEngine.search_for_urls(search)
         if hasattr(spider, 'search'):
             logger.info('Making requests to Google Custom Search')
             
