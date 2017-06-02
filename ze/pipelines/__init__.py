@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+from functools import reduce
 from collections import ChainMap
 import logging; logger = logging.getLogger(__name__)
 from scrapy.exceptions import NotConfigured
@@ -14,6 +15,23 @@ class BasePipeline(object):
         
     def __init__(self, settings, stats): raise NotImplementError
 
+
+class ItemsSideValues(object):
+    
+    def process_item(self, item, spider):    
+        # FIXME find a better place and how to add the tags of search to keywords
+        if hasattr(spider, 'tags'):
+            # URGENT change jobs script 
+            repls = ('[',''), (']',''),('"','')
+            tags = reduce(lambda a, kv: a.replace(*kv), repls, spider.tags)
+            keywords = [t.strip().lower() for t in tags.split(',')]
+            
+            if 'keywords' not in item:
+                item['keywords'] = keywords
+            else: 
+                item['keywords'] = list(set(item['keywords'] + keywords))
+        
+        return item
 
 class DropItemsPipeline(BasePipeline):
     
