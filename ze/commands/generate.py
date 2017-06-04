@@ -50,7 +50,7 @@ jobs = [{
         'regex': '(?i)Provinha.{0,}Brasil',
     },{
         'name': 'ANA',
-        'query': 'ANA OR "Avaliação Nacional * Alfabetização"',
+        'query': '"Avaliação Nacional * Alfabetização"',
         'tags': ('Educação Básica', 'ANA'),
         'regex': '(?i)ANA|Avaliação.{0,}Nacional.{0,}Alfabetizaç?c?ã?a?o',
     },{

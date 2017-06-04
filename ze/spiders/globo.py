@@ -29,19 +29,26 @@ class GloboSpider(ZeSpider):
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
-                    "[itemprop=creator]::text"
+                    "[itemprop=creator]::text",
+                    "#credito-materia"
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::attr(datetime)", 
                     "[itemprop=datePublished]::text", 
+                    "meta[name=article:published_time]::attr(content)",
+                    "#info-edicao-acervo b"
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::attr(datetime)" , 
                     "[itemprop=dateModified]::text", 
+                    "meta[name=article:modified_time]::attr(content)",
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".mc-body" 
+                    ".mc-body",
+                    "materia-conteudo",
+                    "entry-content",
+                    "#texto"
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
