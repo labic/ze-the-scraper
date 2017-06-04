@@ -16,7 +16,6 @@ class MongoPipeline(BasePipeline):
         
         if self.settings['enabled']:
             self.mongo_uri = settings.get('MONGO_URI'),
-            self.mongo_db = settings.get('MONGO_DATABASE', 'ze-the-scraper')
             self.client = None
             
             self.stats = stats
@@ -27,7 +26,7 @@ class MongoPipeline(BasePipeline):
 
     def open_spider(self, spider):
         self.client = MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
+        self.db = self.client.get_default_database()
         self.stats.set_value('items/mongodb/database_name', self.db.name)
 
     def close_spider(self, spider):
