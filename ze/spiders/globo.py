@@ -35,13 +35,13 @@ class GloboSpider(ZeSpider):
                 "datePublished": [
                     "[itemprop=datePublished]::attr(datetime)", 
                     "[itemprop=datePublished]::text", 
-                    "meta[name=article:published_time]::attr(content)",
+                    "meta[name='article:published_time']::attr(content)",
                     "#info-edicao-acervo b"
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::attr(datetime)" , 
                     "[itemprop=dateModified]::text", 
-                    "meta[name=article:modified_time]::attr(content)",
+                    "meta[name='article:modified_time']::attr(content)",
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
