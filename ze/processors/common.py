@@ -13,19 +13,17 @@ class CleanString(object):
 class ParseDate(object):
     
     def __call__(self, value, loader_context):
-        value = value.strip() \
-                    .replace('Atualizado:', '') \
-                    .replace(' | ', ' ') \
-                    .replace('h', ':') \
-                    .replace('h ', ':') \
-                    .replace(', ', '') \
-                    .replace('  ', ' ')
+        value = value.replace('Atualizado:', '') \
+                     .replace(' | ', ' ') \
+                     .replace('h', ':') \
+                     .replace('h ', ':') \
+                     .replace(', ', ' ') \
+                     .replace('-03', '') \
+                     .replace('  ', ' ') \
+                     .strip()
         
         try:
             return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-                        # date_formats=['%d %B %Y %H:%M'], 
-                        # languages=['pt']) \
-                        # .strftime('%Y-%m-%d %H:%M')
         except Exception as e:
             logger.warning('Date not processed: %s' % value)
             return None
