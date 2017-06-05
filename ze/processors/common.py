@@ -14,11 +14,12 @@ class ParseDate(object):
     
     def __call__(self, value, loader_context):
         value = value.replace('Atualizado:', '') \
+                     .replace('Atualizado', '') \
                      .replace(' | ', ' ') \
                      .replace('h', ':') \
                      .replace('h ', ':') \
                      .replace(', ', ' ') \
-                     .replace('-03', '') \
+                     .replace(' -03', '') \
                      .replace('  ', ' ') \
                      .strip()
         
