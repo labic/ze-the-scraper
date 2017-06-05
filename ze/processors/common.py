@@ -19,7 +19,6 @@ class ParseDate(object):
                      .replace('h', ':') \
                      .replace('h ', ':') \
                      .replace(', ', ' ') \
-                     .replace(' -03', '') \
                      .replace('  ', ' ') \
                      .strip()
         

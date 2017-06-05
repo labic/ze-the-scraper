@@ -35,11 +35,11 @@ class HuffPostBrasilSpider(ZeSpider):
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    "timestamp__date--published::text"
+                    ".timestamp__date--published::text"
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::text", 
-                    "timestamp__date--modified::text"
+                    ".timestamp__date--modified::text"
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",

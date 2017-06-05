@@ -31,8 +31,7 @@ class TheInterceptSpider(ZeSpider):
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
-                    "[itemprop=creator] [itemprop=name]::text",
-                    ".author_name::text"
+                    "[itemprop=name]::text"
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
@@ -40,11 +39,11 @@ class TheInterceptSpider(ZeSpider):
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::text", 
-                    "[itemprop=dateModified]::attr(datetime)" 
+                    "[itemprop=dateModified]::attr(datetime)"
+                    ".PostByline-date::text",
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".content", 
                     ".PostContent div" 
                 ], 
                 "keywords": [
