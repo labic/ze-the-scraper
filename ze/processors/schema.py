@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from slugify import Slugify; slugify = Slugify(to_lower=True)
 
 
@@ -27,4 +28,4 @@ class KeywordsParse():
         if spider_name == 'folhadesp':
             values = values.replace('{tags|encode:html_reserved}', '')
         
-        return set([v.strip().lower() for v in values.split(',')])
+        return set([v.strip(.lower() for v in re.split(';|,', values)])

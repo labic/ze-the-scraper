@@ -30,27 +30,33 @@ class GloboSpider(ZeSpider):
                 "author": [
                     "[itemprop=author]::text", 
                     "[itemprop=creator]::text",
-                    "#credito-materia"
+                    "#credito-materia::text"
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::attr(datetime)", 
                     "[itemprop=datePublished]::text", 
                     "meta[name='article:published_time']::attr(content)",
-                    "#info-edicao-acervo b"
+                    "meta[name=dtnoticia]::attr(content)",
+                    "#info-edicao-acervo b::text",
+                    ".data::text",
+                    ".published::text",
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::attr(datetime)" , 
                     "[itemprop=dateModified]::text", 
                     "meta[name='article:modified_time']::attr(content)",
+                    "updated::text",
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
                     ".mc-body",
-                    "materia-conteudo",
-                    "entry-content",
+                    ".materia-conteudo",
+                    ".entry-content",
+                    ".conteudo",
                     "#texto"
                 ], 
                 "keywords": [
+                    "meta[name=keywords]::attr(content)",
                     "[itemprop=keywords]::text", 
                     ".entities__list-itemLink::text"
                 ]
