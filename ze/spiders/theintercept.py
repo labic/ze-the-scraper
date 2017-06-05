@@ -23,11 +23,10 @@ class TheInterceptSpider(ZeSpider):
                 ], 
                 "description": [ 
                     "meta[name='description']::attr(content)", 
-                    "meta[property='twitter:description']::attr(content)",
                     "meta[property='og:description']::attr(content)",
+                    "meta[property='twitter:description']::attr(content)",
                     "meta[name=description]::attr(content)",
-                    "[property=description]::attr(content)", 
-                    "[property='og:description']::attr(content)" 
+                    "[property=description]::attr(content)"
                 ], 
                 "author": [
                     "[itemprop=author]::text", 
@@ -35,12 +34,10 @@ class TheInterceptSpider(ZeSpider):
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    "[property='article:published_time']::attr(content)"
+                    ".PostByline-date::text",
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::text", 
-                    "[itemprop=dateModified]::attr(datetime)"
-                    ".PostByline-date::text",
                 ], 
                 "articleBody": [
                     "[itemprop=articleBody]",
