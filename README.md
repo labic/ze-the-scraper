@@ -1,3 +1,7 @@
+## Install
+
+- [Install Berkeley DB](http://www.linuxfromscratch.org/blfs/view/7.9/server/db.html)
+
 ## Usage
 
 ### Crawlling using a single spider an single url
