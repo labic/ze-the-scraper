@@ -170,29 +170,46 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
         if spider_name is 'atarde':
+            # try:
+            #     selector = 'p'
+            #     for el in html.select(selector):
+            #         text=el.get_text()
+            #         el.replace_with(text)
+            # except Exception as e:
+            #     logger.error('Failed to replace "%s" selector from %s:\n%s',
+            #         selector, spider_name, e)
+            # try:
+            #     selector = 'figure'
+            #     for el in html.select(selector):
+            #         text=el.get_text()
+            #         el.replace_with('')
+            #     selector = 'aside'
+            #     for el in html.select(selector):
+            #         text=el.get_text()
+            #         el.replace_with('')
             try:
-                selector = 'p'
+                selector = 'a'
                 for el in html.select(selector):
                     text=el.get_text()
                     el.replace_with(text)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
-            try:
-                selector = 'figure'
-                for el in html.select(selector):
-                    text=el.get_text()
-                    el.replace_with('')
                 selector = 'aside'
                 for el in html.select(selector):
-                    text=el.get_text()
-                    el.replace_with('')
+                    el.decompose()
+
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
         if spider_name is 'correiobraziliense':
             try:
+                fg = html.new_tag('figure')
+                selector = 'section'
+                for el in html.select(selector):
+                    print('oiiii')
+                    images = el.select('img')
+                    for img in images:
+                        fg.append(html.new_tag('img', src=img['src']))
+                    el.replace_with(fg)
                 selector = '.news__image'
                 for el in html.select(selector):
                     # el.unwrap()
@@ -209,6 +226,10 @@ class ImproveHTML(object):
                 selector = 'h3'
                 for el in html.select(selector):
                     el.name = 'h2'
+                # selector = 'p'
+                # for el in html.select(selector):
+                #     if el.get_text() == '':
+                #         el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
