@@ -53,4 +53,33 @@ class ValorEconomicoSpider(ZeSpider):
                 ]
             }
         }
+    }
+    # ,{
+    #     "ze.items.thingitagible.ItemList": {
+    #         # http://www.valor.com.br/hojenovalor?dia=03&mes=06&ano=2017
+    #         "urls": ["http://www.valor.com.br/hojenovalor?dia={DAY}&mes={MONTH}&ano={YEAR}"],
+    #         "fields": {
+    #             "itemListElement": {
+    #                 "selectors": [],
+    #                 "type": "ze.items.creativework.NewsArticle",
+    #                 "required": True
+    #             },
+    #             "itemListOrder": {
+    #                 "selectors": [],
+    #                 "default": "Unordered"
+    #             },
+    #             "numberOfItems": {
+    #                 "selectors": [],
+    #                 "required": True
+    #             },
+    #             "name": {
+    #                 "selectors": [],
+    #                 "default:": "News Articles - ${name}",
+    #                 "required": True
+    #             },
+    #         },
+    #         "options": {
+    #             "parse_url": True
+    #         }
+    #     }
     }]
