@@ -39,7 +39,7 @@ class NovaEscolaSpider(ZeSpider):
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.texto p::text'#ta dando algo errado aqui. não consigo pegar todos os <p>s
+                    '.texto'#ta dando algo errado aqui. não consigo pegar todos os <p>s
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
