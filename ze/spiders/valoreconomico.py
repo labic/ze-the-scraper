@@ -53,7 +53,7 @@ class ValorEconomicoSpider(ZeSpider):
                 ]
             }
         }
-    }
+    }]
     # ,{
     #     "ze.items.thingitagible.ItemList": {
     #         # http://www.valor.com.br/hojenovalor?dia=03&mes=06&ano=2017
@@ -82,4 +82,4 @@ class ValorEconomicoSpider(ZeSpider):
     #             "parse_url": True
     #         }
     #     }
-    }]
+    }
