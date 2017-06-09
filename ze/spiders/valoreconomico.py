@@ -82,4 +82,4 @@ class ValorEconomicoSpider(ZeSpider):
     #             "parse_url": True
     #         }
     #     }
-    }
+    # }
