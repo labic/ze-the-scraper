@@ -3,8 +3,7 @@
 #TODO:articleBody datePublished dateModified
 from ze.spiders import ZeSpider
 
-class CorreioPopular(ZeSpider):
-    #tudo parece OK
+class CorreioPopularSpider(ZeSpider):
 
     name = 'correiopopular'
     allowed_domains = ['correio.rac.com.br']
@@ -18,7 +17,7 @@ class CorreioPopular(ZeSpider):
                     '.news-title::text'
                 ],
                 "image": [
-                    'meta[property="og:image"]::attr(content)',
+                    "meta[property='og:image']::attr(content)",
                     '[itemprop="image"] img::attr(src)',
                     '#foto_auto img::attr(src)'
                 ],
@@ -35,15 +34,15 @@ class CorreioPopular(ZeSpider):
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
+                    "meta[name='DC.date.created']::attr(content)",
                     '.publish-time::text',#dateModified ta junto
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)',
-                    '.node-body p em::text'#ta com datePublished
+                    '[itemprop=dateModified]::attr(content)'
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
-                    '.article-container'#get text from all div.fe-content
+                    '.article-container'
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',
