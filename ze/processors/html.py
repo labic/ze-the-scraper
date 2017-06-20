@@ -380,6 +380,9 @@ class ImproveHTML(object):
                     selector, spider_name, e)
         if spider_name is 'valor':
             try:
+                selector = 'div'
+                for el in html.select(selector):
+                    el.unwrap()
                 selector = 'a'
                 for el in html.select(selector):
                     print('novaescola a')
