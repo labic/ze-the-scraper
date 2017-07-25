@@ -5,14 +5,22 @@ import logging; logger = logging.getLogger(__name__)
 
 
 class CleanString(object):
-    
+
     def __call__(self, value, loader_context):
         return value.strip('\t\n')
 
 
 class ParseDate(object):
-    
+
     def __call__(self, value, loader_context):
+        spider_name = loader_context.get('spider_name')
+
+        if spider_name == 'r7':
+            value=value.split('(')[1].split(')')[0]
+            print ('value  ',value)
+
+
+
         value = value.replace('Atualizado:', '') \
                      .replace('Atualizado', '') \
                      .replace(' | ', ' ') \
@@ -21,11 +29,11 @@ class ParseDate(object):
                      .replace(', ', ' ') \
                      .replace('  ', ' ') \
                      .strip()
-        
+
         try:
             return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
         except Exception as e:
             logger.warning('Date not processed: %s' % value)
             return None
-        
+
         return value

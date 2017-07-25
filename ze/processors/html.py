@@ -242,10 +242,14 @@ class ImproveHTML(object):
             try:
                 selector = '#foto_auto'
                 for el in html.select(selector):
-                    print('oii')
-                    src = el.select('img')[0]['src']
-                    print(src)
-                    el.replace_with(src)
+                    fg = html.new_tag('figure')
+                    images = el.select('img')
+                    if not(len(images) ==0):
+                        for img in images:
+                            fg.append(html.new_tag('img', src=img['src']))
+                        el.replace_with(fg)
+                    # print(src)
+                    # el.replace_with(src)
 
                 selector = '.fe-content'
                 for el in html.select(selector):
@@ -260,17 +264,22 @@ class ImproveHTML(object):
             try:
                 selector = 'table'
                 for el in html.select(selector):
-                    print('oii')
-                    src = el.select('img')[0]['src']
-                    # src=''
-                    # for img in images:
-                    #     src=src+img['src']
-                    print(src)
-                    el.replace_with(src)
+                    fg = html.new_tag('figure')
+                    images = el.select('img')
+                    if not(len(images) ==0):
+                        for img in images:
+                            fg.append(html.new_tag('img', src=img['src']))
+                        el.replace_with(fg)
+                    # print(src)
+                    # el.replace_with(src)
 
                 selector = 'a'
                 for el in html.select(selector):
                     el.decompose()
+                selector = 'div'
+                for el in html.select(selector):
+                    el.unwrap()
+
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
@@ -286,10 +295,10 @@ class ImproveHTML(object):
                         img_src=img_src+img['src']+'\n'
                     el.replace_with(img_src)
                 #Se não, caso uma imagem de capa
-                selector = 'figure'
-                for el in html.select(selector):
-                    img_src = el.select('img')[0]['src']
-                    el.replace_with(img_src)
+                # selector = 'figure'
+                # for el in html.select(selector):
+                #     img_src = el.select('img')[0]['src']
+                #     el.replace_with(img_src)
 
                 selector = 'a'
                 for el in html.select(selector):
@@ -303,6 +312,10 @@ class ImproveHTML(object):
 
         if spider_name is 'jornaldecampinas':
             try:
+                selector = 'i'
+                for el in html.select(selector):
+                    if (len(el.contents))==0:
+                        el.decompose()
                 selector = 'a'
                 for el in html.select(selector):
                     el.decompose()
@@ -314,8 +327,10 @@ class ImproveHTML(object):
                     el.unwrap()
                 selector = 'img'
                 for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=img['src']))
                     img_src = el['src']
-                    el.replace_with(img_src)
+                    el.replace_with(fg)
                 selector = 'h2'
                 for el in html.select(selector):
                     el.decompose()
@@ -354,9 +369,29 @@ class ImproveHTML(object):
                 # selector = 'img'
                 # for el in html.select(selector):
                 #     el.attrs.remove('caption')
+                selector = 'a'
+                for el in html.select(selector):
+                    print('novaescola a')
+                    # print(el.text())
+                    el.replace_with(el.get_text())
+
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+        if spider_name is 'valor':
+            try:
+                selector = 'div'
+                for el in html.select(selector):
+                    el.unwrap()
+                selector = 'a'
+                for el in html.select(selector):
+                    print('novaescola a')
+                    # print(el.text())
+                    el.replace_with(el.get_text())
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
         # all spiders
         try:
             selector = 'div.wp-caption'
@@ -390,6 +425,7 @@ class ImproveHTML(object):
             el_to_uwrap = [
                 '.article-content',
                 '#cke_pastebin',
+                'center',
                 '.content',
                 '#content-core',
                 '.content-text',
@@ -400,6 +436,7 @@ class ImproveHTML(object):
                 '#mobile1stparagraph',
                 'p span',
                 'p em span',
+                'span',
                 '.td-post-content',
                 '.td-post-featured-image',
                 '#textstructured',
@@ -478,9 +515,12 @@ class ImproveHTML(object):
 
         [el.decompose() for el in html.select(', '.join(el_to_decompose['geral']))]
         [el.decompose() for el in html.select('div') \
-            if len(el.text) == 0 or el.text == '&nbsp;']
+            if len(el.get_text()) == 0 or el.get_text() == '&nbsp;']
         [el.decompose() for el in html.select('p') \
-            if len(el.text) == 0 or el.text == '&nbsp;']
+            if len(el.get_text()) == 0 or el.get_text() == '&nbsp;']
+
+        [el.decompose() for el in html.select('span') \
+            if len(el.contents) == 0]
 
         # TODO: B4S bug
         [el.previous_element.decompose() for el in html.select('p + br + p')]
@@ -498,6 +538,9 @@ class ImproveHTML(object):
                 'data-track-category',
                 'data-track-links',
                 'data-width',
+                'itemtype',
+                'itemscope',
+                'itemprop',
                 'height',
                 'rel',
                 'sizes',

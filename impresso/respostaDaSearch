@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <title>O Estado de S. Paulo</title>
+    <base href="http://digital.estadao.com.br/"/>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <meta name="application-name" content="PressReader"/>
+    <meta name="msapplication-tooltip" content="PressReader"/>
+
+    <meta name="description" content="Connecting People through News. All-you-can-read digital newsstand with thousands of the world’s most popular newspapers and magazines. Vast selection of top stories in full-content format available for free."/>
+    <meta name="keywords" content="magazines, newspapers, digital news, reading, news, breaking news, newspaper online"/>
+
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="google" content="notranslate" value="notranslate"/>
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="msapplication-TileColor" content="#63a70a"/>
+    <meta name="msapplication-navbutton-color" content="#ffffff"/>
+
+    <meta name="msapplication-TileImage" content="/res/pt-br/g22343/t237140146/2/images/sitetile-144.png">
+    <meta name="msapplication-square70x70logo" content="/res/pt-br/g22343/t237140146/2/images/sitetile-tiny.png"/>
+    <meta name="msapplication-square150x150logo" content="/res/pt-br/g22343/t237140146/2/images/sitetile-square.png"/>
+    <meta name="msapplication-wide310x150logo" content="/res/pt-br/g22343/t237140146/2/images/sitetile-wide.png"/>
+    <meta name="msapplication-square310x310logo" content="/res/pt-br/g22343/t237140146/2/images/sitetile-large.png%>"/>
+
+    <link rel="shortcut icon" href="/res/pt-br/g22343/t237140146/2/images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="/res/pt-br/g22343/t237140146/2/images/touch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/res/pt-br/g22343/t237140146/2/images/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/res/pt-br/g22343/t237140146/2/images/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/res/pt-br/g22343/t237140146/2/images/touch-icon-ipad-retina.png">
+    <script type="text/javascript">
+        window.basePath = "/";
+        window.serviceUrl = "http://services.pressreader.com/se2skyservices/";
+    </script>
+
+    <script>
+function NDLoader(){"use strict";function a(n){setTimeout(function(){v(n)},1)}function v(n){if(n.accessToken){window._preload={};var i={accessToken:n.accessToken};NDLoader.setPreload(t("preload",i,null,!0));n.catalog===!0&&t("catalog",i,null,!0);n.issues===!0&&t("issues",i,null,!0)}n.lib&&b(n.lib).then(function(){NDLoader.addTiming("lib")});n.script&&k(n.script).then(function(){NDLoader.addTiming("script")});n.css&&g(n.css)}function t(n,t,i,r){var f=w(n,i),e,o,h;f[f.length-1]!=="/"&&(f+="/");e="";for(o in t)t.hasOwnProperty(o)&&(e+=(e?"&":"?")+o+"="+t[o]);var l=f+n+e,c=(new Date).getTime(),u=d(l,r);return u.then(function(){NDLoader.addTiming(n,"resolved",(new Date).getTime()-c)},function(){NDLoader.addTiming(n,"rejected",(new Date).getTime()-c)}),n==="preload"?u=u.then(p):(h=s(),h&&(h[n]=u,u.catch(function(){delete h[n]}))),u}function y(n){var i=n&&n.res;i&&t("res",{id:i.id,locale:i.locale,ts:i.ts,version:2},n,!0,!0)}function s(){return window._preload}function p(n){var t=s(),i;if(t&&n){for(i in n)n.hasOwnProperty(i)&&!t.hasOwnProperty(i)&&(t[i]=n[i]);return y(t&&t.config&&t.config.config),t}throw"reseted";}function r(n){return n===!0||n==="true"}function w(n,t){var s=window.serviceUrl,l=window.location.protocol=="https:",o=t&&t.services&&t.services[n]||{},f=l||r(o.httpsrequired)||r(o.httpsRequired),h=o.cdnProfile,e=h&&t.cdnProfiles&&t.cdnProfiles[h],c,u,i;return e&&(c=!!e.httpsBaseUrl,(c||!f)&&(f=f||r(e.httpsRequired),i=f?e.httpsBaseUrl:e.baseUrl,i))?(u=s,u.indexOf("://")>0&&(u=u.substr(u.indexOf("/",8))),i[i.length-1]==="/"&&u[0]==="/"&&(u=u.substr(1)),i+u):(i=s,f&&(i=i.replace(/^http:\/\//i,"https://")),i)}function u(){return"loadCallback"+n.length}function f(t){return n.push(t),t}function b(n){return new i(function(t,i){function c(){r=!0;e(h,null)}function l(){r||i("load error")}var s=u(n),h=f({name:s,url:n,execute:function(){t()}}),r=!1;o(n,c,l)})}function k(n){return new i(function(t,i){function c(){s||i("load error")}var r=u(n),l=f({name:r,url:n,execute:function(){this.data&&this.data.call(window);t()}}),s=!1;window[r]=function(n){s=!0;e(l,n);window[r]=undefined};o(h(n,r),c,c)})}function h(n,t){var i=n.indexOf("?")>0?"&":"?";return n+i+"callback="+t}function d(n,t){return new i(function(i,r){function l(){c||r("load error")}var s=u(n),a=f({name:s,url:n,optional:t,execute:function(){i(this.data)}}),c=!1;window[s]=function(n){c=!0;e(a,n);window[s]=undefined};o(h(n,s),l,l)})}function e(t,i){var u,r,t;for(t.data=i,t.loaded=!0,u=!0,r=0;r<n.length;r++){if(t=n[r],!t.loaded){if(u=!1,t.optional)continue;return}t.executed||(t.execute(),t.executed=!0,t.data=null)}console.timeStamp&&console.timeStamp("preloaded");u&&(n=[])}function g(n){return l("link",{type:"text/css",rel:"stylesheet",href:n}),this}function c(n){return n&&function(){this.onload=null;this.onerror=null;n.apply(this,arguments)}}function o(n,t,i){return l("script",{async:!0,defer:!0,type:"text/javascript",onload:c(t),onerror:c(i),src:n}),this}function l(n,t){var i=document.createElement(n);for(var n in t)t.hasOwnProperty(n)&&(i[n]=t[n]);document.getElementsByTagName("head")[0].appendChild(i)}var n=[],i=NDLoader.Promise=function(){function r(){var t=this;t.promise=new n(function(n,i){t.resolve=n;t.reject=i})}function n(n){function s(){o(t.resolved,arguments)}function h(){o(t.rejected,arguments)}function o(n,t){if(!u){u=n;e=t;for(var r=0;r<f.length;r++)i(u,f[r].childDeferred,f[r].callbacks[u-1],e);f.length=0}}var e,f=[],u=t.pending;this.then=function(n,o){var s,h;return u===t.resolved&&!n||u===t.rejected&&!o?this:(s=new r,u&&f.length===0?(h=arguments[u-1],i(u,s,h,e)):f.push({childDeferred:s,callbacks:arguments}),s.promise)};n(s,h)}function i(n,i,r,u){var f,e;if(r){try{f=r.apply(null,u)}catch(o){n=t.rejected;f=o}e=n===t.resolved&&i.resolve||i.reject;e.call(null,f)}}var t={pending:0,resolved:1,rejected:2};return n.prototype.constructor=n,n.prototype.catch=function(n){return this.then(undefined,n)},n.resolve=function(t){return new n(function(n){n(t)})},n.reject=function(t){return new n(function(n,i){i(t)})},n}();this.loadPreset=a}NDLoader.navigationStart=window.performance&&window.performance.timing&&window.performance.timing.navigationStart||(new Date).getTime();NDLoader.executionStart=(new Date).getTime();NDLoader.getPreload=function(){return this._preloadPromise||window._preload&&NDLoader.Promise.resolve(window._preload)||NDLoader.Promise.reject()};NDLoader.setPreload=function(n){return this._preloadPromise=n};NDLoader.addTiming=function(n,t,i){return this.addJsonTiming({category:"Loader",variable:n,label:t,duration:i||(new Date).getTime()-NDLoader.executionStart}),this};NDLoader.addJsonTiming=function(n){var t=this._tacks||(this._tacks=[]);t.push(n)};
+</script>
+    <script>
+        new NDLoader().loadPreset({"css":"/res/pt-br/g22343/t237140146/2/WebResource.ashx?style=html5reset.css$style-core.css$nd-core.css$style-pageview.css$style-textview.css$style-radio.css$style-jslider.css$datepicker.css$style-neo.css$homepage.css$style-core-override.css$se-style.css$style-se-branding.scss$style-se-core.css&caching=1&v=20170710225454330","lib":"https://cdn2-res.pressreader.com/res/!digital.estadao.com.br/scripts/viewer.libs.build.min.js?v=3PA875WoAW--fjPxnLvubZVg-QH8XVXqi8kOIsfjztY1","script":"https://cdn2-res.pressreader.com/res/!digital.estadao.com.br/scripts/viewer.nolibs.build.min.js?v=m3UWM5jbfnjwsc0_-GUYKLCuvyWvljohm880jeX0SSw1"});
+    </script>
+</head>
+<body>
+</body>
+</html>
