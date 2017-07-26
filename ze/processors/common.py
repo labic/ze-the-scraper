@@ -31,10 +31,40 @@ class ParseDate(object):
 
         if spider_name == 'r7':
             value=value.split('(')[1].split(')')[0]
-            print ('value  ',value)
 
         if spider_name == 'correiobraziliense':
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+        if spider_name == 'zh':
+             #CASO SEJA DATEPUBLISHED
+            value=value.split('|')[0].replace(' - ',' ')\
+                                        .replace('h', ':') \
+                                        .replace('min', '')
+            return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+        if spider_name == 'diariodepernambuco':
+            return dateparser.parse(value)
+
+        if spider_name =='correiopopular':
+            value=value.split('Atualizado')[0].replace(' - ',' ')\
+                                        .replace('h', ':') \
+                                        .replace('min', '')\
+                                        .replace('Publicado','')\
+                                        .replace('Atualizado','')
+            print('value'+value)
+            return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+        if spider_name=='jconline':
+            value=value.split('Atualizado')[0].replace(' - ',' ')\
+                                        .replace('h', ':') \
+                                        .replace('min', '')\
+                                        .replace('Publicado','')\
+                                        .replace('Atualizado','')\
+                                        .replace('em','')\
+                                        .strip(',')\
+                                        .replace('às','')
+            print('value'+value)
+            return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
 
         # if spider_name =='gestaoescolar':
         #     # value = value.strip(' de ')split('')
