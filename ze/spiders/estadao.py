@@ -39,6 +39,7 @@ class EstadaoSpider(ZeSpider):
                 "datePublished": [
                     "[itemprop=datePublished]::text",
                     ".data::text", 
+                    '.n--noticia__state p:nth-child(2)::text'
                 ],
                 "dateModified": [
                     "[itemprop=dateModified]::text"

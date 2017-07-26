@@ -11,16 +11,16 @@ class CleanString(object):
 
 
 class ParseDate(object):
+    
+    def __init__(self, field):
+        self.field = field
 
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
 
         if spider_name == 'r7':
-            value=value.split('(')[1].split(')')[0]
-            print ('value  ',value)
-
-
-
+            value = value.split('(')[1].split(')')[0]
+        
         value = value.replace('Atualizado:', '') \
                      .replace('Atualizado', '') \
                      .replace(' | ', ' ') \
