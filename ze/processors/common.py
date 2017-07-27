@@ -24,6 +24,9 @@ class CleanString(object):
 
 class ParseDate(object):
 
+    def __init__(self, field):
+        self.field = field
+
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
 
