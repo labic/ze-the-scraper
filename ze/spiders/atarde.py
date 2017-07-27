@@ -36,17 +36,21 @@ class ATarde(ZeSpider):
                     '[itemprop=datePublished]::attr(content)',
                     '.data::text',
                     'p.data::text',
-                    '.post-date::text'
+                    '.post-date::text',
+                    '.data::text'
 
                 ],
                 "dateModified": [
                     '[itemprop=dateModified]::attr(content)',
-                    '.node-body p em::text'
+                    '.node-body p em::text',
+                    '.post-date::text',
+                    '.data::text'
 
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
                     '.conteudoMateria'
+
                 ],
                 "keywords": [
                     '[itemprop=keywords] a::text',

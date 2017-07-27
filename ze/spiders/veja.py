@@ -32,7 +32,7 @@ class VejaSpider(ZeSpider):
                 ],
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    ".article-date span::text"
+                    ".article-date span::text",
                     ".entry-date::text"
                 ],
                 "dateModified": [
