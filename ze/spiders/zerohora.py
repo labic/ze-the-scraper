@@ -34,7 +34,8 @@ class ValorEconomicoSpider(ZeSpider):
                 ],
                 "dateModified": [
                     '[itemprop=dateModified]::attr(content)',
-                    '.node-body p em::text'
+                    '.node-body p em::text',
+                    '.meta__date::text'
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
