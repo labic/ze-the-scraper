@@ -495,6 +495,7 @@ class ImproveHTML(object):
                     'link',
                     'marquee',
                     'menu',
+                    'n--noticia__newsletter',
                     # 'meta',
                     'figure meta',
                     'noframes',

@@ -294,9 +294,3 @@ class CreativeWorkItem(ThingItem):
     version = Field()
     video = Field()
     workExample = Field()
-
-    images_to_download_urls = Field(
-        default=['https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631',
-                 'https://cdn.pixabay.com/photo/2017/01/06/19/15/soap-bubble-1958650_960_720.jpg']
-    )
-    images_downloaded_urls = Field()
