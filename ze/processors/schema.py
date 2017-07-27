@@ -28,4 +28,5 @@ class KeywordsParse():
         if spider_name == 'folhadesp':
             values = values.replace('{tags|encode:html_reserved}', '')
         
-        return set([v.strip().lower() for v in re.split(';|,', values)])
+        keywords = set([v.strip().lower() for v in re.split(';|,', values)])
+        return [k for k in keywords if k]

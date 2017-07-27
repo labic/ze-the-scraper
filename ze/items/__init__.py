@@ -188,7 +188,7 @@ class CreativeWorkItem(ThingItem):
     )
     # TODO: User array with multiple dates to chose the best
     dateModified = Field(
-        input_processor=MapCompose(ParseDate()),
+        input_processor=MapCompose(ParseDate('dateModified')),
         output_processor=TakeFirst(),
         schemas = {
             'avro': {
@@ -198,7 +198,7 @@ class CreativeWorkItem(ThingItem):
     )
     # TODO: User array with multiple dates to chose the best
     datePublished = Field(
-        input_processor=MapCompose(ParseDate()),
+        input_processor=MapCompose(ParseDate('datePublished')),
         output_processor=TakeFirst(),
         schemas={
             'avro': {
@@ -294,3 +294,9 @@ class CreativeWorkItem(ThingItem):
     version = Field()
     video = Field()
     workExample = Field()
+
+    images_to_download_urls = Field(
+        default=['https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631',
+                 'https://cdn.pixabay.com/photo/2017/01/06/19/15/soap-bubble-1958650_960_720.jpg']
+    )
+    images_downloaded_urls = Field()
