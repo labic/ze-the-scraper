@@ -27,9 +27,10 @@ class CorreioBrasilienseSpider(ZeSpider):
                     '[itemprop=description]::text'
                 ],
                 "author": [
-                    '[itemprop=author]::text',
-                    '[class*=autor]::text',
+                    # '[itemprop=author]::text',
+                    # '[class*=autor]::text',
                     '.autor_casa::text',
+                    '.autor_agencia::text',
                     '.author a::text',
                     '[onclick*=malito] span::text'
                 ],

@@ -38,7 +38,8 @@ class CorreioPopularSpider(ZeSpider):
                     '.publish-time::text',#dateModified ta junto
                 ],
                 "dateModified": [
-                    '[itemprop=dateModified]::attr(content)'
+                    '[itemprop=dateModified]::attr(content)',
+                    '.publish-time::text',#datePublished ta junto
                 ],
                 "articleBody": [
                     '[itemprop=articleBody]',
