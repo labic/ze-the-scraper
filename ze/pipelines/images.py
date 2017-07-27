@@ -17,7 +17,6 @@ from scrapy.utils.misc import arg_to_iter
 from scrapy.utils.request import referer_str
 
 from .files import GSFilesStore, FilesPipeline
-from ..utils import object_utils
 
 
 class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
