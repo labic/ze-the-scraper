@@ -14,7 +14,7 @@ class GSFilesStore(object):
         assert uri.startswith('gs://')
         client = GoogleCloudStorage.Client()
         bucket, self.prefix = uri[5:].split('/', 1)
-        self.bucket = client.get_bucket(bucket)
+        self.bucket = client.bucket(bucket)
 
     def stat_file(self, path, info):
         key_name = '%s%s' % (self.prefix, path)
