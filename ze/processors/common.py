@@ -89,6 +89,12 @@ class ParseDate(object):
 
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
+            if spider_name == 'epoca':
+                value = value.split(' - Atualizado')[0].replace('h',':')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name =='exame':
+                return dateparser.parse(value)
+
 
         if (self.field == 'dateModified'):
 

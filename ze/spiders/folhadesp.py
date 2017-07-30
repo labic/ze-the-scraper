@@ -29,8 +29,9 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                     "[itemprop=description]::text"
                 ], 
                 "author": [
-                    ".news .author p", 
-                    "[itemprop=author]::text"
+                    ".news .author p b", 
+                    "[itemprop=author] b::text",
+                    ".news__byline p strong::text" 
                 ], 
                 "datePublished": [
                     ".news time::attr(datetime)", 
