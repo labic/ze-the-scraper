@@ -109,7 +109,7 @@ class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
     
     def item_completed(self, results, item, info):
         fields_results = {}
-        print(results)
+        
         for _, r in results:
             for image_field, extract_format in list(r['image_fields']):
                 key = '%s_%s_%s' % (image_field, extract_format, r['path'])
