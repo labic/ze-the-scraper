@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import dateparser
+from urllib.parse import urlparse
 import logging; logger = logging.getLogger(__name__)
+
+import dateparser
 
 tabela_meses = {'janeiro':1,
                 'fevereiro':2,
@@ -21,6 +23,17 @@ class CleanString(object):
     def __call__(self, value, loader_context):
         return value.strip('\t\n')
 
+class ValidURL(object):
+    
+    def __call__(self, value, loader_context):
+        try:
+            result = urlparse(value)
+            if all((result.scheme, result.netloc, result.path)):
+                return value
+            else:
+                return None
+        except:
+            return None
 
 class ParseDate(object):
 
