@@ -1,46 +1,73 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import requests
 import sys
 import urllib
 import json
 import ast
 import os
+import dateparser
 from bs4 import BeautifulSoup, Comment
 from subprocess import call
 
 # from scrapy.selector import Selector
 # from scrapy.http import HtmlResponse
 # import numpy as np
+# -------------------------------------READ INPUT JSON------------------------------
+termos=[]
+dataIn=''
+with open('input.json') as fIn:
+	fileInput = json.load(fIn)
+	dataIn = fileInput.get('data')
+	dataIn = dateparser.parse(dataIn)
+	termos = fileInput.get('termos') 
+fIn.close()
+# print(termos)
+# print(dataIn)
+ano = dataIn.year
+mes = dataIn.month
+dia = dataIn.day
 
-ano = 2017
-mes = 7
-dia = 25
+
+
+
+# return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+# ano = 2017
+# mes = 7
+# dia = 25
 pag=1
 diaStr = str(dia).zfill(2)
 mesStr = str(mes).zfill(2)
 anoStr = str(ano)
-endere='/home/labic-redbull/aprendendo/scrapy/impressoes/correio Braziliense/'+anoStr+mesStr+diaStr
+currentAddress = os.path.dirname(os.path.abspath('__file__'))
+endere=currentAddress+'/impressoes/correio Braziliense/'+anoStr+mesStr+diaStr
 
 if not os.path.exists(endere):
     os.makedirs(endere)
+
+# -----------------INFORMAÇÕES NECESSÁRIAS--------------
 
 senha = 'Naovaitercoxinh4!'
 senha_errada ='ioioioiooioi'
 issue_orinal = '20252017071100000000001001'
 
-loginURL = 'http://acesso.estadao.com.br/login/autenticar'
+loginURL = 'http://www.cbdigital.com.br/apps,1,120/flip-auth'
 printURL='http://www.cbdigital.com.br/flip/1/1627/127882/original_prez-1400-*.jpg'
 searchURL='http://www.cbdigital.com.br/apps,1,4/flip-search'
-access_token = 'G8J_q4BIkAUbddUcdMvWXkh2pNeHsJTLsYx6yXQxvgI40kGfLt1f_auOM_u-9iNuuqSilAwYFWdjqHENXatzWQ!!'
+# access_token = 'G8J_q4BIkAUbddUcdMvWXkh2pNeHsJTLsYx6yXQxvgI40kGfLt1f_auOM_u-9iNuuqSilAwYFWdjqHENXatzWQ!!'
 
 
-# login_data={
-# 		'conectado':'1',
-# 		'emaillog':'labic.imprensa@gmail.com',
-# 		'login':'1',
-# 		'passwordlog':senha_errada
-# }
-# print(page.content)
-# curl 'http://cdn.navdmp.com/req?v=7&id=61a1bcd73a2986733f87a9eb709|2&acc=23902&url=http%3A//www.estadao.com.br/&tit=As%20%DAltimas%20Not%EDcias%20do%20Dia%20no%20Portal%20do%20Estado%20de%20S.%20Paulo&utm=75670346.1499375602.4.3.utmcsr%3Dacesso.estadao.com.br%7Cutmccn%3D%28referral%29%7Cutmcmd%3Dreferral%7Cutmcct%3D/login/versao-digital' -H 'Accept: */*' -H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.5' -H 'Cache-Control: max-age=0' -H 'Connection: keep-alive' -H 'Cookie: ac3=1; nid=61a1bcd735b2f2c590a322b9809|2|209; __cfduid=d9b06194133eaf79d9a7c17c9327a37561488551475' -H 'Host: cdn.navdmp.com' -H 'Referer: http://www.estadao.com.br/' -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:54.0) Gecko/20100101 Firefox/54.0'
+login_data={
+		'e':'labic.imprensa@gmail.com',
+		'p':'labic2752'
+}
+# -----------------------------------------------------------
+# ------------------------LOGIN---------------------------
+s=requests.session()
+login = s.request('GET',loginURL,params=login_data)
+print('login st.cd.: '+str(login.status_code))
+dadoImportante = json.loads(login.text).get('ok')
+# ---------------------------------------------
 
 print_data={
 		'accessToken':'bJb-I87mK--FSs0bFF84dNQAstfdnGNzb1VLKM-WZGFa5nAXur2jvpIAfXbgiFITgMmfBpgRWo9Pk9BoCPReSg!!',
@@ -53,15 +80,13 @@ print_data={
 
 }
 
-# http://www.cbdigital.com.br/flip/1/1574/124528/original_prez-1600-*.jpg
-
 
 # opções para dia
 # Today , Last3Days
 search_data = {
 		'i':'null',
 		'o':'0',
-		'q':'economia'
+		'q':'temer'
 }
 
 # login = requests.request('GET',loginURL,params = login_data)
@@ -86,6 +111,7 @@ for pag in dados:
 		print(dia_img+'/'+mes_img+'/'+ano_img)
 		printURL = 'http://www.cbdigital.com.br/flip/1/'+str(id_edicao)+'/'+str(id_pagina)+'/original_prez-1600-*.jpg'
 		img = requests.request('GET',printURL)
+		print(img.status_code)
 
 		fOut = open(endere+'/'+str(npag)+'.jpg','wb')
 		fOut.write(img.content)
