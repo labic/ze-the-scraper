@@ -4,24 +4,11 @@ import urllib
 import json
 import ast
 import os
+import dateparser
+
 from bs4 import BeautifulSoup, Comment
 from subprocess import call
 
-# from scrapy.selector import Selector
-# from scrapy.http import HtmlResponse
-# import numpy as np
-
-ano = 2017
-mes = 7
-dia = 25
-pag=1
-diaStr = str(dia).zfill(2)
-mesStr = str(mes).zfill(2)
-anoStr = str(ano)
-endere='/home/labic-redbull/aprendendo/scrapy/impressoes/Estado de Minas/'+anoStr+mesStr+diaStr
-
-if not os.path.exists(endere):
-    os.makedirs(endere)
 
 senha = 'Naovaitercoxinh4!'
 senha_errada ='ioioioiooioi'
@@ -32,64 +19,81 @@ printURL='http://digital.em.com.br/flip/1/2134/124533/original_prez-1600-*.jpg'
 searchURL='http://digital.em.com.br/apps,1,4/flip-search'
 
 
-# login_data={
-# 		'conectado':'1',
-# 		'emaillog':'labic.imprensa@gmail.com',
-# 		'login':'1',
-# 		'passwordlog':senha_errada
-# }
-# print(page.content)
-# curl 'http://cdn.navdmp.com/req?v=7&id=61a1bcd73a2986733f87a9eb709|2&acc=23902&url=http%3A//www.estadao.com.br/&tit=As%20%DAltimas%20Not%EDcias%20do%20Dia%20no%20Portal%20do%20Estado%20de%20S.%20Paulo&utm=75670346.1499375602.4.3.utmcsr%3Dacesso.estadao.com.br%7Cutmccn%3D%28referral%29%7Cutmcmd%3Dreferral%7Cutmcct%3D/login/versao-digital' -H 'Accept: */*' -H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.5' -H 'Cache-Control: max-age=0' -H 'Connection: keep-alive' -H 'Cookie: ac3=1; nid=61a1bcd735b2f2c590a322b9809|2|209; __cfduid=d9b06194133eaf79d9a7c17c9327a37561488551475' -H 'Host: cdn.navdmp.com' -H 'Referer: http://www.estadao.com.br/' -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:54.0) Gecko/20100101 Firefox/54.0'
-
-print_data={
-		'accessToken':'bJb-I87mK--FSs0bFF84dNQAstfdnGNzb1VLKM-WZGFa5nAXur2jvpIAfXbgiFITgMmfBpgRWo9Pk9BoCPReSg!!',
-		'issue':'2025'+anoStr+mesStr+diaStr+'00000000001001',
-		'page':'2',
-		'paper':'Letter',
-		'scale':'false',
-		'scaleToLandscape':'false',
-		'useContentProxy':'true'
-
-}
-
-# http://www.cbdigital.com.br/flip/1/1574/124528/original_prez-1600-*.jpg
 
 
-# opções para dia
-# Today , Last3Days
-search_data = {
-		'i':'null',
-		'o':'0',
-		'q':'tesouro'
-}
+def imprime_jornal(termo,diaStr,mesStr,anoStr):
+	
+	search_data = {
+			'i':'null',
+			'o':'0',
+			'q':termo
+	}
 
-# login = requests.request('GET',loginURL,params = login_data)
-# print('login '+str(login.status_code))
+	print_data={
+			'accessToken':'bJb-I87mK--FSs0bFF84dNQAstfdnGNzb1VLKM-WZGFa5nAXur2jvpIAfXbgiFITgMmfBpgRWo9Pk9BoCPReSg!!',
+			'issue':'2025'+anoStr+mesStr+diaStr+'00000000001001',
+			'page':'2',
+			'paper':'Letter',
+			'scale':'false',
+			'scaleToLandscape':'false',
+			'useContentProxy':'true'
 
-search = requests.request('GET',searchURL,params = search_data)
-print('search '+str(search.status_code))
-pages = search.text
-pages= json.loads(pages).get('ok').get('matches')
+	}
 
-for pag in pages:
-	id_edicao = pag.get('id_edicao')
-	id_pagina = pag.get('id_pagina')
-	npag = pag.get('numeracao')
-	data = pag.get('attrs').get('flip_ordem_i')
-	ano_img = str(data)[0:4]
-	mes_img = str(data)[4:6]
-	dia_img = str(data)[6:8]
-	if(dia_img==diaStr and mes_img==mesStr and ano_img==anoStr):
-		print(dia_img+'/'+mes_img+'/'+ano_img)
+	search = requests.request('GET',searchURL,params = search_data)
+	print('search '+str(search.status_code))
+	pages = search.text
+	pages= json.loads(pages).get('ok').get('matches')
 
-		printURL = 'http://digital.em.com.br/flip/1/'+str(id_edicao)+'/'+str(id_pagina)+'/original_prez-1600-*.jpg'
-		img = requests.request('GET',printURL)
+	for pag in pages:
+		id_edicao = pag.get('id_edicao')
+		id_pagina = pag.get('id_pagina')
+		npag = pag.get('numeracao')
+		data = pag.get('attrs').get('flip_ordem_i')
+		ano_img = str(data)[0:4]
+		mes_img = str(data)[4:6]
+		dia_img = str(data)[6:8]
+		print('dia '+diaStr+' '+dia_img)
+		print('mes '+mesStr+' '+mes_img)
+		print('ano '+anoStr+' '+ano_img)
 
-		fOut = open(endere+'/'+str(npag)+'.jpg','wb')
-		fOut.write(img.content)
-		fOut.close()
+		if(dia_img==diaStr and mes_img==mesStr and ano_img==anoStr):
+			print(dia_img+'/'+mes_img+'/'+ano_img)
+			print('foi')
+			printURL = 'http://digital.em.com.br/flip/1/'+str(id_edicao)+'/'+str(id_pagina)+'/original_prez-1600-*.jpg'
+			img = requests.request('GET',printURL)
 
-		print(str(data)+'  '+str(id_edicao)+'  '+str(id_pagina)+'  sc:'+str(img.status_code))
-print(len(pages))
-# pagImgURL = soup.select('img')[0]['src']
+			fOut = open(endere+'/'+str(npag)+'.jpg','wb')
+			fOut.write(img.content)
+			fOut.close()
+
+			print(str(data)+'  '+str(id_edicao)+'  '+str(id_pagina)+'  sc:'+str(img.status_code))
+	print(len(pages))
+
+
+
+termos=[]
+dataIn=''
+with open('input.json') as fIn:
+	fileInput = json.load(fIn)
+	dataIn = fileInput.get('data')
+	dataIn = dateparser.parse(dataIn,settings={'DATE_ORDER': 'DMY'})
+	termos = fileInput.get('termos') 
+fIn.close()
+
+ano = dataIn.year
+mes = dataIn.month
+dia = dataIn.day
+
+pag=1
+diaStr = str(dia).zfill(2)
+mesStr = str(mes).zfill(2)
+anoStr = str(ano)
+currentAddress = os.path.dirname(os.path.abspath('__file__'))
+endere=currentAddress+'/impressoes/Estado de Minas/'+anoStr+mesStr+diaStr
+if not os.path.exists(endere):
+    os.makedirs(endere)
+
+for termo in termos:
+	imprime_jornal(termo,diaStr,mesStr,anoStr)
 
