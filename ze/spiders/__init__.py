@@ -62,7 +62,6 @@ class AllSpiders(ZeSpider):
         else:
             spider_names = [s for s in spider_loader.list() \
                             if s not in self.spiders_ignored]
-            print(spider_names)
         
         for spider_name in spider_names:
             Spider = spider_loader.load(spider_name)
