@@ -52,6 +52,7 @@ class AllSpiders(ZeSpider):
     allowed_domains = []
     domains_parses = {}
     start_urls = []
+    spiders_ignored = [name, 'correiopopularimpreso']
     
     def prepare_domains_parses(self):
         spider_loader = SpiderLoader.from_settings(self.settings)
@@ -59,8 +60,9 @@ class AllSpiders(ZeSpider):
         if hasattr(self, 'spiders'):
             spider_names = self.spiders.split(',')
         else:
-            spider_names = spider_loader.list()
-            spider_names.remove(self.name)
+            spider_names = [s for s in spider_loader.list() \
+                            if s not in self.spiders_ignored]
+            print(spider_names)
         
         for spider_name in spider_names:
             Spider = spider_loader.load(spider_name)
