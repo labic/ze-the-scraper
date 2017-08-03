@@ -49,7 +49,8 @@ class G1Spider(ZeSpider):
                 "articleBody": [
                     "[itemprop=articleBody]",
                     ".materia-conteudo", 
-                    ".entry-content" 
+                    ".entry-content", 
+                    ".post-content"
                 ], 
                 "keywords": [
                     "[itemprop=keywords]::text", 
