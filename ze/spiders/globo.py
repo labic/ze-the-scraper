@@ -28,9 +28,12 @@ class GloboSpider(ZeSpider):
                     ".content-head__subtitle::text" 
                 ], 
                 "author": [
+                    "[itemprop=author] [itemprop=name]::attr(content)",
                     "[itemprop=author]::text", 
                     "[itemprop=creator]::text",
-                    "#credito-materia::text"
+                    "#credito-materia::text",
+                    
+
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::attr(datetime)", 
