@@ -28,7 +28,8 @@ class CartaCapitalSpider(ZeSpider):
                 ],
                 "author": [
                     "[itemprop=author]::text",
-                    ".documentAuthor a::text"
+                    ".documentAuthor a::text",
+                    ".documentAuthor::text"
                 ],
                 "datePublished": [
                     "[itemprop=datePublished]::text",
