@@ -98,6 +98,10 @@ class ImproveHTML(object):
                     a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
                     a.append(fg)
 
+                selector = 'svg'
+                for el in html.select(selector):
+                    el.decompose()
+
                     el.replace_with(a)
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
@@ -128,6 +132,13 @@ class ImproveHTML(object):
                     fg.append(fc)
 
                     el.replace_with(fg)
+                selector = 'div section p'
+                for el in html.select(selector):
+                    el.decompose()
+                selector = 'h3'
+                for el in html.select(selector):
+                    print('h3:'+str(len(el.contents)))
+                    print(el.contents)
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s', selector, spider_name, e)
 
@@ -526,6 +537,9 @@ class ImproveHTML(object):
         [el.decompose() for el in html.select('span') \
             if len(el.contents) == 0]
 
+        [el.decompose() for el in html.select('h3') \
+            if len(el.contents) == 0]
+      
         # TODO: B4S bug
         [el.previous_element.decompose() for el in html.select('p + br + p')]
 
@@ -565,6 +579,7 @@ class ImproveHTML(object):
 
         for el in html.select('td p s'):
             el.parent.parent.string = el.string
+
 
         # TODO: What do with more than one strong in p?
         # for el in html.select('p > strong'):

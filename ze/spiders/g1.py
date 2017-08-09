@@ -31,9 +31,11 @@ class G1Spider(ZeSpider):
                     ".materia-titulo h2::text"  
                 ], 
                 "author": [
+                    "[itemprop=author] [itemprop=name]::attr(content)",
                     "[itemprop=author]::text", 
                     "[itemprop=creator]::text", 
-                    ".anunciante-publieditorial::text"
+                    ".anunciante-publieditorial::text",
+                    "#credito-materia::text",
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::attr(datetime)", 
@@ -53,8 +55,9 @@ class G1Spider(ZeSpider):
                     ".post-content"
                 ], 
                 "keywords": [
+                    "meta[name=keywords]::attr(content)",
                     "[itemprop=keywords]::text", 
-                    ".entities,_list-itemLink::text"
+                    ".entities__list-itemLink::text"
                 ]
             }
         }
