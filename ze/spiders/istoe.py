@@ -45,7 +45,8 @@ class VejaSpider(ZeSpider):
                 ],
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    ".article-content"
+                    '.content-section.content',
+                    ".article-content",
                 ],
                 "keywords": [
                     "[itemprop=keywords]::text",

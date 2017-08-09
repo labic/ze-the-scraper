@@ -42,6 +42,7 @@ class HuffPostBrasilSpider(ZeSpider):
                     ".timestamp__date--modified::text"
                 ], 
                 "articleBody": [
+                    '[data-part="contents"]',
                     "[itemprop=articleBody]",
                     ".entry__body", 
                     ".post-contents"

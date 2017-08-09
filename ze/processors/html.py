@@ -66,6 +66,8 @@ class ImproveHTML(object):
                     video_id = el['data-lazy-src'].split('/')[4]
                     fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
                         width='1280', height='720', frameborder='0', allowfullscreen='true')
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
@@ -89,23 +91,31 @@ class ImproveHTML(object):
             try:
                 selector = '[data-block-type="backstage-video"]'
                 for el in html.select(selector):
-                    video_id = el.select('[data-video-id]')[0]['data-video-id']
+                    # possible_video_selectors=['.content-video__placeholder','[data-video-id]']
+                    print('len: '+str(len(el.select('.content-video__placeholder'))))
+                    video_id = el.select('.content-video__placeholder')[0]['data-video-id']
+
                     fg = html.new_tag('figure')
                     fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
                     fc = html.new_tag('figcaption')
-                    fc.string = el.select('[itemprop="caption"]')[0].get_text()
+                    fc.string = el.select('[itemprop="description"]')[0].get_text() #antes tava itemprop='caption'
                     fg.append(fc)
                     a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
                     a.append(fg)
-
-                selector = 'svg'
-                for el in html.select(selector):
-                    el.decompose()
 
                     el.replace_with(a)
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
 
         if spider_name is 'estadao':
             try:
@@ -396,9 +406,71 @@ class ImproveHTML(object):
                     el.unwrap()
                 selector = 'a'
                 for el in html.select(selector):
-                    print('novaescola a')
-                    # print(el.text())
                     el.replace_with(el.get_text())
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        if spider_name is 'globo':
+
+            try:
+                selector = '.foto'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el.select('img')[0]['data-pagespeed-high-res-src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select('figcaption')[0].get_text()
+                    fg.append(fc)
+
+                    el.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+            try:
+                for el in html.select('a'):
+                    link_text=el.get_text()
+                    print(link_text)
+                    el.replace_with(link_text)
+
+                for el in html.select("#autor"):
+                    el.parent.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+        
+        if spider_name is 'huffpostbrasil':
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+                for el in html.select('blockquote'):
+                    el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        # if spider_name is 'istoe':
+        #     try:
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
+
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
+
+        if spider_name is 'jconline':
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        if spider_name is 'zh':
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
@@ -460,9 +532,10 @@ class ImproveHTML(object):
         if not el_to_decompose:
             el_to_decompose = {
                 'geral':     [
-                    'a',
+                    '.additional',
                     '.advertising',
                     '#boxComentarios',
+                    '.box-vejaTambem',
                     '#column-middle',
                     '.content-ads',
                     '.content-head',
@@ -472,6 +545,7 @@ class ImproveHTML(object):
                     '#comments',
                     '#comentarios',
                     '.clear',
+                    '[data-beacon]',
                     '[data-block-type="related-articles"]',
                     '#liveblog-container',
                     '.mc-side-item__container',
@@ -490,6 +564,7 @@ class ImproveHTML(object):
                     'blink',
                     'body',
                     'button',
+                    '.comentarios',
                     'dir',
                     'embed',
                     'fieldset',
@@ -509,6 +584,7 @@ class ImproveHTML(object):
                     'marquee',
                     'menu',
                     'n--noticia__newsletter',
+                    '#noticia_vinculadas',
                     # 'meta',
                     'figure meta',
                     'noframes',
@@ -516,15 +592,24 @@ class ImproveHTML(object):
                     'object',
                     'optgroup',
                     'option',
+                    '#palavraschave',
                     'param',
+                    'path',
                     'plaintext',
+                    '#pub-retangulo-1',
+                    '#recomendadosParaVoce',
                     '#respond',
                     'script',
                     'select',
+                    "#sponsored-links",
+                    '#pub-box-materia',
+                    '.publicidade-entre-texto',
                     'style',
                     'svg',
                     'textarea',
                     'xml',
+                    '[data-ng-controller="compartilhamentoController"]',
+                    '[data-ng-controller="newsletterControllerCardapio"]',
                 ]
             }
 
