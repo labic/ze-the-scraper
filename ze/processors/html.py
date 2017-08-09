@@ -448,8 +448,10 @@ class ImproveHTML(object):
         el_to_decompose = loader_context.get('el_to_decompose')
         if not el_to_decompose:
             el_to_decompose = {
-                'geral': [
+                'geral':     [
+                    'a',
                     '.advertising',
+                    '#boxComentarios',
                     '#column-middle',
                     '.content-ads',
                     '.content-head',
@@ -509,6 +511,7 @@ class ImproveHTML(object):
                     'script',
                     'select',
                     'style',
+                    'svg',
                     'textarea',
                     'xml',
                 ]

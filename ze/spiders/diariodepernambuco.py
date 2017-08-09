@@ -37,7 +37,8 @@ class DiariodePernambuco(ZeSpider):
                     '[itemprop=author]::text',
                     '.yellowlight::text',
                     #blog
-                    '.author a::text'
+                    '.author a::text',
+                    '.post-meta > a::text'
                 ],
                 "datePublished": [
                     '[itemprop=datePublished]::attr(content)',
