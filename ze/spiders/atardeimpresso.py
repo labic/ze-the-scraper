@@ -21,13 +21,13 @@ class CorreioPopularImpressoSpider(Spider):
                           meta={'dont_cache': True},)
 
     def auth(self, resp):
-        auth = self.settings.get('SPIDERS_AUTH').get('atardeimpresso')
+        auth = self.settings.get('SPIDERS_AUTH').get('atarde')
         view_state = resp.selector.css('[name="javax.faces.ViewState"]::attr(value)').extract()[0]
 
         return FormRequest.from_response(resp, callback=self.after_auth,
                                          formdata={
-                                            'j_idt9:usuario': auth['j_idt9:usuario'],
-                                            'j_idt9:j_idt15': auth['j_idt9:j_idt15'],
+                                            'j_idt9:usuario': auth['login'],
+                                            'j_idt9:j_idt15': auth['senha'],
                                             'javax.faces.ViewState': view_state,
                                             'j_idt9:cmdAcessar': 'acessar',
                                             'j_idt9': 'j_idt9'},

@@ -112,6 +112,7 @@ def imprime_jornal(termo):
 		}
 
 		printPage = requests.request('GET',printURL,params = print_data)
+		print(printPage.url)
 		data = printPage.text
 		data = json.loads(data)
 		pagImgURL = data.get('Data').get('Src')
