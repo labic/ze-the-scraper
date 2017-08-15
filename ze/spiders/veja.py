@@ -29,6 +29,7 @@ class VejaSpider(ZeSpider):
                 "author": [
                     "[itemprop=author]::text",
                     ".article-author span strong::text",
+                    ".article-author span::text",
                 ],
                 "datePublished": [
                     "[itemprop=datePublished]::text",

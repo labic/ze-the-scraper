@@ -4,8 +4,8 @@ from ze.spiders import ZeSpider
 
 class GloboSpider(ZeSpider):
 
-    name = 'globo'
-    allowed_domains = ['globo.com']
+    name = 'exame'
+    allowed_domains = ['exame.abril.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
@@ -28,21 +28,15 @@ class GloboSpider(ZeSpider):
                     ".content-head__subtitle::text" 
                 ], 
                 "author": [
-                    "[itemprop=author] [itemprop=name]::attr(content)",
                     "[itemprop=author]::text", 
                     "[itemprop=creator]::text",
-                    "#credito-materia::text",
-                    
-
+                    ".article-author span::text"
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::attr(datetime)", 
                     "[itemprop=datePublished]::text", 
-                    "meta[name='article:published_time']::attr(content)",
-                    "meta[name=dtnoticia]::attr(content)",
-                    "#info-edicao-acervo b::text",
-                    ".data::text",
-                    ".published::text",
+                    "meta[property='bt:pubDate']::attr(content)",
+                    # head > meta:nth-child(44)
                 ], 
                 "dateModified": [
                     "[itemprop=dateModified]::attr(datetime)" , 
@@ -56,7 +50,7 @@ class GloboSpider(ZeSpider):
                     ".materia-conteudo",
                     ".entry-content",
                     ".conteudo",
-                    "#texto"
+                    ".article-content"
                 ], 
                 "keywords": [
                     "meta[name=keywords]::attr(content)",

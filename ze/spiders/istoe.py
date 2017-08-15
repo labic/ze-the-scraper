@@ -2,10 +2,10 @@
 
 from ze.spiders import ZeSpider
 
-class CartaCapitalSpider(ZeSpider):
+class VejaSpider(ZeSpider):
 
-    name = 'cartacapital'
-    allowed_domains = ['cartacapital.com.br', 'cartaeducacao.com.br']
+    name = 'istoe'
+    allowed_domains = ['istoe.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
@@ -13,42 +13,44 @@ class CartaCapitalSpider(ZeSpider):
                     "meta[property='og:title']::attr(content)",
                     "meta[name=title]::attr(content)",
                     "[itemprop=name]::text",
-                    ".documentFirstHeading::text"
+                    ".article-title::text"
                 ],
                 "image": [
                     'meta[property="og:image"]::attr(content)',
                     "[itemprop=image]::attr(content)",
-                    "[property='og:image']::attr(content)"
+                    "[property=og:image]::attr(content)"
                 ],
                 "description": [
                     "meta[property='og:description']::attr(content)",
                     "meta[name=description]::attr(content)",
                     "[itemprop=description]::text",
-                    ".documentDescription::text"
+                    ".article-subtitle::text",
                 ],
                 "author": [
-                    "[itemprop=author]::text",
-                    ".documentAuthor a::text",
-                    ".documentAuthor::text"
+                    # "[itemprop=author]::text",
+                    # ".article-author span strong::text",
+                    # '.author:not(figcaption)::text',
+                    "[rel=author]::text",
+
                 ],
                 "datePublished": [
                     "[itemprop=datePublished]::text",
-                    ".documentPublished::text"
+                    ".article-date span::text",
+                    ".entry-date::text",
+                    '.content-section time::attr(datetime)'
                 ],
                 "dateModified": [
                     "[itemprop=dateModified]::text",
-                    '.documentModified::text'
+                    ".article-date span::text"
                 ],
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    "#content-core",
-                    ".td-post-content",
+                    '.content-section.content',
+                    ".article-content",
                 ],
                 "keywords": [
                     "[itemprop=keywords]::text",
-                    "[property='rnews:keywords']::text",
-                    "[rel='tag']::text",
-                    "#category .link-category::text"
+                    ".article-tags a::text"
                 ]
             }
         }

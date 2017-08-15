@@ -35,6 +35,7 @@ class EstadaoSpider(ZeSpider):
                     "[itemprop=author]::text", 
                     ".autor::text", 
                     ".author::text", 
+                    ".n--noticia__state span::text",
                 ], 
                 "datePublished": [
                     "[itemprop=datePublished]::text",

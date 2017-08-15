@@ -49,8 +49,9 @@ class JCOnlineSpider(ZeSpider):
                 ],
                 "articleBody": [
                     "[itemprop=articleBody]",
-                    "#noticia_corpodanoticia"#pegar o que ta entre <p></p>,
-                    "#texto-noticia"#fazer negocio de pegar xhr
+                    "#noticia_corpodanoticia",#pegar o que ta entre <p></p>,
+                    "#texto-noticia",#fazer negocio de pegar xhr
+                    ".noticia_corpodanoticia"
                 ],
                 "keywords": [
                     "[itemprop=keywords] a::text",

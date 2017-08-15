@@ -10,23 +10,34 @@ from bs4 import BeautifulSoup, Comment
 from subprocess import call
 
 
-senha = 'Naovaitercoxinh4!'
+senha = 'Naovaiter'
 senha_errada ='ioioioiooioi'
-issue_orinal = '20252017071100000000001001'
 
-loginURL = ''
-printURL='http://digital.em.com.br/flip/1/2134/124533/original_prez-1600-*.jpg'
-searchURL='http://digital.em.com.br/apps,1,4/flip-search'
+loginURL = 'http://flipzh.clicrbs.com.br/jornal-digital/flip/loginEdicao.do'
+# printURL='http://digital.em.com.br/flip/1/2134/124533/original_prez-1600-*.jpg'
+searchURL='http://flipzh.clicrbs.com.br/jornal-digital/flip/jornal/skins/king/jsp/pesquisa.jsp'
+# imgURL='http://flipzh.clicrbs.com.br/jornal-digital/files/flip/RBS/1885/up24/15017132743301.jpg'
+login_data={
 
-
+	'username':'labic.imprensa@gmail.com',
+	'senha':senha
+}
 
 
 def imprime_jornal(termo,diaStr,mesStr,anoStr):
 	
 	search_data = {
-			'i':'null',
-			'o':'0',
-			'q':termo
+			'edicao':"3258",
+			'search':"true",
+			'linkedicao':"pub/gruporbs/",
+			'apenasEssa':"true",
+			'keywords':"temer"
+	}
+
+	search_params = {
+			'idForm':"3258",
+			'acervo':"false",
+			'labicinkedicao':"pub/gruporbs/"
 	}
 
 	print_data={
@@ -40,10 +51,19 @@ def imprime_jornal(termo,diaStr,mesStr,anoStr):
 
 	}
 
-	search = requests.request('GET',searchURL,params = search_data)
+
+	search = s.request('POST',searchURL,params = search_params, data = search_data)
 	print('search '+str(search.status_code))
-	pages = search.text
-	pages= json.loads(pages).get('ok').get('matches')
+	# print(search.content)
+	soup = BeautifulSoup(search.text,'html.parser')
+	selector = '#item_pesquisa'
+	pages=[]
+	for el in soup.select(selector):
+		print(el['onclick'])
+		temp={}
+		temp['edicao']=el.select('strong')[0].get_text().replace(' Edição número ','')
+		print(temp['edicao'])
+	exit()
 
 	for pag in pages:
 		id_edicao = pag.get('id_edicao')
@@ -94,6 +114,11 @@ endere=currentAddress+'/impressoes/Estado de Minas/'+anoStr+mesStr+diaStr
 if not os.path.exists(endere):
     os.makedirs(endere)
 
+# -----------------LOGIN-------------------
+s = requests.session()
+login = s.request('GET',loginURL, params = login_data)
+print('s.c.:'+str(login.status_code))
+print(login.content)
 for termo in termos:
 	imprime_jornal(termo,diaStr,mesStr,anoStr)
 

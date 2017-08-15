@@ -6,24 +6,35 @@ import urllib
 import json
 import ast
 import os
+import dateparser
 
 
 from subprocess import call
 # from scrapy.selector import Selector
 # from scrapy.http import HtmlResponse
 # import numpy as np
+# -----------------------SETUP-Pega info do json e cria pasta---------------
+termos=[]
+dataIn=''
+with open('input.json') as fIn:
+	fileInput = json.load(fIn)
+	dataIn = fileInput.get('data')
+	dataIn = dateparser.parse(dataIn,settings={'DATE_ORDER': 'DMY'})
+	termos = fileInput.get('termos') 
+fIn.close()
 
-ano = 2017
-mes = 7
-dia = 13
-pag=1
+ano = dataIn.year
+mes = dataIn.month
+dia = dataIn.day
+
 diaStr = str(dia).zfill(2)
 mesStr = str(mes).zfill(2)
 anoStr = str(ano)
-endere='/home/labic-redbull/aprendendo/scrapy/impressoes/'+anoStr+mesStr+diaStr
-
+currentAddress = os.path.dirname(os.path.abspath('__file__'))
+endere=currentAddress+'/impressoes/Estadao/'+anoStr+mesStr+diaStr
 if not os.path.exists(endere):
     os.makedirs(endere)
+# ------------------------------------------------------------
 
 senha = 'Naovaitercoxinh4!'
 senha_errada ='ioioioiooioi'
@@ -67,44 +78,48 @@ search_data = {
 		'accessToken':access_token
 }
 
-login = requests.request('GET',loginURL,params = login_data)
-print('login '+str(login.status_code))
 
-search = requests.request('GET',searchURL,params = search_data)
-print('search '+str(search.status_code))
+def imprime_jornal(termo):
+	search_data['SearchText']=termo
+	# login = requests.request('GET',loginURL,params = login_data)
+	# print('login '+str(login.status_code))
 
-data = search.text
-data = json.loads(data)
-data = data.get('Items')
-pages=[]
-for found in data:
-	page = found.get('Page')
-	if page not in pages:
-		pages.append(page)
-print(pages)
+	search = requests.request('GET',searchURL,params = search_data)
+	print('search '+str(search.status_code))
 
-
-# ---------------Pega IMGS---------------
-for pag in pages:
-
-	print_data={
-		'accessToken':'bJb-I87mK--FSs0bFF84dNQAstfdnGNzb1VLKM-WZGFa5nAXur2jvpIAfXbgiFITgMmfBpgRWo9Pk9BoCPReSg!!',
-		'issue':'2025'+anoStr+mesStr+diaStr+'00000000001001',
-		'page':str(pag),
-		'paper':'Letter',
-		'scale':'false',
-		'scaleToLandscape':'false',
-		'useContentProxy':'true'
-	}
-
-	printPage = requests.request('GET',printURL,params = print_data)
-	data = printPage.text
+	data = search.text
 	data = json.loads(data)
-	pagImgURL = data.get('Data').get('Src')
-	img = requests.request('GET',pagImgURL)
-	print('pag  '+str(pag)+'   status code:'+str(img.status_code))
-	fOut = open(endere+'/'+str(pag)+'.png','wb')
-	fOut.write(img.content)
-	fOut.close()
+	data = data.get('Items')
+	pages=[]
+	for found in data:
+		page = found.get('Page')
+		if page not in pages:
+			pages.append(page)
+	print(pages)
 
 
+	# ---------------Pega IMGS---------------
+	for pag in pages:
+
+		print_data={
+			'accessToken':'bJb-I87mK--FSs0bFF84dNQAstfdnGNzb1VLKM-WZGFa5nAXur2jvpIAfXbgiFITgMmfBpgRWo9Pk9BoCPReSg!!',
+			'issue':'2025'+anoStr+mesStr+diaStr+'00000000001001',
+			'page':str(pag),
+			'paper':'Letter',
+			'scale':'false',
+			'scaleToLandscape':'false',
+			'useContentProxy':'true'
+		}
+
+		printPage = requests.request('GET',printURL,params = print_data)
+		data = printPage.text
+		data = json.loads(data)
+		pagImgURL = data.get('Data').get('Src')
+		img = requests.request('GET',pagImgURL)
+		print('pag  '+str(pag)+'   status code:'+str(img.status_code))
+		fOut = open(endere+'/'+str(pag)+'.png','wb')
+		fOut.write(img.content)
+		fOut.close()
+
+for termo in termos:
+	imprime_jornal(termo)

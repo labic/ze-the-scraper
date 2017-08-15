@@ -36,13 +36,12 @@ class ValidURL(object):
             return None
 
 class ParseDate(object):
-
     def __init__(self, field):
         self.field = field
+        print('field'+field)
 
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
-
         print('------------------------------------------------------------------------------------\n'+str(value)+'\n--------------------------------------------------------------------')
 
         if spider_name == 'r7':
@@ -51,35 +50,104 @@ class ParseDate(object):
         if spider_name == 'correiobraziliense':
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
-        if spider_name == 'zh':
-             #CASO SEJA DATEPUBLISHED
-            value=value.split('|')[0].replace(' - ',' ')\
-                                        .replace('h', ':') \
-                                        .replace('min', '')
-            return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
-        if spider_name == 'diariodepernambuco':
-            return dateparser.parse(value)
+        if (self.field == 'datePublished'):
 
-        if spider_name =='correiopopular':
-            value=value.split('Atualizado')[0].replace(' - ',' ')\
-                                        .replace('h', ':') \
-                                        .replace('min', '')\
-                                        .replace('Publicado','')\
-                                        .replace('Atualizado','')
-            print('value'+value)
-            return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-        if spider_name=='jconline':
-            value=value.split('Atualizado')[0].replace(' - ',' ')\
-                                        .replace('h', ':') \
-                                        .replace('min', '')\
-                                        .replace('Publicado','')\
-                                        .replace('Atualizado','')\
-                                        .replace('em','')\
-                                        .strip(',')\
-                                        .replace('às','')
-            print('value'+value)
-            return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name == 'zh':
+
+                value=value.split('|')[0].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
+            if spider_name == 'diariodepernambuco':
+                return dateparser.parse(value)
+
+            if spider_name =='correiopopular':
+                value=value.split('Atualizado')[0].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('Publicado','')\
+                                            .replace('Atualizado','')
+
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name=='jconline':
+                value=value.split('Atualizado')[0].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('Publicado','')\
+                                            .replace('Atualizado','')\
+                                            .replace('em','')\
+                                            .strip(',')\
+                                            .replace('às','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            if spider_name =='atarde':
+                value=value.split('|')[0].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            if spider_name == 'veja':
+                value = value.split(' - ')[1].replace('Publicado','')\
+                                            .replace('em','')\
+                                            .replace(',','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            if spider_name=='estadao':
+                value1 = value.split('|')[1]
+                value1 = value1.replace('h',':')
+                value = value.split('|')[0]+value1
+
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            if spider_name == 'epoca':
+                value = value.split(' - Atualizado')[0].replace('h',':')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name =='exame':
+                return dateparser.parse(value)
+
+
+        if (self.field == 'dateModified'):
+
+            if spider_name == 'zh':
+
+                print('veio aqui')
+                value=value.split('|')[1].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('Atualizada','')\
+                                            .replace('em','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
+            if spider_name == 'diariodepernambuco':
+                return dateparser.parse(value)
+
+            if spider_name =='correiopopular':
+                value=value.split('Atualizado')[0].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('Publicado','')\
+                                            .replace('Atualizado','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name=='jconline':
+                value=value.split('Atualizado')[0].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('Publicado','')\
+                                            .replace('Atualizado','')\
+                                            .replace('em','')\
+                                            .strip(',')\
+                                            .replace('às','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+
+
+
+        # if spider_name =='estadodeminas':
+        #     return dateparser.parse(value,settings={'TIMEZONE': '+0300'})
 
 
         # if spider_name =='gestaoescolar':
@@ -87,17 +155,16 @@ class ParseDate(object):
         #     return(dateparser.parse(value, settings={'TIMEZONE': '+0300'}))
 
 
-        # value = value.replace('Atualizado:', '') \
-        #              .replace('Atualizado', '') \
-        #              .replace(' | ', ' ') \
-        #              .replace('h', ':') \
-        #              .replace('h ', ':') \
-        #              .replace(', ', ' ') \
-        #              .replace('  ', ' ') \
-        #              .strip()
+        value = value.replace('Atualizado:', '') \
+                     .replace('Atualizado', '') \
+                     .replace(' | ', ' ') \
+                     .replace('h', ':') \
+                     .replace('h ', ':') \
+                     .replace(', ', ' ') \
+                     .replace('  ', ' ') \
+                     .strip()
 
         try:
-            print(dateparser.parse(value, settings={'TIMEZONE': '+0300'}))
             return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
         except Exception as e:
             logger.warning('Date not processed: %s' % value)
