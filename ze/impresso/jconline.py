@@ -40,7 +40,7 @@ search_params={
 		'termo':'falta',
 		'pagina':'1',
 		'quantidadePorPagina':'50'
-	
+
 }
 tipos=[]
 # http://jconlinedigital.ne10.uol.com.br/restrito/edicoes/1/8/2017/1/politica/0801_01_POL_4/0801_01_POL_4.jpg
@@ -55,7 +55,7 @@ def imprime_jornal(termo):
 	# 	fSearch.write(search.content)
 	# fSearch.close()
 	# print(dataStr)
-	
+
 	# print(search.text)
 	results = json.loads(search.text)
 	results=results.get('resultado')
@@ -98,7 +98,7 @@ with open('input.json') as fIn:
 	fileInput = json.load(fIn)
 	dataIn = fileInput.get('data')
 	dataIn = dateparser.parse(dataIn,settings={'DATE_ORDER': 'DMY'})
-	termos = fileInput.get('termos') 
+	termos = fileInput.get('termos')
 fIn.close()
 
 dataIn=datetime.datetime.today()
