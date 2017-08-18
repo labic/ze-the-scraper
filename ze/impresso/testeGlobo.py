@@ -48,8 +48,8 @@ search_data={
 				'srchIn':'ALL',
 				'srchOrderBy':'Relevance',
 				'srchPage':'0',
-				'srchStartDate':'2017-07-22',
-				'srchStopDate':'2017-07-26',
+				'srchStartDate':'2017-08-18',
+				'srchStopDate':'2017-08-18',
 				'srchText':termo
 }
 search_data['srchText']=termo
@@ -77,8 +77,9 @@ fSearch.close()
 
 for page in pages:
 	print(page)
+	page_params['page']=page
 	pre_download_page = requests.request('GET',page_URL,params = page_params)
-
+	print(pre_download_page.url)
 	soup = BeautifulSoup(pre_download_page.text,'html.parser')
 	pagImg_URL = soup.select('img')[0]['src']
 
