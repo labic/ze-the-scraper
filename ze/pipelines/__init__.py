@@ -28,7 +28,7 @@ class DropItemsPipeline(BasePipeline):
     
     def process_item(self, item, spider):
         for validation_method in self.validation_methods:
-            self[validation_method](item, spider)
+            getattr(self, validation_method)(item, spider)
         
         return item
     
