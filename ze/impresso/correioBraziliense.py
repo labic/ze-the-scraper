@@ -7,6 +7,7 @@ import json
 import ast
 import os
 import dateparser
+import datetime
 from bs4 import BeautifulSoup, Comment
 from subprocess import call
 
@@ -94,7 +95,7 @@ dataIn=''
 with open('input.json') as fIn:
 	fileInput = json.load(fIn)
 	dataIn = fileInput.get('data')
-	dataIn = dateparser.parse(dataIn,settings={'DATE_ORDER': 'DMY'})
+	dataIn = datetime.datetime.now()
 	termos = fileInput.get('termos') 
 fIn.close()
 # print(termos)
