@@ -3,8 +3,9 @@ import re
 from functools import reduce
 from collections import ChainMap
 import logging; logger = logging.getLogger(__name__)
+
 from scrapy.exceptions import NotConfigured
-from ze.exceptions import EmptyFields, MissingSearchQueryKeywords
+from ..exceptions import EmptyFields, MissingSearchQueryKeywords
 
 
 class BasePipeline(object):
@@ -54,17 +55,27 @@ class DropItemsPipeline(BasePipeline):
 
 class ItemsSideValues(object):
     
+    # FIXME: find a better place and how to add the tags of search to keywords
     def process_item(self, item, spider):    
-        # FIXME find a better place and how to add the tags of search to keywords
+        repls = ('[',''), (']',''),('"','')
+        argument_value = None
+        
         if hasattr(spider, 'tags'):
-            # URGENT change jobs script 
-            repls = ('[',''), (']',''),('"','')
-            tags = reduce(lambda a, kv: a.replace(*kv), repls, spider.tags)
-            keywords = [t.strip().lower() for t in tags.split(',')]
-            
+            logger.warning('Argument tags for spider is DEPRECATED! \
+                            Please use "-a keywords" argument.')
+            argument_value = reduce(lambda a, kv: a.replace(*kv), repls, spider.tags)
+        
+        if hasattr(spider, 'keywords'):
+            argument_value = reduce(lambda a, kv: a.replace(*kv), repls, spider.keywords)
+        
+        if argument_value:
+            keywords = [t.strip().lower() for t in argument_value.split(',')]
+                
             if 'keywords' not in item:
                 item['keywords'] = keywords
             else: 
                 item['keywords'] = list(set(item['keywords'] + keywords))
+        else:
+            logger.warning('keywords argument not passed')
         
         return item
