@@ -91,8 +91,6 @@ class ImproveHTML(object):
             try:
                 selector = '[data-block-type="backstage-video"]'
                 for el in html.select(selector):
-                    # possible_video_selectors=['.content-video__placeholder','[data-video-id]']
-                    print('len: '+str(len(el.select('.content-video__placeholder'))))
                     video_id = el.select('.content-video__placeholder')[0]['data-video-id']
 
                     fg = html.new_tag('figure')
@@ -145,10 +143,6 @@ class ImproveHTML(object):
                 selector = 'div section p'
                 for el in html.select(selector):
                     el.decompose()
-                selector = 'h3'
-                for el in html.select(selector):
-                    print('h3:'+str(len(el.contents)))
-                    print(el.contents)
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s', selector, spider_name, e)
 
@@ -227,18 +221,12 @@ class ImproveHTML(object):
                 selector = 'section'
                 for el in html.select(selector):
                     fg = html.new_tag('figure')
-                    print('oiiii')
                     images = el.select('img')
+                    
                     if not(len(images) ==0):
                         for img in images:
                             fg.append(html.new_tag('img', src=img['src']))
                         el.replace_with(fg)
-
-
-                # selector = '.news__image'
-                # for el in html.select(selector):
-                #     # el.unwrap()
-                #     el.decompose()
 
                 selector = 'div'
                 for el in html.select(selector):
@@ -269,8 +257,6 @@ class ImproveHTML(object):
                         for img in images:
                             fg.append(html.new_tag('img', src=img['src']))
                         el.replace_with(fg)
-                    # print(src)
-                    # el.replace_with(src)
 
                 selector = '.fe-content'
                 for el in html.select(selector):
@@ -664,13 +650,6 @@ class ImproveHTML(object):
 
         for el in html.select('td p s'):
             el.parent.parent.string = el.string
-
-
-        # TODO: What do with more than one strong in p?
-        # for el in html.select('p > strong'):
-        #     h2 = html.new_tag('h2')
-        #     h2.string = el.string
-        #     el.parent.replace_with(h2)
 
         [c.extract() for c in html.findAll(text=lambda text:isinstance(text, Comment))]
 

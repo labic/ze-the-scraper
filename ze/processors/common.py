@@ -9,7 +9,7 @@ import dateparser
 class CleanString(object):
     
     def __call__(self, value, loader_context):
-        return value.strip('\t\n')
+        return value.strip().strip('\t\n')
 
 
 class ValidURL(object):
