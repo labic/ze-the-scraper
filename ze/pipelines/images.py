@@ -1,44 +1,41 @@
 # -*- coding: utf-8 -*-
 
-from collections import defaultdict
-import itertools
 import time
 import logging; logger = logging.getLogger(__name__)
 
 from bs4 import BeautifulSoup
-from twisted.internet import defer, threads
-from twisted.internet.defer import Deferred, DeferredList
+from twisted.internet import defer
 
 from scrapy import Request
 from scrapy.pipelines.images import ImagesPipeline as ScrapyImagesPipeline
-from scrapy.pipelines.files import FSFilesStore, S3FilesStore
 from scrapy.utils.log import failure_to_exc_info
-from scrapy.utils.misc import arg_to_iter
 from scrapy.utils.request import referer_str
 
-from .files import GSFilesStore, FilesPipeline
+from .files import FilesPipeline
 
 
 class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
     
     def get_media_requests(self, item, info):
-        if info.images_fields:
-            images_urls = []; images_urls_append = images_urls.append
-            for image_field, extract_format in info.images_fields.items():
-                if extract_format == 'url':
-                    images_urls_append((item[image_field], 
-                                        (image_field, extract_format)))
-                
-                if extract_format == 'urls':
-                    for image_url in item[image_field]:
-                        images_urls_append((image_url, 
+        images_fields = info.media_fields.get('images')
+        if images_fields:
+            images_urls = []; append_images_urls = images_urls.append
+            for image_field, extract_format in images_fields.items():
+                if image_field in item:
+                    if extract_format == 'url':
+                        append_images_urls((item[image_field], 
                                             (image_field, extract_format)))
-                
-                if extract_format == 'html':
-                    html = BeautifulSoup(item[image_field], 'html.parser')
-                    for img in html.findAll('img'):
-                        images_urls_append((img['src'], 
-                                            (image_field, extract_format)))
+                    
+                    if extract_format == 'urls':
+                        for image_url in item[image_field]:
+                            append_images_urls((image_url, 
+                                                (image_field, extract_format)))
+                    
+                    if extract_format == 'html':
+                        html = BeautifulSoup(item[image_field], 'html.parser')
+                        for img in html.findAll('img'):
+                            append_images_urls((img['src'], 
+                                                (image_field, extract_format)))
             
             
             for image_url, image_field in images_urls:
@@ -46,22 +43,9 @@ class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
                                             set()).add(image_field)
                 yield Request(image_url,
                               meta={'image_field': image_field, 'info': info})
-    
-    def _get_images_fields(self, item):
-        # TODO: Refactor this!
-        qualname = type(item).__qualname__
-        media_fields = self.media_items_fields.get(qualname)
-        return media_fields.get('images')
-    
-    def process_item(self, item, spider):
-        info = self.spiderinfo
-        info.images_fields = self._get_images_fields(item)
-        info.urls_fields = {}
-        
-        requests = arg_to_iter(self.get_media_requests(item, info))
-        dlist = [self._process_request(r, info) for r in requests]
-        dfd = DeferredList(dlist, consumeErrors=1)
-        return dfd.addCallback(self.item_completed, item, info)     
+        else:
+            logger.info('Don\'t have set images fields in MEDIA_ITEMS_FIELDS \
+                        setting to %s class' %item.__class__.__name__)
     
     def media_to_download(self, request, info):
         def _onsuccess(result):
@@ -110,23 +94,25 @@ class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
     def item_completed(self, results, item, info):
         fields_results = {}
         
-        for _, r in results:
-            for image_field, extract_format in list(r['image_fields']):
-                key = '%s_%s_%s' % (image_field, extract_format, r['path'])
-                if not fields_results.get(key):
-                    fields_results.setdefault(key, []).append(r)
+        for ok, r in results:
+            if ok and r:
+                for image_field, extract_format in list(r['image_fields']):
+                    key = '%s_%s_%s' % (image_field, extract_format, r['path'])
+                    if not fields_results.get(key):
+                        fields_results.setdefault(key, []).append(r)
         
         for key, results in fields_results.items():
-            field, extract_format, _ = key.split('_')
-            
-            if extract_format == 'url':
-                item[field] = r['url']
-            
-            if extract_format == 'urls':
-                item[field] = [result['path'] for result in fields_results[key]]
-            
-            if extract_format == 'html':
-                for r in fields_results[key]:
-                    item[field] = item[field].replace(r['url'], r['path'])
+            if ok:
+                field, extract_format, _ = key.split('_')
+                
+                if extract_format == 'url':
+                    item[field] = r['url']
+                
+                if extract_format == 'urls':
+                    item[field] = [result['path'] for result in fields_results[key]]
+                
+                if extract_format == 'html':
+                    for r in fields_results[key]:
+                        item[field] = item[field].replace(r['url'], r['path'])
         
         return item

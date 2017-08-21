@@ -52,6 +52,7 @@ scrapy crawl all \
 
 - [ ] Implement DeltaFetch midleware
 - [ ] decompose class `.n--noticia__newsletter` to spider estadao
+- [ ] Use https://github.com/codelucas/newspaper
 
 ## Ideas
 
