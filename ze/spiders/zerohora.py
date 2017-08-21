@@ -3,7 +3,7 @@ from ze.spiders import ZeSpider
 class ValorEconomicoSpider(ZeSpider):
 
     name = 'zh'
-    allowed_domains = ['zh.clicrbs.com.br/']
+    allowed_domains = ['zh.clicrbs.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {

@@ -5,7 +5,7 @@ from ze.spiders import ZeSpider
 class GloboSpider(ZeSpider):
 
     name = 'epoca'
-    allowed_domains = ['globo.com']
+    allowed_domains = ['epoca.globo.com']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
