@@ -18,6 +18,19 @@ ENVIROMENT = 'development'
 
 DUPEFILTER_DEBUG = True
 
+SPIDERS_AUTH = {}
+# Exemple
+# SPIDERS_AUTH = {
+#     'correiopopularimpreso': {
+#         'email': 'EMAIL@DOMAIN.COM',
+#         'senha': 'PASSWORD',
+#     },
+#     'atardeimpresso': {
+#         'j_idt9:usuario': 'EMAIL@DOMAIN.COM',
+#         'j_idt9:j_idt15': 'PASSWORD'
+#     }
+# }
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/56.0.2924.76 Chrome/56.0.2924.76 Safari/537.36'
 
@@ -42,7 +55,7 @@ CONCURRENT_REQUESTS_PER_IP=16
 # Google Cloud Application
 GOOGLE_CLOUD_ENABLED=True
 # Google Cloud Application Credentions used for many pipelines
-GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON='REQUIRED!'
+GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON='GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON in line'
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 EXTENSIONS={
@@ -60,8 +73,8 @@ EXTENSIONS={
 DELTAFETCH_ENABLED=False
 GOOGLE_SEARCH_MIDDLEWARE_ENABLED=True
 GOOGLE_SEARCH_MIDDLEWARE_LIB='google_rest'
-GOOGLE_SEARCH_MIDDLEWARE_API_KEY='REQUIRED!'
-GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID='REQUIRED!'
+GOOGLE_SEARCH_MIDDLEWARE_API_KEY='GOOGLE_SEARCH_MIDDLEWARE_API_KEY'
+GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID='GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID'
 GOOGLE_SEARCH_MIDDLEWARE_CACHE_EXPIRATION_SECS=10800
 GOOGLE_SEARCH_MIDDLEWARE_MAX_INDEX=None
 
@@ -73,6 +86,7 @@ SPIDER_MIDDLEWARES = {
     'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
     'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
+    'ze.middlewares.MetadataMiddleware': 1000,
 }
 
 # Enable or disable downloader middlewares
@@ -84,7 +98,7 @@ SPIDER_MIDDLEWARES = {
 
 # MongoDB pipeline configuration
 MONGO_ENABLED=False
-MONGO_URI='REQUIRED!'
+MONGO_URI='MONGO_URI'
 # Google Cloud BigQuery pipeline configuration
 GOOGLE_CLOUD_BIGQUERY_ENABLED=False
 GOOGLE_CLOUD_BIGQUERY_DATASET=''
@@ -102,30 +116,42 @@ ITEM_PIPELINES={
     'ze.pipelines.google.cloud.GooglePubSubPipeline': 300,
     'ze.pipelines.google.cloud.GoogleDatastorePipeline': 400,
     'ze.pipelines.google.cloud.GoogleBigQueryPipeline': 500,
+    'ze.pipelines.communication.MailPipeline': 600,
 }
 DROP_ITEM_PIPELINE_ENABLED=False
 DROP_ITEM_PIPELINE_VALIDATION_METHODS=[
     'drop_items_with_empty_fields',
     'drop_items_that_not_match_regex',
 ]
-IMAGES_THUMBS = {
-    'small': (50, 50),
-    'big': (270, 270),
-}
+
 MEDIA_ALLOW_REDIRECTS = True
-MEDIA_BASE_URL = 'http://inep.cdn.labic.net/'
-IMAGE_BASE_URL_PATH = '/clipping/images'
-IMAGES_STORE = 'REQUIRED!'
-IMAGES_URLS_FIELD = 'images_to_download_urls'
-IMAGES_RESULT_FIELD = 'images_downloaded_urls'
-MEDIA_ITEMS_FIELDS = {
+MEDIA_BASE_URL='https://sub.domain.com'
+MEDIA_ITEMS_FIELDS={
     'ArticleItem': { 
         'images': { 
             'image': 'urls',
             'articleBody': 'html',
         },
         'files': None
+    },
+    'NewsArticleItem': { 
+        'images': None,
+        'files': { 
+            'url': 'url',
+        }
     }
+}
+
+FILES_STORE='gs://BUCKET/PATH/TO/SAVE/'
+FILES_BASE_URL_PATH='/clipping/files'
+
+IMAGES_BASE_PATH='/develop/clipping/images'
+IMAGES_STORE='gs://BUCKET/PATH/TO/SAVE/clipping/images/'
+IMAGES_URLS_FIELD='images_to_download_urls'
+IMAGES_RESULT_FIELD='images_downloaded_urls'
+IMAGES_THUMBS={
+    'small': (50, 50),
+    'big': (270, 270),
 }
 
 # SPIDER_CONTRACTS={
