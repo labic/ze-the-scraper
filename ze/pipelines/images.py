@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+from urllib.parse import urlparse
 import logging; logger = logging.getLogger(__name__)
 
 from bs4 import BeautifulSoup
@@ -38,7 +39,7 @@ class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
                                                 (image_field, extract_format)))
             
             for image_url, image_field in images_urls:
-                if image_url:
+                if 'scheme' in urlparse(image_url):
                     info.urls_fields.setdefault(image_url, 
                                                 set()).add(image_field)
                     yield Request(image_url,
