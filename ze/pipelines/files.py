@@ -72,7 +72,7 @@ class FilesPipeline(ScrapyFilesPipeline):
             dfd = DeferredList(dlist, consumeErrors=1)
             return dfd.addCallback(self.item_completed, item, info)
         else:
-            logger.info('Don\'t have MEDIA_ITEMS_FIELDS to %s'%spider.name)
+            logger.warning('Don\'t have MEDIA_ITEMS_FIELDS to %s'%spider.name)
             return item
     
     def get_media_requests(self, item, info):

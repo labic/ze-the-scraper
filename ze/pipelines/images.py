@@ -23,26 +23,26 @@ class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
             for image_field, extract_format in images_fields.items():
                 if image_field in item:
                     if extract_format == 'url':
-                        append_images_urls((item[image_field], 
+                        append_images_urls((item[image_field].strip(), 
                                             (image_field, extract_format)))
                     
                     if extract_format == 'urls':
                         for image_url in item[image_field]:
-                            append_images_urls((image_url, 
+                            append_images_urls((image_url.strip(), 
                                                 (image_field, extract_format)))
                     
                     if extract_format == 'html':
                         html = BeautifulSoup(item[image_field], 'html.parser')
                         for img in html.findAll('img'):
-                            append_images_urls((img['src'], 
+                            append_images_urls((img['src'].strip(), 
                                                 (image_field, extract_format)))
             
-            
             for image_url, image_field in images_urls:
-                info.urls_fields.setdefault(image_url, 
-                                            set()).add(image_field)
-                yield Request(image_url,
-                              meta={'image_field': image_field, 'info': info})
+                if image_url:
+                    info.urls_fields.setdefault(image_url, 
+                                                set()).add(image_field)
+                    yield Request(image_url,
+                                  meta={'image_field': image_field, 'info': info})
         else:
             logger.info('Don\'t have set images fields in MEDIA_ITEMS_FIELDS \
                         setting to %s class' %item.__class__.__name__)
@@ -95,7 +95,7 @@ class ImagesPipeline(ScrapyImagesPipeline, FilesPipeline):
         fields_results = {}
         
         for ok, r in results:
-            if ok and r:
+            if ok and 'image_fields' in r:
                 for image_field, extract_format in list(r['image_fields']):
                     key = '%s_%s_%s' % (image_field, extract_format, r['path'])
                     if not fields_results.get(key):
