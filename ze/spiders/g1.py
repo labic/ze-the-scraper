@@ -5,7 +5,7 @@ from ze.spiders import ZeSpider
 class G1Spider(ZeSpider):
 
     name = 'g1'
-    allowed_domains = ['g1.com.br']
+    allowed_domains = ['g1.globo.com']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": { 
