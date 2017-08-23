@@ -68,7 +68,6 @@ class CorreioPopularImpressoSpider(Spider):
 
     def get_search_urls(self, resp):
         selector = resp.selector
-        # print('\n--------------RESPOSTA-----------\n'+resp.text)
         pages_functions = selector.css('#item_pesquisa::attr(onclick)').extract()
         pages_ids = [re.findall('ipg=(.*?)&',f)[0] for f in pages_functions]
 
@@ -77,8 +76,7 @@ class CorreioPopularImpressoSpider(Spider):
             params = {'idForm': page_id,
                       'idEdicao': resp.meta['edition_number'],
                       'ajaxContent': 'true',}
-            print('\n********PAGEID***********\n'+page_id)
-            return FormRequest(self.export_pdf_url.format(**params),
+            yield FormRequest(self.export_pdf_url.format(**params),
                                headers=resp.headers,
                                callback=self.get_export_url,
                                meta={'edition_number': params['idEdicao'],
