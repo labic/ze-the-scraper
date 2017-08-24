@@ -45,6 +45,30 @@ class ArticleItem(CreativeWorkItem):
     wordCount = Field()
 
 
+class MediaObjectItem(CreativeWorkItem):
+    
+    associatedArticle = Field()
+    bitrate = Field()
+    contentSize = Field()
+    contentUrl = Field()
+    duration = Field()
+    embedUrl = Field()
+    encodesCreativeWork = Field()
+    encodingFormat = Field()
+    height = Field()
+    playerType = Field()
+    productionCompany = Field()
+    regionsAllowed = Field()
+    requiresSubscription = Field()
+    uploadDate = Field()
+    width = Field()
+
+
+class AudioObjectItem(MediaObjectItem):
+    
+    transcript = Field()
+
+
 class NewsArticleItem(ArticleItem):
 
     dateline = Field()
