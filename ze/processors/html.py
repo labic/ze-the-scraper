@@ -397,6 +397,17 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'ebc':
+            try:
+                selector = 'a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+
         if spider_name is 'globo':
 
             try:
@@ -461,6 +472,17 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'terra':
+            try:
+                selector = '.video-related'
+                for el in html.select(selector):
+                    el.parent.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
         # all spiders
         try:
             selector = 'div.wp-caption'
@@ -520,6 +542,7 @@ class ImproveHTML(object):
                 'geral':     [
                     '.additional',
                     '.advertising',
+                    '.articleCredit',
                     '#boxComentarios',
                     '.box-vejaTambem',
                     '#column-middle',
@@ -527,6 +550,7 @@ class ImproveHTML(object):
                     '.content-head',
                     '.content-know-more',
                     '.content-share-bar',
+                    '.contentShareBottom',
                     '.comments',
                     '#comments',
                     '#comentarios',
@@ -546,6 +570,7 @@ class ImproveHTML(object):
                     'applet',
                     'base',
                     'basefont',
+                    '.bbccom_slot',
                     'bgsound',
                     'blink',
                     'body',
@@ -563,6 +588,7 @@ class ImproveHTML(object):
                     'ilayer',
                     'input',
                     'isindex',
+                    '.know_more',
                     'label',
                     'layer',
                     'legend',
@@ -584,9 +610,11 @@ class ImproveHTML(object):
                     'plaintext',
                     '#pub-retangulo-1',
                     '#recomendadosParaVoce',
+                    '.related-news-shell',
                     '#respond',
                     'script',
                     'select',
+                    '.story-body__unordered-list',
                     "#sponsored-links",
                     '#pub-box-materia',
                     '.publicidade-entre-texto',
