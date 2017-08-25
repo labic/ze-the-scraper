@@ -27,14 +27,12 @@ class ItemLoader(ScrapyItemLoader):
         item = self.item
         
         for field_name in tuple(self._values):
+            default_value = self.item.fields[field_name].get('default')
             value = self.get_output_value(field_name)
             if value is not None:
                 item[field_name] = value
-        
-        for field_name in self.item.fields:
-            default_value = self.item.fields[field_name].get('default')
-            if not item.get(field_name) and default_value:
-                item[field_name] = self.item.fields[field_name].get('default')
+            elif not item.get(field_name) and default_value:
+                item[field_name] = default_value
         
         item['dateCreated'] = datetime.utcnow()
         
