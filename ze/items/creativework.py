@@ -47,6 +47,9 @@ class ArticleItem(CreativeWorkItem):
 
 class MediaObjectItem(CreativeWorkItem):
     
+    author = Field()
+    image = Field()
+    
     associatedArticle = Field()
     bitrate = Field()
     contentSize = Field()
