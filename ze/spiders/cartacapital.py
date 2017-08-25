@@ -5,7 +5,7 @@ from ze.spiders import ZeSpider
 class CartaCapitalSpider(ZeSpider):
 
     name = 'cartacapital'
-    allowed_domains = ['cartacapital.com.br', 'cartaeducacao.com.br']
+    allowed_domains = ['cartacapital.com.br']
     parses = [{
         "ze.items.creativework.ArticleItem": {
             "fields": {
