@@ -471,6 +471,14 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+        if spider_name is 'elpais':
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
         if spider_name is 'terra':
             try:
@@ -577,6 +585,7 @@ class ImproveHTML(object):
                     'button',
                     '.comentarios',
                     'dir',
+                    '#elpais_gpt-INTEXT',
                     'embed',
                     'fieldset',
                     'form',
@@ -615,6 +624,7 @@ class ImproveHTML(object):
                     'script',
                     'select',
                     '.story-body__unordered-list',
+                    '.sumario_apoyos',
                     "#sponsored-links",
                     '#pub-box-materia',
                     '.publicidade-entre-texto',
