@@ -3,7 +3,7 @@
 from urllib.parse import urlparse
 import logging; logger = logging.getLogger(__name__)
 
-import dateparser
+import dateparser, datetime
 
 
 class CleanString(object):
@@ -32,12 +32,15 @@ class ParseDate(object):
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
 
+
         if spider_name == 'r7':
             value=value.split('(')[1].split(')')[0]
 
         if spider_name == 'correiobraziliense':
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
+        if spider_name == 'bbc':
+            return datetime.datetime.fromtimestamp(int(value))
 
         if (self.field == 'datePublished'):
             if spider_name == 'zh':
