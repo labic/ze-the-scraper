@@ -45,6 +45,48 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'cartaeducacao':
+            try:
+                selector = '.image-inline'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select('.image-caption')[0].string
+                    fg.append(fc)
+
+                    el.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+            try:
+                selector = '.tile-rights'
+                for i, el in enumerate(html.select(selector)):
+                    fg = html.new_tag('figure')
+                    img = html.select('.canvasImg img')[i]
+                    fg.append(html.new_tag('img', src=img['data-src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select('span')[0].string
+                    fg.append(fc)
+
+                    el.replace_with(fg)
+                    img.parent.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+            try:
+                selector = 'a'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
         if spider_name is 'veja':
             try:
                 selector = '.featured-image'
@@ -222,7 +264,7 @@ class ImproveHTML(object):
                 for el in html.select(selector):
                     fg = html.new_tag('figure')
                     images = el.select('img')
-                    
+
                     if not(len(images) ==0):
                         for img in images:
                             fg.append(html.new_tag('img', src=img['src']))
@@ -434,7 +476,7 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
-        
+
         if spider_name is 'huffpostbrasil':
             try:
                 for el in html.select('a'):
@@ -648,9 +690,9 @@ class ImproveHTML(object):
 
         [el.decompose() for el in html.select('h3') \
             if len(el.contents) == 0]
-      
+
         # TODO: B4S bug
-        [el.previous_element.decompose() for el in html.select('p + br + p')]
+        # [el.previous_element.decompose() for el in html.select('p + br + p')]
 
         attrs_to_remove = loader_context.get('attrs_to_remove')
         if not attrs_to_remove:
