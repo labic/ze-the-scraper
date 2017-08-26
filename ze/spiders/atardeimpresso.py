@@ -8,7 +8,8 @@ from scrapy.selector import Selector
 
 from ..items.creativework import NewsArticleItem
 
-class CorreioPopularImpressoSpider(Spider):
+
+class ATardeImpressoSpider(Spider):
 
     name = 'atardeimpresso'
     start_urls = ['http://edicaodigital.atarde.uol.com.br/index.xhtml']
@@ -23,7 +24,7 @@ class CorreioPopularImpressoSpider(Spider):
     def auth(self, resp):
         auth = self.settings.get('SPIDERS_AUTH').get('atardeimpresso')
         view_state = resp.selector.css('[name="javax.faces.ViewState"]::attr(value)').extract()[0]
-
+        
         return FormRequest.from_response(resp, callback=self.after_auth,
                                          formdata={
                                             'j_idt9:usuario': auth['j_idt9:usuario'],
@@ -70,8 +71,7 @@ class CorreioPopularImpressoSpider(Spider):
         selector = resp.selector
         pages_functions = selector.css('#item_pesquisa::attr(onclick)').extract()
         pages_ids = [re.findall('ipg=(.*?)&',f)[0] for f in pages_functions]
-
-
+        
         for page_id in pages_ids:
             params = {'idForm': page_id,
                       'idEdicao': resp.meta['edition_number'],
@@ -86,9 +86,9 @@ class CorreioPopularImpressoSpider(Spider):
         export_functions = resp.selector.css('[onClick]::attr(onclick)').extract()
         export_urls = [f.replace("abrePdf('","").replace("');","") \
                        for f in export_functions]
-
+        
         for export_url in export_urls:
-        	newArticleItem = NewsArticleItem()
-        	newArticleItem['url'] = export_url
-
-        	yield newArticleItem
+            newArticleItem = NewsArticleItem()
+            newArticleItem['url'] = export_url
+            
+            yield newArticleItem

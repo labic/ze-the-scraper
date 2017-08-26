@@ -17,15 +17,14 @@ class CorreioPopularImpressoSpider(Spider):
         for u in self.start_urls:
             yield Request(u, callback=self.auth,
                           meta={'dont_cache': True},)
-        
+    
     def auth(self, resp):
         auth = self.settings.get('SPIDERS_AUTH').get('correiopopularimpreso')
         return FormRequest.from_response(resp, callback=self.after_auth,
-                                         formdata={
-                                            'email': auth['email'], 
-                                            'senha': auth['senha']},
-                                          meta={'dont_cache': True},)
-    
+                                         formdata={'email': auth['email'], 
+                                                   'senha': auth['senha']},
+                                         meta={'dont_cache': True},)
+
     def after_auth(self, resp):
         return Request('http://correiopopular.html5v3.fivepress.com.br/',
                        callback=self.get_edition,

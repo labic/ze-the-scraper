@@ -1,47 +1,54 @@
 # -*- coding: utf-8 -*-
-from copy import copy
-import json
+from urllib.parse import urlparse
+
 import scrapy
 from scrapy.spiderloader import SpiderLoader
-from scrapy.utils.spider import spidercls_for_request
-from scrapy.http import Request, HtmlResponse
-import urllib
+from scrapy.http import Request
+
 import ze
 
+
 class ZeSpider(scrapy.Spider):
-    
+
     allowed_domains = []
-    parses = []
-    
+
     def start_requests(self):
         if hasattr(self, 'url'):
             self.start_urls.append(self.url)
         
         for url in self.start_urls:
             yield Request(url, dont_filter=False)
-    
+
     def parse(self, response):
-        for p in self.parses:
-            for i, a in p.items():
-                ItemClass = ze.utils.import_class(i)
-                load_method = self[a.get('load_method')] if a.get('load_method') else self.load_item
-                yield load_method(response, ItemClass, a)
+        for item_ref in self.items_refs:
+            yield self.load_item(item_ref, response)
 
-    def load_item(self, response, ItemClass, parse):
-        spider_name = self.name if not parse.get('spider_name') else parse.get('spider_name')
-        il = ze.items.ItemLoader(
-            item=ItemClass(), 
-            response=response, 
-            spider_name=spider_name)
+    def load_item(self, item_def, response):
+        def parse_item_ref(item_def, response, spider_name):
+            ItemClass = ze.utils.import_class(item_def.get('item'))
+            item_load = ze.items.ItemLoader(item=ItemClass(), 
+                                            response=response, 
+                                            spider_name=spider_name)
+            
+            for field_name, properties in item_def['fields'].items():
+                if not 'item' in properties:
+                    for i, selector in enumerate(properties['selectors']['css']):
+                        if i == 0: item_load.add_css(field_name, selector) 
+                        else: item_load.add_fallback_css(field_name, selector)
+                else:
+                    field_item_load = parse_item_ref(properties, response, spider_name)
+                    item_load.add_value(field_name, field_item_load.load_item())
+            
+            return item_load
         
-        for field, selectors in parse['fields'].items():
-            for i, s in enumerate(selectors):
-                il.add_css(field, s) if i == 0 else il.add_fallback_css(field, s)
+        spider_name = self.name if not hasattr(item_def, 'spider') \
+                                else item_def['spider']['name']
+        item = parse_item_ref(item_def, response, spider_name)
+        item.add_value('url', response.url)
         
-        il.add_value('url', response.url)
-        return il.load_item()
+        return item.load_item()
 
-    def make_request_from_onw_search_engine(self, args={}):
+    def search(self, match):
         raise NotImplementedError
 
 
@@ -50,60 +57,57 @@ class AllSpiders(ZeSpider):
 
     name = 'all'
     allowed_domains = []
-    domains_parses = {}
+    domains_items_refs = {}
     start_urls = []
     spiders_ignored = [name, 'atardeimpresso', 'correiobrazilienseimpresso', 
         'correiopopularimpreso', 'estadaoimpresso', 'estadodeminasimpresso',
         'ogloboimpresso', ]
     
-    def prepare_domains_parses(self):
+    def _prepare_domains_items_refs(self):
         spider_loader = SpiderLoader.from_settings(self.settings)
         
         if hasattr(self, 'spiders'):
             spider_names = getattr(self, 'spiders').split(',')
         else:
-            spider_names = [s for s in spider_loader.list() \
-                            if s not in self.spiders_ignored]
+            spider_names = [spider_name for spider_name in spider_loader.list() \
+                            if spider_name not in self.spiders_ignored]
         
         for spider_name in spider_names:
             Spider = spider_loader.load(spider_name)
             
             for domain in Spider.allowed_domains:
-                for i, parse in enumerate(Spider.parses):
-                    for item_class, properties in parse.items():
-                        properties['spider_name'] = spider_name
-                        Spider.parses[i][item_class] = properties
+                for i, item_ref in enumerate(Spider.items_refs):
+                    item_ref['spider_name'] = spider_name
+                    Spider.items_refs[i] = item_ref
                 
-                self.domains_parses[domain] = Spider.parses
+                self.domains_items_refs[domain] = Spider.items_refs
             
             self.allowed_domains += Spider.allowed_domains
         
         self.allowed_domains.sort(key=len,reverse=True)
     
     def start_requests(self):
-        self.prepare_domains_parses()
+        self._prepare_domains_items_refs()
         
         for url in self.start_urls:
             yield Request(url, dont_filter=False)
     
     def parse(self, response):
         try:
-            response_url = urllib.parse.urlparse(response.url)
+            response_url = urlparse(response.url)
             domains_allowed = list(d for d in self.allowed_domains \
-                                  if d in response_url.geturl())
+                                      if d in response_url.geturl())
            
             # FIXME what do when get 2 domain? For now let some DropItem handler   
             if (len(domains_allowed) > 1):
-                self.logger.error('more than one allowed domain %s to url: %s'%(domains_allowed, response.url))
-        except IndexError:
-            parse_of_domain = None
+                self.logger.error('more than one allowed domain %s to url: %s'
+                                  %(domains_allowed, response.url))
+        except IndexError as error:
+            self.logger.error(error)
         
         if domains_allowed:
-            for domain_parse in self.domains_parses[domains_allowed[0]]:
-                for item_class, parse in domain_parse.items():
-                    ItemClass = ze.utils.import_class(item_class)
-                    load_method = self[parse.get('load_method')] if parse.get('load_method') else self.load_item
-                    yield load_method(response, ItemClass, parse)
+            for item_ref in self.domains_items_refs[domains_allowed[0]]:
+                yield self.load_item(item_ref, response)
         else:
             self.crawler.stats.inc_value('spider/all/url_without_parse_count')
             self.logger.warning('Don\'t exist a parse on spiders with allowed domain that match this url: %s'%response.url)
