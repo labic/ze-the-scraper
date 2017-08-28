@@ -8,7 +8,7 @@ import dateparser
 
 
 class CleanString(object):
-    
+
     def __call__(self, value, loader_context):
         return value.strip().strip('\t\n')
 
@@ -23,7 +23,7 @@ class FormatString(object):
 
 
 class ValidURL(object):
-    
+
     def __call__(self, value, loader_context):
         try:
             result = urlparse(value)
@@ -62,7 +62,7 @@ class ParseDate(object):
 
             if spider_name == 'diariodepernambuco':
                 return dateparser.parse(value)
-            
+
             if spider_name =='correiopopular':
                 value=value.split('Atualizado')[0].replace(' - ',' ')\
                                             .replace('h', ':') \
@@ -70,7 +70,7 @@ class ParseDate(object):
                                             .replace('Publicado','')\
                                             .replace('Atualizado','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-            
+
             if spider_name=='jconline':
                 value=value.split('Atualizado')[0].replace(' - ',' ')\
                                             .replace('h', ':') \
@@ -81,30 +81,33 @@ class ParseDate(object):
                                             .strip(',')\
                                             .replace('às','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-            
+
             if spider_name =='atarde':
                 value=value.split('|')[0].replace(' - ',' ')\
                                             .replace('h', ':') \
                                             .replace('min', '')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-            
+
             if spider_name == 'veja':
                 value = value.split(' - ')[1].replace('Publicado','')\
                                             .replace('em','')\
                                             .replace(',','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-            
+
             if spider_name=='estadao':
                 value1 = value.split('|')[1]
                 value1 = value1.replace('h',':')
                 value = value.split('|')[0]+value1
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-            
+
             if spider_name == 'epoca':
                 value = value.split(' - Atualizado')[0].replace('h',':')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-            
+
             if spider_name =='exame':
+                return dateparser.parse(value)
+            if spider_name =='sbt':
+                print('-----------------------',value)
                 return dateparser.parse(value)
 
         if (self.field == 'dateModified'):
@@ -115,10 +118,10 @@ class ParseDate(object):
                                             .replace('Atualizada','')\
                                             .replace('em','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
-            
+
             if spider_name == 'diariodepernambuco':
                 return dateparser.parse(value)
-            
+
             if spider_name =='correiopopular':
                 value=value.split('Atualizado')[0].replace(' - ',' ')\
                                             .replace('h', ':') \
@@ -126,7 +129,7 @@ class ParseDate(object):
                                             .replace('Publicado','')\
                                             .replace('Atualizado','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-            
+
             if spider_name=='jconline':
                 value=value.split('Atualizado')[0].replace(' - ',' ')\
                                             .replace('h', ':') \
@@ -137,7 +140,7 @@ class ParseDate(object):
                                             .strip(',')\
                                             .replace('às','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
-        
+
         value = value.replace('Atualizado:', '') \
                      .replace('Atualizado', '') \
                      .replace(' | ', ' ') \
@@ -146,11 +149,11 @@ class ParseDate(object):
                      .replace(', ', ' ') \
                      .replace('  ', ' ') \
                      .strip()
-        
+
         try:
             return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
         except Exception as e:
             logger.warning('Date not processed: %s' % value)
             return None
-        
+
         return value
