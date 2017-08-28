@@ -20,14 +20,10 @@ class ItemLoader(ScrapyItemLoader):
     def add_fallback_css(self, field_name, css, *processors, **kw):
         if not any(self.get_collected_values(field_name)):
             self.add_css(field_name, css, *processors, **kw)
-            # TODO: Make DRY
-            self.context[field_name] = kw.get('contexts')
 
     def add_fallback_xpath(self, field_name, css, *processors, **kw):
         if not any(self.get_collected_values(field_name)):
             self.add_xpath(field_name, css, *processors, **kw)
-            # TODO: Make DRY
-            self.context[field_name] = kw.get('contexts')
 
     def load_item(self):
         item = self.item
