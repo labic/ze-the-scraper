@@ -113,6 +113,8 @@ class ParseDate(object):
                 return dateparser.parse(value)
             if spider_name =='sbt':
                 return dateparser.parse(value)
+            if spider_name =='sejabixo':
+                return dateparser.parse(value.split('em ')[1])
 
         if (self.field == 'dateModified'):
             if spider_name == 'zh':
