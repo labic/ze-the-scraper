@@ -3,13 +3,23 @@
 from urllib.parse import urlparse
 import logging; logger = logging.getLogger(__name__)
 
-import dateparser, datetime
+from datetime import datetime
+import dateparser
 
 
 class CleanString(object):
     
     def __call__(self, value, loader_context):
         return value.strip().strip('\t\n')
+
+
+class FormatString(object):
+
+    def __call__(self, values, loader_context):
+        format_string = loader_context.get('format', '{}')
+        for value in values:
+            print(value)
+            yield format_string.format(value)
 
 
 class ValidURL(object):
@@ -26,6 +36,7 @@ class ValidURL(object):
 
 
 class ParseDate(object):
+
     def __init__(self, field):
         self.field = field
 
@@ -40,7 +51,7 @@ class ParseDate(object):
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
         if spider_name == 'bbc':
-            return datetime.datetime.fromtimestamp(int(value))
+            return datetime.fromtimestamp(int(value))
 
         if (self.field == 'datePublished'):
             if spider_name == 'zh':

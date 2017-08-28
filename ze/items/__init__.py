@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-
 from datetime import datetime
+
+from w3lib.html import remove_tags
 from scrapy import Item, Field
 from scrapy.loader import ItemLoader as ScrapyItemLoader
-from scrapy.loader.processors import Join, TakeFirst, MapCompose
-from w3lib.html import remove_tags
-from ..processors.common import CleanString, ParseDate, ValidURL
+from scrapy.loader.processors import Join, TakeFirst, MapCompose, Compose
+
+from ..processors.common import *
 from ..processors.schema import AuthorParse, KeywordsParse
 
+
 class ItemLoader(ScrapyItemLoader):
-    
+
     def get_collected_values(self, field_name):
         return (self._values[field_name]
                 if field_name in self._values
@@ -18,17 +20,22 @@ class ItemLoader(ScrapyItemLoader):
     def add_fallback_css(self, field_name, css, *processors, **kw):
         if not any(self.get_collected_values(field_name)):
             self.add_css(field_name, css, *processors, **kw)
+            # TODO: Make DRY
+            self.context[field_name] = kw.get('contexts')
 
     def add_fallback_xpath(self, field_name, css, *processors, **kw):
         if not any(self.get_collected_values(field_name)):
             self.add_xpath(field_name, css, *processors, **kw)
-    
+            # TODO: Make DRY
+            self.context[field_name] = kw.get('contexts')
+
     def load_item(self):
         item = self.item
         
         for field_name in tuple(self._values):
             default_value = self.item.fields[field_name].get('default')
             value = self.get_output_value(field_name)
+            
             if value is not None:
                 item[field_name] = value
             elif not item.get(field_name) and default_value:
@@ -102,7 +109,7 @@ class ThingItem(BaseItem):
         # }
     )
     url = Field(
-        output_processor=TakeFirst(),
+        output_processor=Compose(FormatString(), TakeFirst()),
         schemas={
             'avro': {
                 'field_type': 'STRING', 

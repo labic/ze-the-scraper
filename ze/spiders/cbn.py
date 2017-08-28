@@ -56,7 +56,9 @@ class CBNSpider(ZeSpider):
                                 ".ouvir a::attr(data-caminho)"
                             ]
                         },
-                        "format": "http://download.sgr.globo.com/audios/encodeds/{value}.mp3"
+                        "contexts": {
+                            "format": "http://download.sgr.globo.com/audios/encodeds/{}.mp3"
+                        }
                     }
                 }
             },

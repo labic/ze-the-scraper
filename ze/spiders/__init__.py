@@ -32,6 +32,8 @@ class ZeSpider(scrapy.Spider):
             
             for field_name, properties in item_def['fields'].items():
                 if not 'item' in properties:
+                    # TODO: This will word with 2 fields with some context?
+                    item_load.context.update(properties.get('contexts', {}))
                     for i, selector in enumerate(properties['selectors']['css']):
                         if i == 0: item_load.add_css(field_name, selector) 
                         else: item_load.add_fallback_css(field_name, selector)
