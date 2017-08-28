@@ -319,7 +319,6 @@ class ImproveHTML(object):
                         for img in images:
                             fg.append(html.new_tag('img', src=img['src']))
                         el.replace_with(fg)
-                    # print(src)
                     # el.replace_with(src)
 
                 selector = 'a'
@@ -420,8 +419,6 @@ class ImproveHTML(object):
                 #     el.attrs.remove('caption')
                 selector = 'a'
                 for el in html.select(selector):
-                    print('novaescola a')
-                    # print(el.text())
                     el.replace_with(el.get_text())
 
             except Exception as e:
@@ -468,7 +465,6 @@ class ImproveHTML(object):
             try:
                 for el in html.select('a'):
                     link_text=el.get_text()
-                    print(link_text)
                     el.replace_with(link_text)
 
                 for el in html.select("#autor"):

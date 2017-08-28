@@ -18,7 +18,6 @@ class FormatString(object):
     def __call__(self, values, loader_context):
         format_string = loader_context.get('format', '{}')
         for value in values:
-            print(value)
             yield format_string.format(value)
 
 
@@ -107,7 +106,6 @@ class ParseDate(object):
             if spider_name =='exame':
                 return dateparser.parse(value)
             if spider_name =='sbt':
-                print('-----------------------',value)
                 return dateparser.parse(value)
 
         if (self.field == 'dateModified'):
