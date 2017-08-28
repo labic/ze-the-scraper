@@ -42,7 +42,7 @@ class GoogleSearchMiddleware(object):
                 'cx': self.custom_search_engine_key,
                 'fields': 'items(cacheId,link,snippet,title),queries',
                 'start': 1,
-                'q': spider.query,
+                'q': spider.search,
                 'sort': 'date:r:{date}:{date}'.format(date=datetime.now().strftime('%Y%m%d'))
             }
             
