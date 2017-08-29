@@ -60,7 +60,8 @@ class ThingItem(BaseItem):
         output_processor=TakeFirst(),
         schemas={
             'avro': {
-                'field_type': 'STRING', 
+                'name': 'description',
+                'type': ('null', 'string'),
             }, 
         }
     )
@@ -71,11 +72,11 @@ class ThingItem(BaseItem):
         output_processor=TakeFirst(),
     )
     image = Field(
-        default=['null'], 
         input_processor=MapCompose(ValidURL()),
         schemas={
             'avro': {
-                'field_type': 'STRING', 
+                'name': 'image',
+                'type': ('null', 'string'), 
             }, 
         }
     )
@@ -88,7 +89,8 @@ class ThingItem(BaseItem):
         output_processor=TakeFirst(),
         schemas={
             'avro': {
-                'field_type': 'STRING', 
+                'name': 'name',
+                'type': ('null', 'string'), 
             }, 
         }
     )
@@ -97,18 +99,20 @@ class ThingItem(BaseItem):
     )
     sameAs = Field(
         output_processor=TakeFirst(),
-        # schemas = {
-        #     'avro': {
-        #         'field_type': 'STRING',
-        #         'mode': 'REPEATED',
-        #     }, 
-        # }
+        schemas = {
+            'avro': {
+                'name': 'sameAs',
+                'type': ('null', 'string'),
+                'mode': 'repeated',
+            }, 
+        }
     )
     url = Field(
         output_processor=Compose(FormatString(), TakeFirst()),
         schemas={
             'avro': {
-                'field_type': 'STRING', 
+                'name': 'url',
+                'type': ('null', 'string'), 
             }, 
         }
     )
@@ -116,12 +120,12 @@ class ThingItem(BaseItem):
 
 class CreativeWorkItem(ThingItem):
     about = Field(
-        # schemas={
-        #     'avro': {
-        #         'field_type': 'STRING', 
-        #         'mode': 'REPEATED', 
-        #     }, 
-        # }
+        schemas={
+            'avro': {
+                'name': 'about',
+                'type': ('null', 'string'), 
+            }, 
+        }
     )
     accessMode = Field()
     accessModeSufficient = Field()
@@ -141,20 +145,21 @@ class CreativeWorkItem(ThingItem):
         input_processor=MapCompose(remove_tags, AuthorParse()), 
         schemas = {
             'avro': {
-                'field_type': 'RECORD', 
-                'mode': 'REPEATED', 
+                'name': 'author',
+                'type': ('null', 'record'), 
+                'mode': 'repeated', 
                 'fields': ({
                     'name': 'name', 
-                    'field_type': 'STRING', 
+                    'type': 'string', 
                 },{
                     'name': 'type', 
-                    'field_type': 'STRING', 
+                    'type': 'string', 
                 })
             }, 
             'datastore': {
-                'field_type': 'arrayValue', 
+                'type': 'arrayValue', 
                 'values': {
-                    'field_type': 'entityValue'
+                    'type': 'entityValue'
                 }
             }
         }
@@ -165,11 +170,11 @@ class CreativeWorkItem(ThingItem):
     comment = Field()
     commentCount = Field(
         output_processor = TakeFirst(),
-        # schemas={
-        #     'avro': {
-        #         'field_type': 'INTEGER', 
-        #     }, 
-        # }
+        schemas={
+            'avro': {
+                'type': ('null', 'integer'), 
+            }, 
+        }
     )
     contentLocation = Field()
     contentRating = Field()
@@ -181,7 +186,7 @@ class CreativeWorkItem(ThingItem):
     dateCreated = Field(
         schemas = {
             'avro': {
-                'field_type': 'TIMESTAMP', 
+                'type': ('null', 'timestamp'), 
             }, 
         }
     )
@@ -191,7 +196,7 @@ class CreativeWorkItem(ThingItem):
         output_processor=TakeFirst(),
         schemas = {
             'avro': {
-                'field_type': 'TIMESTAMP', 
+                'type': ('null', 'timestamp'), 
             }, 
         }
     )
@@ -201,7 +206,7 @@ class CreativeWorkItem(ThingItem):
         output_processor=TakeFirst(),
         schemas={
             'avro': {
-                'field_type': 'TIMESTAMP',
+                'type': ('null', 'timestamp'),
             }
         }
     )
@@ -218,36 +223,36 @@ class CreativeWorkItem(ThingItem):
     headline = Field()
     inLanguage = Field()
     interactionStatistic = Field(
-        # schemas={
-        #     'avro': {
-        #         'field_type': 'RECORD',
-        #         'mode': 'REPEATED',
-        #         'fields': [{ 
-        #                 'name': 'interactionType',
-        #                 'field_type': 'STRING',
-        #             },{
-        #                 'name': 'userInteractionCount',
-        #                 'field_type': 'INTEGER',
-        #             },{ 
-        #                 'name': 'type',
-        #                 'field_type': 'STRING',
-        #             },{
-        #                 'name': 'interactionService',
-        #                 'field_type': 'RECORD',
-        #                 'mode': 'REPEATED',
-        #                 'fields': [{ 
-        #                         'name': 'url',
-        #                         'field_type': 'STRING',
-        #                     },{ 
-        #                         'name': 'name',
-        #                         'field_type': 'STRING',
-        #                     },{ 
-        #                         'name': 'type',
-        #                         'field_type': 'STRING',
-        #                 }]
-        #         }]
-        #     }
-        # }
+        schemas={
+            'avro': {
+                'type': ('null', 'record'),
+                'mode': 'repeated',
+                'fields': [{ 
+                        'name': 'interactionType',
+                        'type': 'string',
+                    },{
+                        'name': 'userInteractionCount',
+                        'type': 'integer',
+                    },{ 
+                        'name': 'type',
+                        'type': 'string',
+                    },{
+                        'name': 'interactionService',
+                        'type': ('null', 'record'),
+                        'mode': 'repeated',
+                        'fields': [{ 
+                                'name': 'url',
+                                'type': 'string',
+                            },{ 
+                                'name': 'name',
+                                'type': 'string',
+                            },{ 
+                                'name': 'type',
+                                'type': 'string',
+                        }]
+                }]
+            }
+        }
     )
     interactivityType = Field()
     isAccessibleForFree = Field()
@@ -255,12 +260,10 @@ class CreativeWorkItem(ThingItem):
     isFamilyFriendly = Field()
     isPartOf = Field()
     keywords = Field(
-        output_processor=MapCompose(
-            KeywordsParse()
-        ),
+        output_processor=MapCompose(KeywordsParse()),
         schemas={
             'avro': {
-                'field_type': 'STRING'
+                'type': ('null', 'string')
             }
         }
     )

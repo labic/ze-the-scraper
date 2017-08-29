@@ -5,10 +5,13 @@ from datetime import datetime
 from collections import Counter
 import urllib
 import requests
+
 import logging; logger = logging.getLogger(__name__)
+
 from scrapy.exceptions import NotConfigured
 from scrapy import signals
 from scrapy.utils.project import data_path
+
 import GoogleScraper
 
 
@@ -42,12 +45,16 @@ class GoogleSearchMiddleware(object):
                 'cx': self.custom_search_engine_key,
                 'fields': 'items(cacheId,link,snippet,title),queries',
                 'start': 1,
-                'q': spider.search,
-                'sort': 'date:r:{date}:{date}'.format(date=datetime.now().strftime('%Y%m%d'))
+                'q': spider.query,
+                'sort': 'date:d:s',
+                'dateRestrict': 'd1',
+                # 'sort': 'date:r:{date}:{date}'.format(date=datetime.now().strftime('%Y%m%d'))
             }
+            print(query_paraments)
             
             search_items_ruls = self.search_urls_via_api_rest(query_paraments)
             logger.debug('search_items_ruls counter: %s'%search_items_ruls)
+            raise NotImplementedError
             spider.start_urls = search_items_ruls
         else:
             logger.info('Spider %s don\'t has search argument'%spider.name)
@@ -68,6 +75,7 @@ class GoogleSearchMiddleware(object):
         if 'items' in search_results:
             current_search_itens = search_results['items']
             search_items += current_search_itens
+            print(current_search_itens)
             search_items_urls += [i['link'] for i in current_search_itens]
         
         search_request = search_results['queries']['request'][0]

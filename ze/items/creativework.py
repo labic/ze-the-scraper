@@ -24,7 +24,7 @@ class ArticleItem(CreativeWorkItem):
         output_processor=TakeFirst(), 
         schemas={
             'avro': {
-                'field_type': 'STRING', 
+                'type': 'string', 
             }, 
         }
     )

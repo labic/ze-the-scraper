@@ -19,6 +19,7 @@ scrapinghub.yml
 *.egg-info
 *.log
 *.jl
+*.avro
 *.logs
 *.pyc
 .c9
