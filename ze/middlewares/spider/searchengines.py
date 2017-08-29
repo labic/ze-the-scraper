@@ -54,7 +54,6 @@ class GoogleSearchMiddleware(object):
             
             search_items_ruls = self.search_urls_via_api_rest(query_paraments)
             logger.debug('search_items_ruls counter: %s'%search_items_ruls)
-            raise NotImplementedError
             spider.start_urls = search_items_ruls
         else:
             logger.info('Spider %s don\'t has search argument'%spider.name)
@@ -75,7 +74,6 @@ class GoogleSearchMiddleware(object):
         if 'items' in search_results:
             current_search_itens = search_results['items']
             search_items += current_search_itens
-            print(current_search_itens)
             search_items_urls += [i['link'] for i in current_search_itens]
         
         search_request = search_results['queries']['request'][0]
