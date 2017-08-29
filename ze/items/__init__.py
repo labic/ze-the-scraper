@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, timezone
 
 from w3lib.html import remove_tags
 from scrapy import Item, Field
@@ -37,7 +37,7 @@ class ItemLoader(ScrapyItemLoader):
             elif not item.get(field_name) and default_value:
                 item[field_name] = default_value
         
-        item['dateCreated'] = datetime.utcnow()
+        item['dateCreated'] = datetime.now(timezone.utc)
         
         return item
 
