@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from urllib.parse import urlparse
+
 import logging; logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -52,6 +53,10 @@ class ParseDate(object):
 
         if spider_name == 'bbc':
             return datetime.fromtimestamp(int(value))
+
+        if spider_name == 'mundoeducacao':
+            value = value.replace('em','')
+            return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
         if (self.field == 'datePublished'):
             if spider_name == 'zh':
