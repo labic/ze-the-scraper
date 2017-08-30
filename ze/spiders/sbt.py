@@ -38,11 +38,12 @@ class SBTSpider(ZeSpider):
                         '[itemprop=description]::text',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        '.entry-content blockquote p::text'
+                        'h2.ONOTICE::text'
                     ]
                 }
             },
             "author": {
+                "default": "SBT Notícias",
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
@@ -57,7 +58,7 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.entry-date::text',
-                        'h1 .titleNoticeSocial::text'
+                        '.BOX.FG666.BOLD::text'
                     ]
                 }
             },
@@ -72,7 +73,9 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.entry-content'
+                        '.entry-content',
+                        '.contentNotice .FG333',
+                        '.contenttice .FG333'
                     ]
                 }
             },

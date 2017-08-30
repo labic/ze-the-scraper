@@ -604,6 +604,24 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+        if spider_name is 'r7':
+            # try:
+            #     selector = '.gallery'
+            #     for el in html.select(selector):
+            #         el.parent.decompose()
+
+            # except Exception as e:
+            #     logger.error('Failed to replace "%s" selector from %s:\n%s',
+            #         selector, spider_name, e)
+
+            try:
+                selector = 'a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
 
         # all spiders
@@ -747,10 +765,12 @@ class ImproveHTML(object):
                     "#sponsored-links",
                     '#pub-box-materia',
                     '.publicidade-entre-texto',
+                    '.sharebar',
                     'style',
                     'svg',
                     'textarea',
                     '.titulo-post',
+                    'video',
                     'xml',
                     '[data-ng-controller="compartilhamentoController"]',
                     '[data-ng-controller="newsletterControllerCardapio"]',
