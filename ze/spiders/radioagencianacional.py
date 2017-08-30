@@ -41,6 +41,18 @@ class RadioagenciaNacionalSpider(ZeSpider):
                     ]
                 }
             }, 
+            "audio": {
+                "item": "ze.items.creativework.AudioObjectItem",
+                "fields": {
+                    "url": {
+                        "selectors": {
+                            "css": [
+                                ".news-content .play-audio::attr(data-mp3)"
+                            ]
+                        }
+                    }
+                }
+            }, 
             "author": {
                 "selectors": {
                     "css": [

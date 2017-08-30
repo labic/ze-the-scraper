@@ -74,7 +74,7 @@ class GoogleSearchMiddleware(object):
         if 'items' in search_results:
             current_search_itens = search_results['items']
             search_items += current_search_itens
-            pprint(current_search_itens)
+            logger.debug(pprint(current_search_itens))
             search_items_urls += [i['link'] for i in current_search_itens]
         
         search_request = search_results['queries']['request'][0]
@@ -91,8 +91,8 @@ class GoogleSearchMiddleware(object):
             self.stats.set_value(self.gcse_stats_base%'results', search_total_results)
             self.stats.set_value(self.gcse_stats_base%'urls', len(search_items_urls))
             self.stats.set_value(self.gcse_stats_base%'unique_urls', len(search_unique_urls))
-        else:
-            return search_unique_urls
+        
+        return search_unique_urls
     
     def search_via_googler(self, query_paraments):
         """
