@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class EBCSpider(ZeSpider):
+class AgenciaBrasilSpider(ZeSpider):
 
-    name = 'ebc'
-    allowed_domains = ['ebc.com.br']
+    name = 'agenciabrasil'
+    allowed_domains = ['agenciabrasil.ebc.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -15,7 +15,8 @@ class EBCSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '.title-post::text'
+                        '.news-main h1::text',
+                        '.title::text',
                     ]
                 }
             },
@@ -23,8 +24,7 @@ class EBCSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"] img::attr(src)',
-                        '.node-noticia figure img::attr(src)'
+                        '[itemprop="image"] img::attr(src)'
                     ]
                 }
             },
@@ -34,7 +34,8 @@ class EBCSpider(ZeSpider):
                         "meta[property='og:description']::attr(content)",
                         "meta[name=description]::attr(content)",
                         '[itemprop=description]::attr(content)',
-                        '[itemprop=description]::text'
+                        '[itemprop=description]::text',
+                        '.news p:nth-child(1)::text'
                     ]
                 }
             },
@@ -43,6 +44,7 @@ class EBCSpider(ZeSpider):
                     "css": [
                         '[itemprop=author]::text',
                         '[class*=autor]::text',
+                        '.news-main .news-info strong::text',
                         '.node-info span strong::text'
                     ]
                 }
@@ -51,6 +53,7 @@ class EBCSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
+                        '.news-main .date::text',
                         '.date::text'
                     ]
                 }
@@ -67,6 +70,7 @@ class EBCSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
+                        '.news',
                         '.node-noticia .content'
                     ]
                 }
@@ -76,7 +80,8 @@ class EBCSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '.tags a::text'
+                        '.tags a::text',
+                        '.breadcrumb span::text',
                     ]
                 }
             },
