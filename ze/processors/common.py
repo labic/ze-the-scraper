@@ -105,6 +105,10 @@ class ParseDate(object):
                 value = value.split('|')[0]+value1
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
+            if spider_name=='tvcultura':
+                value=value.replace('<small>','').replace('</small>','').replace('<time>','').replace('</time>','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
             if spider_name == 'epoca':
                 value = value.split(' - Atualizado')[0].replace('h',':')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})

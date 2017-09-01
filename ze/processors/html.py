@@ -605,6 +605,15 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'tvbrasil':
+            try:
+                selector = 'link'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
         if spider_name is 'redetv':
             try:
@@ -615,6 +624,7 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+
 
             try:
                 selector = 'img'
@@ -634,14 +644,6 @@ class ImproveHTML(object):
 
 
         if spider_name is 'r7':
-            # try:
-            #     selector = '.gallery'
-            #     for el in html.select(selector):
-            #         el.parent.decompose()
-
-            # except Exception as e:
-            #     logger.error('Failed to replace "%s" selector from %s:\n%s',
-            #         selector, spider_name, e)
 
             try:
                 selector = 'a'
@@ -726,6 +728,7 @@ class ImproveHTML(object):
                     '#comments',
                     '#comentarios',
                     '.compartilhe',
+                    '.compartilhar',
                     '.clear',
                     '[data-beacon]',
                     '[data-block-type="related-articles"]',
@@ -797,6 +800,7 @@ class ImproveHTML(object):
                     '.sharebar',
                     'style',
                     'svg',
+                    'tags',
                     'textarea',
                     '.titulo-post',
                     'video',
