@@ -109,6 +109,11 @@ class ParseDate(object):
                 value = value.split(' - Atualizado')[0].replace('h',':')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
+            # if spider_name == 'globo':
+                # return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
+
             if spider_name =='exame':
                 return dateparser.parse(value)
             if spider_name =='sbt':
@@ -124,6 +129,15 @@ class ParseDate(object):
                                             .replace('Atualizada','')\
                                             .replace('em','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+            # if spider_name == 'globo':
+            #     value=value.split('|')[1].replace(' - ',' ')\
+            #                                 .replace('h', ':') \
+            #                                 .replace('min', '')\
+            #                                 .replace('Atualizada','')\
+            #                                 .replace('em','')
+            #     return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
 
             if spider_name == 'diariodepernambuco':
                 return dateparser.parse(value)

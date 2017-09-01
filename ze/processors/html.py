@@ -604,6 +604,35 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+
+
+        if spider_name is 'redetv':
+            try:
+                selector = 'a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+            try:
+                selector = 'img'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el['src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.parent.select('em')[0].string
+                    fg.append(fc)
+                    el.parent.select('em')[0].decompose()
+
+                    el.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+
         if spider_name is 'r7':
             # try:
             #     selector = '.gallery'
