@@ -2,7 +2,7 @@
 from . import ZeSpider
 
 
-class ATardeSpider(ZeSpider):
+class GovAcreSpider(ZeSpider):
 
     name = 'govac'
     allowed_domains = ['ac.gov.br']

@@ -744,6 +744,8 @@ class ImproveHTML(object):
                     '.content-ads',
                     '.content-head',
                     '.content-know-more',
+                    '.content-noticias-related',
+                    '.content-noticias-buttons',
                     '.content-share-bar',
                     '.contentShareBottom',
                     '.comments',

@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovAcreSpider(ZeSpider):
+class GovAmazonasSpider(ZeSpider):
 
-    name = 'r7tv'
-    allowed_domains = ['r7.com']
+    name = 'govam'
+    allowed_domains = ['am.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -13,10 +13,9 @@ class GovAcreSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         "meta[property='og:title']::attr(content)",
-                        "meta[property='twitter:title']::attr(content)",
                         "meta[name=title]::attr(content)",
-                        "[itemprop=name]::text",
-                        ".title::text"
+                        '[itemprop=headline]::text',
+                        '.content-noticias h2::text'
                     ]
                 }
             },
@@ -24,68 +23,67 @@ class GovAcreSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         'meta[property="og:image"]::attr(content)',
-                        'meta[property="twitter:image"]::attr(content)',
-                        "[itemprop=image]::attr(content)"
+                        '[itemprop="image"] img::attr(src)',
+                        '.content-noticias-image-container figure img::attr(src)',
                     ]
                 }
             },
             "description": {
                 "selectors": {
                     "css": [
-                        "meta[name='description']::attr(content)",
-                        "meta[property='twitter:description']::attr(content)",
                         "meta[property='og:description']::attr(content)",
                         "meta[name=description]::attr(content)",
-                        "[property=description]::attr(content)",
-                        "[property='og:description']::attr(content)"
+                        '[itemprop=description]::attr(content)',
+                        '[itemprop=description]::text',
+                        '.conteudoMateria figure figcaption::text'
                     ]
                 }
             },
             "author": {
-                "default": "SBT Notícias",
                 "selectors": {
                     "css": [
-                        "[itemprop=author]::text",
-                        "[itemprop=creator] [itemprop=name]::text",
-                        ".author_name::text",
-                        '.BOX.FG1EA9D2.FS16.BOLD.TEXTUPP::text'
+                        '[itemprop=author]::text',
+                        '.autor-post ::text'
                     ]
                 }
             },
             "datePublished": {
                 "selectors": {
                     "css": [
-                        "[itemprop=datePublished]::text",
-                        "[property='article:published_time']::attr(content)",
-                        '.published_at::attr(datetime)'
+                        '[itemprop=datePublished]::attr(content)',
+                        '.data::text',
+                        '.content-noticias time::text'
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        "[itemprop=dateModified]::text",
-                        "[itemprop=dateModified]::attr(datetime)"
+                        '[itemprop=dateModified]::attr(content)',
+                        '.node-body p em::text',
+                        '.post-date::text',
+                        '.data::text'
                     ]
                 }
             },
             "articleBody": {
                 "selectors": {
                     "css": [
-                        "[itemprop=articleBody]",
-                        ".content",
-                        "#article_content"
+                        '[itemprop=articleBody]',
+                        '[class=card-content]',
+                        '.content-noticias'
                     ]
                 }
             },
             "keywords": {
                 "selectors": {
                     "css": [
-                        "meta[property='keywords']::attr(content)",
-                        "[itemprop=keywords]::text",
-                        "[name=news_keywords]::attr(content)"
+                        '[itemprop=keywords] a::text',
+                        '[rel=tag]::text',
+                        '[onclick*=montaURL]::text',
+                        '.tags a::text'
                     ]
                 }
-            },
+            }
         }
     }]
