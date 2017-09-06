@@ -643,6 +643,10 @@ class ImproveHTML(object):
 
 
 
+
+
+
+
         if spider_name is 'r7':
 
             try:
@@ -650,6 +654,24 @@ class ImproveHTML(object):
                 for el in html.select(selector):
                     el.replace_with(el.get_text())
 
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+        #
+        #   ESTADUAIS
+        #
+
+        # não consegue pegar os seletores de imagem, nem o próprio img, talvez seja carreado a parte
+        if spider_name is 'govac':
+            try:
+                selector = '[id*=attachment]'
+                for el in html.select(selector):
+                    el.decompose()
+                selector='.gallery-size-thumbnail'
+                for el in html.select(selector):
+                    el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
