@@ -711,7 +711,8 @@ class ImproveHTML(object):
 
             for el in html.select(selector):
                 fg = html.new_tag('figure')
-                print(len(el.select('img')))
+                print('-----------------Lista de imgs encontrados dentro de wp-caption   ,',el.select('img'))
+                # ele não ta conseguindo selecionar o img por algum motivo
                 fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
                 fc = html.new_tag('figcaption')
                 fc.string = el.select('.wp-caption-text')[0].string
