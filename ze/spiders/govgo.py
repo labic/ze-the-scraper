@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovBahiaSpider(ZeSpider):
+class GovernoGoiasSpider(ZeSpider):
 
-    name = 'govba'
-    allowed_domains = ['ba.gov.br']
+    name = 'govgo'
+    allowed_domains = ['go.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -15,35 +15,38 @@ class GovBahiaSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '#story_title::text'
+                        '#tituloconteudo::text'
                     ]
                 }
             },
             "image": {
                 "selectors": {
                     "css": [
+                        "meta[property='og:description']::attr(content)",
+                        "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"] img::attr(src)',
-                        '#news-photos img::attr(src)',# o seletyor esta certo porém não consegue identificar, nem no html.py
+                        '[itemprop="image"]::attr(src)',
+                        '#texto_content img::attr("src")'
                     ]
                 }
             },
             "description": {
                 "selectors": {
                     "css": [
-                        "meta[property='og:description']::attr(content)",
-                        "meta[name=description]::attr(content)",
                         '[itemprop=description]::attr(content)',
                         '[itemprop=description]::text',
-                        '.conteudoMateria figure figcaption::text'
+                        '.entry-content h2::text',
+                        '.linha-fina::text',
+                        '.entry-content blockquote p::text'
                     ]
                 }
             },
             "author": {
                 "selectors": {
                     "css": [
+                        '[name=author]::attr(content)',
                         '[itemprop=author]::text',
-                        '#story_text em strong ::text'
+                        '.author a::text',
                     ]
                 }
             },
@@ -51,18 +54,15 @@ class GovBahiaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.data::text',
-                        '#story_date::text'
+                        '.published::text',
+                        '#textoresumo::text'
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        '[itemprop=dateModified]::attr(content)',
-                        '.node-body p em::text',
-                        '.post-date::text',
-                        '.data::text'
+                        '[itemprop=dateModified]::attr(content)'
                     ]
                 }
             },
@@ -70,8 +70,7 @@ class GovBahiaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '[class=card-content]',
-                        '#story_text'
+                        '#texto_content'
                     ]
                 }
             },
@@ -80,8 +79,7 @@ class GovBahiaSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text',
-                        '.tags a::text'
+                        '[onclick*=montaURL]::text'
                     ]
                 }
             }

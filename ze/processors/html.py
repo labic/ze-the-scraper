@@ -677,14 +677,45 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
 
+        if spider_name is 'goves':
+            try:
+                selector = '.gallery'
+                for el in html.select(selector):
+                    el.decompose()
+                #     section = html.new_tag('section')
+                #     for image in el.select('img'):
+                #         fg = html.new_tag('figure')
+
+                #         img = html.new_tag('img', src=image['src'])
+                #         fg.append(img)
+                #         section.append(fg)
+
+                #     el.replace_with(section)
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+        if spider_name is 'govgo':
+            try:
+                selector = '.ngg-galleryoverview'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
         # all spiders
         try:
             selector = 'div.wp-caption'
+
             for el in html.select(selector):
                 fg = html.new_tag('figure')
+                print(len(el.select('img')))
                 fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
                 fc = html.new_tag('figcaption')
                 fc.string = el.select('.wp-caption-text')[0].string
+
                 fg.append(fc)
 
                 el.replace_with(fg)
@@ -812,10 +843,14 @@ class ImproveHTML(object):
                     '.publicidade-content',
                     '.publicado',
                     '#recomendadosParaVoce',
+                    '.relacionadas',
                     '.related-news-shell',
                     '#respond',
                     'script',
                     'select',
+                    '.single__conteudo--galeria-de-fotos',
+                    '.single__conteudo--tags',
+                    '.social-share-buttons',
                     '.story-body__unordered-list',
                     '.sumario_apoyos',
                     "#sponsored-links",

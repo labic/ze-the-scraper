@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovBahiaSpider(ZeSpider):
+class GovCearaSpider(ZeSpider):
 
-    name = 'govba'
-    allowed_domains = ['ba.gov.br']
+    name = 'govce'
+    allowed_domains = ['ceara.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -15,7 +15,7 @@ class GovBahiaSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '#story_title::text'
+                        '.contentheading::text'
                     ]
                 }
             },
@@ -24,7 +24,7 @@ class GovBahiaSpider(ZeSpider):
                     "css": [
                         'meta[property="og:image"]::attr(content)',
                         '[itemprop="image"] img::attr(src)',
-                        '#news-photos img::attr(src)',# o seletyor esta certo porém não consegue identificar, nem no html.py
+                        '.conteudoMateria figure img::attr(src)',
                     ]
                 }
             },
@@ -43,7 +43,7 @@ class GovBahiaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
-                        '#story_text em strong ::text'
+                        '.autor-post ::text'
                     ]
                 }
             },
@@ -52,7 +52,7 @@ class GovBahiaSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
-                        '#story_date::text'
+                        '#campo_data p'
                     ]
                 }
             },
@@ -71,7 +71,7 @@ class GovBahiaSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '[class=card-content]',
-                        '#story_text'
+                        '.contentpaneopen:nth-child(2)'
                     ]
                 }
             },

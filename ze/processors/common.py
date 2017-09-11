@@ -125,6 +125,17 @@ class ParseDate(object):
             if spider_name =='sejabixo':
                 return dateparser.parse(value.split('em ')[1])
 
+
+                #GOVERNAMENTAL - ESTADOS
+            if spider_name == 'govce':
+                value=value.split(',')[0]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+            if spider_name == 'govgo':
+                value=value.split('publicação:')[1].replace('-','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
         if (self.field == 'dateModified'):
             if spider_name == 'zh':
                 value=value.split('|')[1].replace(' - ',' ')\
