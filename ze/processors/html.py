@@ -705,6 +705,19 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        # SOLUÇÃO TEMPORÁRIA ENQUANTO NÃO RESOLVE O PROBLEMA DAS IMAGENS
+        if spider_name is 'govma':
+            try:
+                selector = '.wp-caption'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+
         # all spiders
         try:
             selector = 'div.wp-caption'
@@ -713,6 +726,7 @@ class ImproveHTML(object):
                 fg = html.new_tag('figure')
                 print('-----------------Lista de imgs encontrados dentro de wp-caption   ,',el.select('img'))
                 # ele não ta conseguindo selecionar o img por algum motivo
+                print(el.select('img'))
                 fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
                 fc = html.new_tag('figcaption')
                 fc.string = el.select('.wp-caption-text')[0].string

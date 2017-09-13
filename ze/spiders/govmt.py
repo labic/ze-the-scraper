@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovernoMaranhaoSpider(ZeSpider):
+class GovernoMatoGrossoSpider(ZeSpider):
 
-    name = 'govma'
-    allowed_domains = ['ma.gov.br']
+    name = 'govmt'
+    allowed_domains = ['mt.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -16,7 +16,7 @@ class GovernoMaranhaoSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-header h3 a::text'
+                        '.header-title span::text'
                     ]
                 }
             },
@@ -48,6 +48,7 @@ class GovernoMaranhaoSpider(ZeSpider):
                         '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
+                        '.journal-content-article > span::text'
                     ]
                 }
             },
@@ -55,7 +56,8 @@ class GovernoMaranhaoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::attr(datetime)'
+                        '.entry-date::attr(datetime)',
+                        '.taglib-header '
                     ]
                 }
             },
@@ -72,7 +74,7 @@ class GovernoMaranhaoSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
-                        # '.entry-content'
+                        '.full-content'
                     ]
                 }
             },
@@ -81,7 +83,7 @@ class GovernoMaranhaoSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[name=keywords]::attr(content)'
                     ]
                 }
             }
