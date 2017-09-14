@@ -73,6 +73,7 @@ class GoogleBigQueryPipeline(BasePipeline):
             raise NotConfigured('Google Cloud BigQuery is not enabled, check settings values')
     
     def process_item(self, item, spider):
+        # USE https://googlecloudplatform.github.io/google-cloud-python/latest/bigquery/table.html#google.cloud.bigquery.table.Table.row_from_mapping
         try:
             table_name = item.__class__.__name__
             table = self.tables.get(table_name)

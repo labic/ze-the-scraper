@@ -2,6 +2,13 @@
 
 - [Install Berkeley DB](http://www.linuxfromscratch.org/blfs/view/7.9/server/db.html)
 
+
+
+## Limitações
+
+ - Os artigos `article` são listados por ordem da data de coleta `dateCreated` porem os artigos podem ser considerados com atualizados e serem coletados novamente causado que a data de coleta e data de publicação `datePublished` divirjam 
+ 
+
 ## Usage
 
 ### Crawlling using a single spider an single url
