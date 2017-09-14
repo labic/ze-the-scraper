@@ -31,7 +31,7 @@ class GoogleSearchMiddleware(object):
             self.lib = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_LIB', 'google_rest')
             self.api_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_API_KEY')
             self.custom_search_engine_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID')
-            self.max_index = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_MAX_INDEX', 20)
+            self.max_index = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_MAX_INDEX', 10)
             crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
         else:
             raise NotConfigured('Search Engine is not enabled, check settings values')
@@ -47,52 +47,56 @@ class GoogleSearchMiddleware(object):
         query_paraments = {
             'key': self.api_key,
             'cx': self.custom_search_engine_key,
-            'fields': 'items(cacheId,link,snippet,title),queries',
+            'fields': 'items(cacheId,link,snippet,title),queries(request)',
             'start': 1,
+            'filter': 0,
             'q': spider.query,
             'sort': 'date',
-            'as_qdr': getattr(spider, 'dateRestrict', 'd1'),
             'dateRestrict': getattr(spider, 'dateRestrict', 'd1'),
         }
         search_items_ruls = self.search_urls_via_api_rest(query_paraments)
         logger.debug('search_items_urls: \n%s'%search_items_ruls)
         spider.start_urls = search_items_ruls
     
-    def search_urls_via_api_rest(self, query_paraments, search_items=[], search_items_urls=[]):
-        self.stats.inc_value(self.gcse_stats_base%'requests')
+    def search_urls_via_api_rest(self, query_paraments):
+        def get_urls(query_paraments, search_items=[], search_items_urls=[]):
+            self.stats.inc_value(self.gcse_stats_base%'requests')
+            
+            query_paraments_encoded = urllib.parse.urlencode(query_paraments)
+            google_custom_search_url = ''.join((self.api_rest_base_url, query_paraments_encoded))
+            
+            search_results = requests.get(google_custom_search_url).json()
+            
+            search_error = search_results.get('error')
+            if search_error:
+                logger.error(search_error)
+                return []
+            
+            if 'items' in search_results:
+                current_search_itens = search_results['items']
+                search_items += search_results['items']
+                search_items_urls += [i['link'] for i in current_search_itens]
+            
+            search_request = search_results['queries']['request'][0]
+            search_total_results = int(search_request['totalResults'])
+            search_total_pages = math.ceil(search_total_results/10)
+            search_start_index = int(search_request['startIndex'])
+            search_unique_urls = list(set(search_items_urls))
+            
+            if search_total_pages > search_start_index \
+            and search_start_index < self.max_index:
+                query_paraments['start'] += 1
+                get_urls(query_paraments, search_items, search_items_urls)
+            
+                self.stats.set_value(self.gcse_stats_base%'results', search_total_results)
+                self.stats.set_value(self.gcse_stats_base%'urls', len(search_items_urls))
+                self.stats.set_value(self.gcse_stats_base%'unique_urls', len(search_unique_urls))
+            
+            unique_search_items = list({v['cacheId']:v for v in search_items}.values())
+            return unique_search_items, search_unique_urls
         
-        query_paraments_encoded = urllib.parse.urlencode(query_paraments)
-        google_custom_search_url = ''.join((self.api_rest_base_url, query_paraments_encoded))
-        
-        search_results = requests.get(google_custom_search_url).json()
-        
-        search_error = search_results.get('error')
-        if search_error:
-            logger.error(search_error)
-            return []
-        
-        if 'items' in search_results:
-            current_search_itens = search_results['items']
-            search_items += current_search_itens
-            logger.debug(pprint(current_search_itens))
-            search_items_urls += [i['link'] for i in current_search_itens]
-        
-        search_request = search_results['queries']['request'][0]
-        search_total_results = int(search_request['totalResults'])
-        search_total_pages = math.ceil(search_total_results/10)
-        search_start_index = int(search_request['startIndex'])
-        search_unique_urls = list(set(search_items_urls))
-        
-        if search_total_pages > search_start_index \
-        and search_start_index < self.max_index:
-            query_paraments['start'] += 1
-            self.search_urls_via_api_rest(query_paraments, search_items, search_items_urls)
-        
-            self.stats.set_value(self.gcse_stats_base%'results', search_total_results)
-            self.stats.set_value(self.gcse_stats_base%'urls', len(search_items_urls))
-            self.stats.set_value(self.gcse_stats_base%'unique_urls', len(search_unique_urls))
-        
-        return search_unique_urls
+        unique_search_items, unique_urls = get_urls(query_paraments)
+        return unique_urls
     
     def search_via_googler(self, query_paraments):
         """
