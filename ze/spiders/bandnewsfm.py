@@ -2,20 +2,20 @@
 from . import ZeSpider
 
 
-class GloboSpider(ZeSpider):
+class BandNewsFMSpider(ZeSpider):
 
-    name = 'globo'
-    allowed_domains = ['globo.com']
+    name = 'bandnewsfm'
+    allowed_domains = ['cbn.globoradio.globo.com']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
-            "name":{
+            "name": {
                 "selectors": {
                     "css": [
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         "[itemprop=name]::text",
-                        ".content-head__title::text"
+                        "#materia_interna h1::text"
                     ]
                 }
             },
@@ -28,27 +28,39 @@ class GloboSpider(ZeSpider):
                     ]
                 }
             },
-            "description": {
+            "description":  {
                 "selectors": {
                     "css": [
                         "meta[property='og:description']::attr(content)",
                         "meta[name=description]::attr(content)",
                         "[itemprop=description]::text",
                         "[itemprop=alternativeHeadline]::text",
-                        ".content-head__subtitle::text"
+                        "#materia_interna h2::text"
                     ]
                 }
             },
             "author": {
                 "selectors": {
                     "css": [
-                        "[itemprop=author] [itemprop=name]::attr(content)",
                         "[itemprop=author]::text",
                         "[itemprop=creator]::text",
-                        "#credito-materia::text",
-                        ".autorDataHora strong::text"
-
+                        ".td-post-author-name a::text"
                     ]
+                }
+            },
+            "audio": {
+                "item": "ze.items.creativework.AudioObjectItem",
+                "fields": {
+                    "url": {
+                        "selectors": {
+                            "css": [
+                                ".td-post-content iframe::attr(src)"
+                            ]
+                        },
+                        "contexts": {
+                            "format": "http://video12.mais.uol.com.br/{}.mp3"
+                        }
+                    }
                 }
             },
             "datePublished": {
@@ -56,13 +68,9 @@ class GloboSpider(ZeSpider):
                     "css": [
                         "[itemprop=datePublished]::attr(datetime)",
                         "[itemprop=datePublished]::text",
-                        "meta[name='article:published_time']::attr(content)",
-                        "meta[name=dtnoticia]::attr(content)",
-                        "#info-edicao-acervo b::text",
-                        ".data::text",
-                        ".published::text",
-                        ".autorDataHora::text"
-
+                        "time[datetime]::text",
+                        "time::attr(datetime)",
+                        ".datahora::text"
                     ]
                 }
             },
@@ -71,31 +79,25 @@ class GloboSpider(ZeSpider):
                     "css": [
                         "[itemprop=dateModified]::attr(datetime)" ,
                         "[itemprop=dateModified]::text",
-                        "meta[name='article:modified_time']::attr(content)",
-                        "updated::text"
+                        ".updated"
                     ]
                 }
             },
             "articleBody": {
                 "selectors": {
                     "css": [
-                        "[itemprop=articleBody]",
-                        ".mc-body",
-                        ".materia-conteudo",
-                        ".entry-content",
-                        # ".conteudo",
-                        "#texto",
-                        'internas-conteudo-primeiro-parag'
-
+                       "[itemprop=articleBody]",
+                        "#materia_interna",
+                        '.td-post-content'
                     ]
                 }
             },
             "keywords": {
+                "default": ["rádio"],
                 "selectors": {
                     "css": [
                         "meta[name=keywords]::attr(content)",
-                        "[itemprop=keywords]::text",
-                        ".entities__list-itemLink::text"
+                        "[itemprop=keywords]::text"
                     ]
                 }
             }

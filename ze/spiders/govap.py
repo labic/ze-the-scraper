@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class SBTSpider(ZeSpider):
+class GovAmapaSpider(ZeSpider):
 
-    name = 'sbt'
-    allowed_domains = ['sbt.com.br']
+    name = 'govap'
+    allowed_domains = ['ap.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -15,41 +15,35 @@ class SBTSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '.title-post::text',
-                        '.entry-title::text'
+                        '.content-noticias h2::text'
                     ]
                 }
             },
             "image": {
                 "selectors": {
                     "css": [
-                        "meta[property='og:description']::attr(content)",
-                        "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"]::attr(src)',
-                        '.lazy::attr("data-lazy-src")'
+                        '[itemprop="image"] img::attr(src)',
+                        '.conteudoMateria figure img::attr(src)',
                     ]
                 }
             },
             "description": {
                 "selectors": {
                     "css": [
+                        "meta[property='og:description']::attr(content)",
+                        "meta[name=description]::attr(content)",
                         '[itemprop=description]::attr(content)',
                         '[itemprop=description]::text',
-                        '.entry-content h2::text',
-                        '.linha-fina::text',
-                        'h2.ONOTICE::text'
+                        '.conteudoMateria figure figcaption::text'
                     ]
                 }
             },
             "author": {
-                "default": "SBT Notícias",
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
-                        '.author a::text',
-                        '[href*="mailto"]::text',
-                        '.news-data-pub__author span::text'
+                        '.autor-post ::text'
                     ]
                 }
             },
@@ -57,15 +51,18 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::text',
-                        '.BOX.FG666.BOLD::text'
+                        '.data::text',
+                        '.data-post::text'
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        '[itemprop=dateModified]::attr(content)'
+                        '[itemprop=dateModified]::attr(content)',
+                        '.node-body p em::text',
+                        '.post-date::text',
+                        '.data::text'
                     ]
                 }
             },
@@ -73,9 +70,8 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.entry-content',
-                        '.contentNotice .FG333',
-                        '.contenttice .FG333'
+                        '[class=card-content]',
+                        '.content-noticias'
                     ]
                 }
             },
@@ -84,9 +80,10 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[onclick*=montaURL]::text',
+                        '.tags a::text'
                     ]
                 }
-            },
+            }
         }
     }]

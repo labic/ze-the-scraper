@@ -105,14 +105,36 @@ class ParseDate(object):
                 value = value.split('|')[0]+value1
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
+            if spider_name=='tvcultura':
+                value=value.replace('<small>','').replace('</small>','').replace('<time>','').replace('</time>','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
             if spider_name == 'epoca':
                 value = value.split(' - Atualizado')[0].replace('h',':')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            # if spider_name == 'globo':
+                # return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
 
             if spider_name =='exame':
                 return dateparser.parse(value)
             if spider_name =='sbt':
                 return dateparser.parse(value)
+            if spider_name =='sejabixo':
+                return dateparser.parse(value.split('em ')[1])
+
+
+                #GOVERNAMENTAL - ESTADOS
+            if spider_name == 'govce':
+                value=value.split(',')[0]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+            if spider_name == 'govgo':
+                value=value.split('publicação:')[1].replace('-','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
 
         if (self.field == 'dateModified'):
             if spider_name == 'zh':
@@ -122,6 +144,15 @@ class ParseDate(object):
                                             .replace('Atualizada','')\
                                             .replace('em','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+            # if spider_name == 'globo':
+            #     value=value.split('|')[1].replace(' - ',' ')\
+            #                                 .replace('h', ':') \
+            #                                 .replace('min', '')\
+            #                                 .replace('Atualizada','')\
+            #                                 .replace('em','')
+            #     return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
 
             if spider_name == 'diariodepernambuco':
                 return dateparser.parse(value)

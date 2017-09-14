@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GloboSpider(ZeSpider):
+class RedeTVSpider(ZeSpider):
 
-    name = 'globo'
-    allowed_domains = ['globo.com']
+    name = 'redetv'
+    allowed_domains = ['redetv.uol.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -40,14 +40,16 @@ class GloboSpider(ZeSpider):
                 }
             },
             "author": {
+                "default": "RedeTV!",
                 "selectors": {
                     "css": [
                         "[itemprop=author] [itemprop=name]::attr(content)",
                         "[itemprop=author]::text",
                         "[itemprop=creator]::text",
-                        "#credito-materia::text",
-                        ".autorDataHora strong::text"
-
+                        ".author::text",
+                        ".blog-post-date::text",
+                        ".credit::text",
+                        ".home-item .date-item:nth-child(2) strong::text"
                     ]
                 }
             },
@@ -61,8 +63,9 @@ class GloboSpider(ZeSpider):
                         "#info-edicao-acervo b::text",
                         ".data::text",
                         ".published::text",
-                        ".autorDataHora::text"
-
+                        ".blog-post-time::text",
+                        "[property='article:published_time']::attr(content)",
+                        ".date-item::text"
                     ]
                 }
             },
@@ -80,13 +83,14 @@ class GloboSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         "[itemprop=articleBody]",
+                        '[property="na:ArticleBody"]',
                         ".mc-body",
                         ".materia-conteudo",
                         ".entry-content",
-                        # ".conteudo",
-                        "#texto",
-                        'internas-conteudo-primeiro-parag'
-
+                        ".conteudo",
+                        ".story",
+                        "#content",
+                        ".text"
                     ]
                 }
             },

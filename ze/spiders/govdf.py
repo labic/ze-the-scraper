@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class SBTSpider(ZeSpider):
+class GovernoDestritoFederalSpider(ZeSpider):
 
-    name = 'sbt'
-    allowed_domains = ['sbt.com.br']
+    name = 'govdf'
+    allowed_domains = ['df.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -38,18 +38,16 @@ class SBTSpider(ZeSpider):
                         '[itemprop=description]::text',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        'h2.ONOTICE::text'
+                        '.entry-content blockquote p::text'
                     ]
                 }
             },
             "author": {
-                "default": "SBT Notícias",
                 "selectors": {
                     "css": [
+                        '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
-                        '[href*="mailto"]::text',
-                        '.news-data-pub__author span::text'
                     ]
                 }
             },
@@ -57,8 +55,7 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::text',
-                        '.BOX.FG666.BOLD::text'
+                        '.entry-date::text'
                     ]
                 }
             },
@@ -73,9 +70,7 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.entry-content',
-                        '.contentNotice .FG333',
-                        '.contenttice .FG333'
+                        '.noticia'
                     ]
                 }
             },
@@ -87,6 +82,6 @@ class SBTSpider(ZeSpider):
                         '[onclick*=montaURL]::text'
                     ]
                 }
-            },
+            }
         }
     }]

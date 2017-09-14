@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class SBTSpider(ZeSpider):
+class GovernoMatoGrossoSpider(ZeSpider):
 
-    name = 'sbt'
-    allowed_domains = ['sbt.com.br']
+    name = 'govmt'
+    allowed_domains = ['mt.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -16,7 +16,7 @@ class SBTSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-title::text'
+                        '.header-title span::text'
                     ]
                 }
             },
@@ -27,7 +27,7 @@ class SBTSpider(ZeSpider):
                         "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
                         '[itemprop="image"]::attr(src)',
-                        '.lazy::attr("data-lazy-src")'
+                        '.wp-caption img::attr("src")'
                     ]
                 }
             },
@@ -38,18 +38,17 @@ class SBTSpider(ZeSpider):
                         '[itemprop=description]::text',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        'h2.ONOTICE::text'
+                        '.entry-content blockquote p::text'
                     ]
                 }
             },
             "author": {
-                "default": "SBT Notícias",
                 "selectors": {
                     "css": [
+                        '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
-                        '[href*="mailto"]::text',
-                        '.news-data-pub__author span::text'
+                        '.journal-content-article > span::text'
                     ]
                 }
             },
@@ -57,15 +56,16 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::text',
-                        '.BOX.FG666.BOLD::text'
+                        '.entry-date::attr(datetime)',
+                        '.taglib-header '
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        '[itemprop=dateModified]::attr(content)'
+                        '[itemprop=dateModified]::attr(content)',
+                        '.updated::attr(datetime)'
                     ]
                 }
             },
@@ -74,8 +74,7 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
-                        '.contentNotice .FG333',
-                        '.contenttice .FG333'
+                        '.full-content'
                     ]
                 }
             },
@@ -84,9 +83,9 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[name=keywords]::attr(content)'
                     ]
                 }
-            },
+            }
         }
     }]

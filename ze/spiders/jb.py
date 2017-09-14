@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class SBTSpider(ZeSpider):
+class JornaldoBrasilSpider(ZeSpider):
 
-    name = 'sbt'
-    allowed_domains = ['sbt.com.br']
+    name = 'jb'
+    allowed_domains = ['jb.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -15,41 +15,34 @@ class SBTSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '.title-post::text',
-                        '.entry-title::text'
+                        '.materia h1::text'
                     ]
                 }
             },
             "image": {
                 "selectors": {
                     "css": [
-                        "meta[property='og:description']::attr(content)",
-                        "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"]::attr(src)',
-                        '.lazy::attr("data-lazy-src")'
+                        '[itemprop="image"] img::attr(src)'
                     ]
                 }
             },
             "description": {
                 "selectors": {
                     "css": [
+                        "meta[property='og:description']::attr(content)",
+                        "meta[name=description]::attr(content)",
                         '[itemprop=description]::attr(content)',
                         '[itemprop=description]::text',
-                        '.entry-content h2::text',
-                        '.linha-fina::text',
-                        'h2.ONOTICE::text'
+                        '.resumo h2::text'
                     ]
                 }
             },
             "author": {
-                "default": "SBT Notícias",
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
-                        '.author a::text',
-                        '[href*="mailto"]::text',
-                        '.news-data-pub__author span::text'
+                        '.author::text'
                     ]
                 }
             },
@@ -57,15 +50,17 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::text',
-                        '.BOX.FG666.BOLD::text'
+                        '.data::text',
+                        '#content article time:first-child ::attr(datetime)'
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        '[itemprop=dateModified]::attr(content)'
+                        '[itemprop=dateModified]::attr(content)',
+                        '#content article time:nth-child(2) ::attr(datetime)'
+
                     ]
                 }
             },
@@ -73,9 +68,8 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.entry-content',
-                        '.contentNotice .FG333',
-                        '.contenttice .FG333'
+                        '.conteudo-materia',
+                        '#content #HOTWordsTxt'
                     ]
                 }
             },
@@ -84,9 +78,10 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[onclick*=montaURL]::text',
+                        '.tags span::text'
                     ]
                 }
-            },
+            }
         }
     }]

@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class SBTSpider(ZeSpider):
+class GovernoGoiasSpider(ZeSpider):
 
-    name = 'sbt'
-    allowed_domains = ['sbt.com.br']
+    name = 'govgo'
+    allowed_domains = ['go.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -15,8 +15,7 @@ class SBTSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '.title-post::text',
-                        '.entry-title::text'
+                        '#tituloconteudo::text'
                     ]
                 }
             },
@@ -27,7 +26,7 @@ class SBTSpider(ZeSpider):
                         "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
                         '[itemprop="image"]::attr(src)',
-                        '.lazy::attr("data-lazy-src")'
+                        '#texto_content img::attr("src")'
                     ]
                 }
             },
@@ -38,18 +37,16 @@ class SBTSpider(ZeSpider):
                         '[itemprop=description]::text',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        'h2.ONOTICE::text'
+                        '.entry-content blockquote p::text'
                     ]
                 }
             },
             "author": {
-                "default": "SBT Notícias",
                 "selectors": {
                     "css": [
+                        '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
-                        '[href*="mailto"]::text',
-                        '.news-data-pub__author span::text'
                     ]
                 }
             },
@@ -57,8 +54,8 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::text',
-                        '.BOX.FG666.BOLD::text'
+                        '.published::text',
+                        '#textoresumo::text'
                     ]
                 }
             },
@@ -73,9 +70,7 @@ class SBTSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.entry-content',
-                        '.contentNotice .FG333',
-                        '.contenttice .FG333'
+                        '#texto_content'
                     ]
                 }
             },
@@ -87,6 +82,6 @@ class SBTSpider(ZeSpider):
                         '[onclick*=montaURL]::text'
                     ]
                 }
-            },
+            }
         }
     }]

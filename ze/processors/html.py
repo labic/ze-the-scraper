@@ -605,15 +605,132 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'tvbrasil':
+            try:
+                selector = 'link'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        if spider_name is 'redetv':
+            try:
+                selector = 'a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+            try:
+                selector = 'img'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el['src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.parent.select('em')[0].string
+                    fg.append(fc)
+                    el.parent.select('em')[0].decompose()
+
+                    el.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+
+
+
+
+
+        if spider_name is 'r7':
+
+            try:
+                selector = 'a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+        #
+        #   ESTADUAIS
+        #
+
+        # não consegue pegar os seletores de imagem, nem o próprio img, talvez seja carreado a parte
+        if spider_name is 'govac':
+            try:
+                selector = '[id*=attachment]'
+                for el in html.select(selector):
+                    el.decompose()
+                selector='.gallery-size-thumbnail'
+                for el in html.select(selector):
+                    el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+        if spider_name is 'goves':
+            try:
+                selector = '.gallery'
+                for el in html.select(selector):
+                    el.decompose()
+                #     section = html.new_tag('section')
+                #     for image in el.select('img'):
+                #         fg = html.new_tag('figure')
+
+                #         img = html.new_tag('img', src=image['src'])
+                #         fg.append(img)
+                #         section.append(fg)
+
+                #     el.replace_with(section)
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+        if spider_name is 'govgo':
+            try:
+                selector = '.ngg-galleryoverview'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        # SOLUÇÃO TEMPORÁRIA ENQUANTO NÃO RESOLVE O PROBLEMA DAS IMAGENS
+        if spider_name is 'govma':
+            try:
+                selector = '.wp-caption'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
 
         # all spiders
         try:
             selector = 'div.wp-caption'
+
             for el in html.select(selector):
                 fg = html.new_tag('figure')
+                print('-----------------Lista de imgs encontrados dentro de wp-caption   ,',el.select('img'))
+                # ele não ta conseguindo selecionar o img por algum motivo
+                print(el.select('img'))
                 fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
                 fc = html.new_tag('figcaption')
                 fc.string = el.select('.wp-caption-text')[0].string
+
                 fg.append(fc)
 
                 el.replace_with(fg)
@@ -673,12 +790,15 @@ class ImproveHTML(object):
                     '.content-ads',
                     '.content-head',
                     '.content-know-more',
+                    '.content-noticias-related',
+                    '.content-noticias-buttons',
                     '.content-share-bar',
                     '.contentShareBottom',
                     '.comments',
                     '#comments',
                     '#comentarios',
                     '.compartilhe',
+                    '.compartilhar',
                     '.clear',
                     '[data-beacon]',
                     '[data-block-type="related-articles"]',
@@ -738,19 +858,26 @@ class ImproveHTML(object):
                     '.publicidade-content',
                     '.publicado',
                     '#recomendadosParaVoce',
+                    '.relacionadas',
                     '.related-news-shell',
                     '#respond',
                     'script',
                     'select',
+                    '.single__conteudo--galeria-de-fotos',
+                    '.single__conteudo--tags',
+                    '.social-share-buttons',
                     '.story-body__unordered-list',
                     '.sumario_apoyos',
                     "#sponsored-links",
                     '#pub-box-materia',
                     '.publicidade-entre-texto',
+                    '.sharebar',
                     'style',
                     'svg',
+                    'tags',
                     'textarea',
                     '.titulo-post',
+                    'video',
                     'xml',
                     '[data-ng-controller="compartilhamentoController"]',
                     '[data-ng-controller="newsletterControllerCardapio"]',
