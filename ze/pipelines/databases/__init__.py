@@ -56,6 +56,7 @@ class MongoPipeline(BasePipeline):
                     
                     if not item_finded:
                         collection.insert(dict(item))
+                        self.stats.inc_value('items/mongodb/insert_count')
             else:
                 collection.insert(dict(item))
                 self.stats.inc_value('items/mongodb/insert_count')
