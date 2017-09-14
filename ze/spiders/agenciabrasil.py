@@ -71,6 +71,7 @@ class AgenciaBrasilSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
                         '.news',
+                        '.content',
                         '.node-noticia .content'
                     ]
                 }
