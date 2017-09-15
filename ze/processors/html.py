@@ -463,15 +463,39 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
             try:
-                for el in html.select('a'):
+                selector='a'
+                for el in html.select(selector):
                     link_text=el.get_text()
                     el.replace_with(link_text)
 
-                for el in html.select("#autor"):
+                selector="#autor"
+                for el in html.select(selector):
                     el.parent.decompose()
+
+                selector = 'svg'
+                for el in html.select(selector):
+                    el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+            try:
+                selector='.content-media__container'
+                for el in html.select(selector):
+                    print( len(el.select("img")))
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
+
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select('.content-media__description span')[0].get_text()
+                    fg.append(fc)
+                    print('-------------------------oiiii')
+
+                    el.replace_with(fg)
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
 
         if spider_name is 'huffpostbrasil':
             try:

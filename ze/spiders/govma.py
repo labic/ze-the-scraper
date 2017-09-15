@@ -72,6 +72,7 @@ class GovernoMaranhaoSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
+                        '#noticia-principal #noticias'
                         # '.entry-content'
                     ]
                 }
