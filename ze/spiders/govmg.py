@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class JornaldoBrasilSpider(ZeSpider):
+class GovernoMinasGeraisSpider(ZeSpider):
 
-    name = 'jb'
-    allowed_domains = ['jb.com.br']
+    name = 'govmg'
+    allowed_domains = ['mg.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -15,35 +15,40 @@ class JornaldoBrasilSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '.materia h1::text',
-                        'article h1::text'
+                        '.title-post::text',
+                        '.entry-title::text'
                     ]
                 }
             },
             "image": {
                 "selectors": {
                     "css": [
+                        "meta[property='og:description']::attr(content)",
+                        "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"] img::attr(src)'
+                        '[itemprop="image"]::attr(src)',
+                        '.lazy::attr("data-lazy-src")'
                     ]
                 }
             },
             "description": {
                 "selectors": {
                     "css": [
-                        "meta[property='og:description']::attr(content)",
-                        "meta[name=description]::attr(content)",
                         '[itemprop=description]::attr(content)',
                         '[itemprop=description]::text',
-                        '.resumo h2::text'
+                        '[name="description"]::attr(content)',
+                        '.entry-content h2::text',
+                        '.linha-fina::text',
+                        '.entry-content blockquote p::text'
                     ]
                 }
             },
             "author": {
                 "selectors": {
                     "css": [
+                        '[name=author]::attr(content)',
                         '[itemprop=author]::text',
-                        '.author::text'
+                        '.author a::text',
                     ]
                 }
             },
@@ -51,17 +56,15 @@ class JornaldoBrasilSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.data::text',
-                        '#content article time:first-child ::attr(datetime)'
+                        '.entry-date::text',
+                        '.text-date::attr(datetime)'
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        '[itemprop=dateModified]::attr(content)',
-                        '#content article time:nth-child(2) ::attr(datetime)'
-
+                        '[itemprop=dateModified]::attr(content)'
                     ]
                 }
             },
@@ -69,8 +72,8 @@ class JornaldoBrasilSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.conteudo-materia',
-                        '#content #HOTWordsTxt'
+                        '.noticia',
+                        'div.clear'
                     ]
                 }
             },
@@ -79,8 +82,7 @@ class JornaldoBrasilSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text',
-                        '.tags span::text'
+                        '[name="keywords"]::attr(content)',
                     ]
                 }
             }

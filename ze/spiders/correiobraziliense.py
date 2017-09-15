@@ -15,7 +15,9 @@ class CorreioBrasilienseSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '.title-post::text'
+                        '.title-post::text',
+                        '.news-tit::text'
+
                     ]
                 }
             },

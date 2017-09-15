@@ -706,15 +706,20 @@ class ImproveHTML(object):
                 selector = '.gallery'
                 for el in html.select(selector):
                     el.decompose()
-                #     section = html.new_tag('section')
-                #     for image in el.select('img'):
-                #         fg = html.new_tag('figure')
+                selector='img'
+                # for el in html.select(selector):
+                #     img_src=el['src']
+                #     if 'es.gov.br' in img_src:
 
-                #         img = html.new_tag('img', src=image['src'])
-                #         fg.append(img)
-                #         section.append(fg)
+                # #     section = html.new_tag('section')
+                # #     for image in el.select('img'):
+                # #         fg = html.new_tag('figure')
 
-                #     el.replace_with(section)
+                # #         img = html.new_tag('img', src=image['src'])
+                # #         fg.append(img)
+                # #         section.append(fg)
+
+                # #     el.replace_with(section)
 
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
@@ -845,6 +850,7 @@ class ImproveHTML(object):
                     'body',
                     'button',
                     '.comentarios',
+                    '.clearfix',
                     'dir',
                     '#elpais_gpt-INTEXT',
                     'embed',
@@ -901,6 +907,7 @@ class ImproveHTML(object):
                     'tags',
                     'textarea',
                     '.titulo-post',
+                    '.top-artigos',
                     'video',
                     'xml',
                     '[data-ng-controller="compartilhamentoController"]',

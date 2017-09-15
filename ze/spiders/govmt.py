@@ -16,7 +16,8 @@ class GovernoMatoGrossoSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.header-title span::text'
+                        '.header-title span::text',
+                        '.news-tit::text'
                     ]
                 }
             },
