@@ -44,6 +44,7 @@ class ParseDate(object):
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
 
+        print('\n\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n')
 
         if spider_name == 'r7':
             value=value.split('(')[1].split(')')[0]
@@ -134,6 +135,9 @@ class ParseDate(object):
             if spider_name == 'govgo':
                 value=value.split('publicação:')[1].replace('-','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+            if spider_name =='govpa':
+                print('-----------------------',value)
 
 
         if (self.field == 'dateModified'):
