@@ -52,7 +52,8 @@ class GovCearaSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
-                        '#campo_data p'
+                        '#campo_data p',
+                        '.createdate::text'
                     ]
                 }
             },
@@ -62,7 +63,8 @@ class GovCearaSpider(ZeSpider):
                         '[itemprop=dateModified]::attr(content)',
                         '.node-body p em::text',
                         '.post-date::text',
-                        '.data::text'
+                        '.data::text',
+                        '.modifydate::text',
                     ]
                 }
             },
@@ -71,7 +73,7 @@ class GovCearaSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '[class=card-content]',
-                        '.contentpaneopen:nth-child(2)'
+                        '#conteudo_central',
                     ]
                 }
             },

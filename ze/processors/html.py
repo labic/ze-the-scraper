@@ -481,14 +481,12 @@ class ImproveHTML(object):
             try:
                 selector='.content-media__container'
                 for el in html.select(selector):
-                    print( len(el.select("img")))
                     fg = html.new_tag('figure')
                     fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
 
                     fc = html.new_tag('figcaption')
                     fc.string = el.select('.content-media__description span')[0].get_text()
                     fg.append(fc)
-                    print('-------------------------oiiii')
 
                     el.replace_with(fg)
 
@@ -706,7 +704,10 @@ class ImproveHTML(object):
                 selector = '.gallery'
                 for el in html.select(selector):
                     el.decompose()
-                selector='img'
+                # for el in html.select('.body-part p'):
+                    # print(el.get_text())
+
+                # selector='img'
                 # for el in html.select(selector):
                 #     img_src=el['src']
                 #     if 'es.gov.br' in img_src:
@@ -734,6 +735,16 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'govpa':
+            try:
+                selector = '.data'
+                for el in html.select(selector):
+                    print('++++++++++++++++++',el)
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
         # SOLUÇÃO TEMPORÁRIA ENQUANTO NÃO RESOLVE O PROBLEMA DAS IMAGENS
         if spider_name is 'govma':
             try:
@@ -744,6 +755,30 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+        if spider_name is 'govce':
+            try:
+                selector = 'script'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+        if spider_name is 'govba':
+            try:
+                selector = 'img'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el['src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.parent.get_text()
+                    fg.append(fc)
+
+                    el.parent.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
 
 
 
@@ -828,7 +863,7 @@ class ImproveHTML(object):
                     '#comentarios',
                     '.compartilhe',
                     '.compartilhar',
-                    '.clear',
+                    # '.clear',
                     '[data-beacon]',
                     '[data-block-type="related-articles"]',
                     '#liveblog-container',
@@ -847,10 +882,10 @@ class ImproveHTML(object):
                     '.bbccom_slot',
                     'bgsound',
                     'blink',
-                    'body',
+                    # 'body',
                     'button',
                     '.comentarios',
-                    '.clearfix',
+                    # '.clearfix',
                     'dir',
                     '#elpais_gpt-INTEXT',
                     'embed',

@@ -58,7 +58,11 @@ class GovernoParaSpider(ZeSpider):
                         '[itemprop=datePublished]::attr(content)',
                         '.entry-date::text',
                         '.text-date::attr(datetime)',
+                        '.data:first-child::text',
+                        '.conteudo_interna .col-md-9 .data::text',
+                        # "meta[property='og:title']::attr(content)",
                         '.data::text'
+
                     ]
                 }
             },
