@@ -72,6 +72,11 @@ class AudioObjectItem(MediaObjectItem):
     transcript = Field()
 
 
+class VideoObjectItem(MediaObjectItem):
+    
+    transcript = Field()
+
+
 class NewsArticleItem(ArticleItem):
 
     dateline = Field()
