@@ -85,7 +85,9 @@ class GloboSpider(ZeSpider):
                         ".entry-content",
                         # ".conteudo",
                         "#texto",
-                        'internas-conteudo-primeiro-parag'
+                        'internas-conteudo-primeiro-parag',
+                        # '$div > p.internas-conteudo-primeiro-parag'
+                        '.col-xs-12.col-md-8.col-md-width-mod'
 
                     ]
                 }
