@@ -70,7 +70,8 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.noticia'
+                        # '.noticia',
+                        '.body-part'
                     ]
                 }
             },
