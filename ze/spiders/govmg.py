@@ -73,7 +73,8 @@ class GovernoMinasGeraisSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.noticia',
-                        'div.clear'
+                        'div.clear',
+                        'article main'
                     ]
                 }
             },
