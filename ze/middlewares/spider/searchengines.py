@@ -27,11 +27,11 @@ class GoogleSearchMiddleware(object):
     def __init__(self, crawler):
         self.stats = crawler.stats
         
-        if crawler.settings.getbool('GOOGLE_SEARCH_MIDDLEWARE_ENABLED'):
-            self.lib = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_LIB', 'google_rest')
-            self.api_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_API_KEY')
-            self.custom_search_engine_key = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_CUSTOM_SEARCH_ENGINE_ID')
-            self.max_index = crawler.settings.get('GOOGLE_SEARCH_MIDDLEWARE_MAX_INDEX', 10)
+        if crawler.settings.getbool('SEARCH_MIDDLEWARE_LIB'):
+            self.sources = crawler.settings.getlist('SEARCH_MIDDLEWARE_SOURCES', ['googler'])
+            self.gcse_api_key = crawler.settings.get('SEARCH_MIDDLEWARE_GCSE_API_KEY')
+            self.gcse_cx = crawler.settings.get('SEARCH_MIDDLEWARE_GCSE_CX')
+            self.max_index = crawler.settings.get('SEARCH_MIDDLEWARE_GCSE_MAX_INDEX', 10)
             crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
         else:
             raise NotConfigured('Search Engine is not enabled, check settings values')
@@ -45,8 +45,8 @@ class GoogleSearchMiddleware(object):
         logger.info('Making requests to Google Custom Search')
         
         query_paraments = {
-            'key': self.api_key,
-            'cx': self.custom_search_engine_key,
+            'key': self.cse_api_key,
+            'cx': self.gcse_cx,
             'fields': 'items(cacheId,link,snippet,title),queries(request)',
             'start': 1,
             'filter': 0,
@@ -54,11 +54,16 @@ class GoogleSearchMiddleware(object):
             'sort': 'date',
             'dateRestrict': getattr(spider, 'dateRestrict', 'd1'),
         }
-        search_items_ruls = self.search_urls_via_api_rest(query_paraments)
+        search_items_ruls = []
+        if 'google_rest' in self.sources:
+            search_items_ruls += self.search_via_gcse_api(query_paraments)
+        if 'googler' in self.sources:
+            search_items_ruls += self.search_via_googler(query_paraments)
+        if 'bing'
         logger.debug('search_items_urls: \n%s'%search_items_ruls)
         spider.start_urls = search_items_ruls
     
-    def search_urls_via_api_rest(self, query_paraments):
+    def search_via_gcse_api(self, query_paraments):
         def get_urls(query_paraments, search_items=[], search_items_urls=[]):
             self.stats.inc_value(self.gcse_stats_base%'requests')
             
