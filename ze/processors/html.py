@@ -737,7 +737,8 @@ class ImproveHTML(object):
 
         if spider_name is 'govpa':
             try:
-                selector = '.data'
+                print('\n\nentrou em govpa----------\n')
+                selector = '.texto'
                 for el in html.select(selector):
                     print('++++++++++++++++++',el)
 

@@ -12,6 +12,9 @@ class DiarioDePernambucoSpider(ZeSpider):
             "name": {
                 "selectors": {
                     "css": [
+                        #pra blog
+                        # '.entry-title a::text',
+                        #pra principal
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
@@ -19,7 +22,8 @@ class DiarioDePernambucoSpider(ZeSpider):
                         'div.et_pb_text_align_center::text',
                         #para blog
                         '.entry-title::text',
-                        '.entry-heading a::text'
+                        '.entry-heading a::text',
+
                     ]
                 }
             },
@@ -52,7 +56,9 @@ class DiarioDePernambucoSpider(ZeSpider):
                         '.yellowlight::text',
                         #blog
                         '.author a::text',
-                        '.post-meta > a::text'
+                        '.post-meta > a::text',
+                        # '.author a::attr(title)',
+
                     ]
                 }
             },
@@ -64,7 +70,8 @@ class DiarioDePernambucoSpider(ZeSpider):
                         '[property="article:published_time"]::attr(content)',
                         #para blog
                         '.entry-date::attr(datetime)',
-                        '.date::text'
+                        '.date::text',
+                        '.published::text'
                     ]
                 }
             },
