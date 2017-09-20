@@ -123,6 +123,10 @@ class ParseDate(object):
                 return dateparser.parse(value)
             if spider_name =='sejabixo':
                 return dateparser.parse(value.split('em ')[1])
+            if spider_name =='senado':
+                value = value.split(' - ')[0]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
 
 
                 #GOVERNAMENTAL - ESTADOS
@@ -131,12 +135,18 @@ class ParseDate(object):
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
             if spider_name == 'govgo':
-                value=value.split('publicação:')[1].replace('-','')
+                if '-' in value:
+                    value=value.split('publicação:')[1].replace('-','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
             if spider_name == 'govpa':
                 print('- - - - - - - - - - ', value)
                 # value=value.split('publicação:')[1].replace('-','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
+            if spider_name == 'govpb':
+                value=value.split('Fotos')[0].replace(' - ',' ')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
 
@@ -179,6 +189,9 @@ class ParseDate(object):
                                             .replace('em','')\
                                             .strip(',')\
                                             .replace('às','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name =='senado':
+                value = value.split(' - ')[1].replace('ATUALIZADO EM','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name=='govce':
