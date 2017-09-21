@@ -1,3 +1,6 @@
+# Zé The Scraper
+[![Build Status](https://travis-ci.org/labic/ze-the-scraper.svg?branch=develop)](https://travis-ci.org/labic/ze-the-scraper)
+
 ## Install
 
 - [Install Berkeley DB](http://www.linuxfromscratch.org/blfs/view/7.9/server/db.html)
