@@ -6,6 +6,7 @@ from scrapy.spiderloader import SpiderLoader
 from scrapy.http import Request
 
 import ze
+from ze import utils
 
 
 class ZeSpider(scrapy.Spider):
@@ -25,7 +26,7 @@ class ZeSpider(scrapy.Spider):
 
     def load_item(self, item_def, response):
         def parse_item_ref(item_def, response, spider_name):
-            ItemClass = ze.utils.import_class(item_def.get('item'))
+            ItemClass = utils.import_class(item_def.get('item'))
             item_load = ze.items.ItemLoader(item=ItemClass(), 
                                             response=response, 
                                             spider_name=spider_name)

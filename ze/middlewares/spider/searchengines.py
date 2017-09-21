@@ -106,8 +106,7 @@ class GoogleSearchMiddleware(object):
             unique_search_items = list({v['cacheId']:v for v in search_items}.values())
             return unique_search_items, search_unique_urls
         
-        logger.debug('Making search with Google Custom Search API with configuration: {}'
-                    .format(query_paraments))
+        logger.debug('Making search with Google Custom Search API')
         unique_search_items, unique_urls = get_urls(query_paraments)
         return unique_urls
     
@@ -149,8 +148,7 @@ class GoogleSearchMiddleware(object):
             'print_results': None,
         }
         
-        logger.debug('Making search with Googler lib with configuration: {}'
-                     .format(config))
+        logger.debug('Making search with Googler lib with configuration')
         
         try:
             google_search = GoogleScraper.scrape_with_config(config)
