@@ -16,6 +16,7 @@ NEWSPIDER_MODULE = os.getenv('SPIDER_MODULES', 'ze.spiders')
 COMMANDS_MODULE = os.getenv('COMMANDS_MODULE', 'ze.commands')
 ENVIROMENT = os.getenv('ENVIROMENT', 'development')
 
+LOG_LEVEL = os.getenv('LOG_LEVEL', 'DEBUG')
 DUPEFILTER_DEBUG = True
 
 SPIDERS_AUTH = os.getenv('SPIDERS_AUTH', {'somespider': {'user': 'USER', 'pass': 'PASS'}})
