@@ -6,9 +6,9 @@ python:
 env:
   - LOG_LEVEL=DEBUG
 install:
-  - pip install -r "requirements/$TRAVIS_BRANCH.txt"
+  - pip install -r "requirements/${TRAVIS_BRANCH}.txt"
 script:
   - scrapy settings
   - scrapy list | wc -w
   - scrapy bench
-  - scrapy crawl all -a query="$SEARCH_QUERY" -a dateRestrict="$SEARCH_PERIOD" \ -s LOG_LEVEL="$LOG_LEVEL"
+  - scrapy crawl all -a query="${SEARCH_QUERY}" -a dateRestrict="${SEARCH_PERIOD}" \ -s LOG_LEVEL="${LOG_LEVEL}"
