@@ -45,7 +45,6 @@ class GoogleSearchMiddleware(object):
         search_items_ruls = []
         
         if 'gcse_api' in self.sources:
-            logger.info('Making search with Google Custom Search API')
             query_paraments = {
                 'key': self.gcse_api_key,
                 'cx': self.gcse_cx,
@@ -58,11 +57,12 @@ class GoogleSearchMiddleware(object):
             }
             search_items_ruls += self.search_via_gcse_api(query_paraments)
         if 'googler' in self.sources:
-            logger.info('Making search with Googler lib')
             query_paraments = {
                 'q': spider.query,
                 'sort': 'date',
                 'dateRestrict': None,
+                'results_per_page': 25,
+                'num_pages': 4,
             }
             search_items_ruls += self.search_via_googler(query_paraments)
         
@@ -106,6 +106,8 @@ class GoogleSearchMiddleware(object):
             unique_search_items = list({v['cacheId']:v for v in search_items}.values())
             return unique_search_items, search_unique_urls
         
+        logger.debug('Making search with Google Custom Search API with configuration: {}'
+                    .format(query_paraments))
         unique_search_items, unique_urls = get_urls(query_paraments)
         return unique_urls
     
@@ -138,7 +140,7 @@ class GoogleSearchMiddleware(object):
             'keywords': [query_paraments['q']],
             'google_search_url': google_search_url % dateRestrict,
             'num_results_per_page': query_paraments.get('results_per_page', 25),
-            'num_pages_for_keyword': query_paraments.get('pages', 4),
+            'num_pages_for_keyword': query_paraments.get('num_pages', 4),
             'num_workers': 2,
             'search_engines': ['google',],
             'search_type': 'normal',
@@ -147,8 +149,8 @@ class GoogleSearchMiddleware(object):
             'print_results': None,
         }
         
-        logger.debug('Google Search scrapping start with this configuration: {}'
-                    .format(config))
+        logger.debug('Making search with Googler lib with configuration: {}'
+                     .format(config))
         
         try:
             google_search = GoogleScraper.scrape_with_config(config)
@@ -159,12 +161,14 @@ class GoogleSearchMiddleware(object):
                 urls_without_fix= [r.link for r in serp.links]
                 urls = [fix_urls(r.link) for r in serp.links]
             
-            logger.debug('Google Search fixed links successfully extracted with query "{}": {:d} links extracted'.format(
-                query_paraments['query'], len(urls)))
-            logger.debug('Google Search links without fix successfully extracted with query "{}":\n{}'.format(
-                query_paraments['query'], urls_without_fix))
-            logger.debug('List of link extracted from Google Search with the query "{}":\n{}'.format(
-                query_paraments['query'], urls))
+            logger.debug(('Google Search fixed links successfully extracted with ' 
+                          'query "{}": {:d} links extracted').format(query_paraments['q'], 
+                                                                     len(urls)))
+            logger.debug(('Google Search links without fix successfully extracted ' 
+                          'with query "{}":\n{}').format(query_paraments['q'], 
+                                                         urls_without_fix))
+            logger.debug(('List of link extracted from Google Search with the ' 
+                          'query "{}":\n{}').format(query_paraments['q'], urls))
             
             return urls
         except GoogleScraper.GoogleSearchError as e:

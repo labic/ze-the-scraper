@@ -3,7 +3,16 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+env:
+  - LOG_LEVEL=DEBUG
 install:
   - pip install -r requirements/$TRAVIS_BRANCH.txt
 script:
-  - pytest # or py.test for Python versions 3.5 and below
+  - scrapy settings
+  - scrapy list | wc -w
+  - scrapy bench
+  - | scrapy crawl all -a search="$SEARCH_ENGINE" \
+                     -a query="$SEARCH_QUERY" \
+                     -a regex="$SCORE_REGEX" \
+                     -a dateRestrict="$SEARCH_PERIOD" \
+                     -s LOG_LEVEL="$LOG_LEVEL"
