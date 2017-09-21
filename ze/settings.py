@@ -94,7 +94,7 @@ DROP_ITEM_PIPELINE_ENABLED = os.getenv('DROP_ITEM_PIPELINE_ENABLED', False)
 DROP_ITEM_PIPELINE_VALIDATIONS = os.getenv('DROP_ITEM_PIPELINE_VALIDATIONS', 'not_match_regex, empty_required_fields')
 # MongoDB pipeline configuration
 MONGO_ENABLED = os.getenv('MONGO_ENABLED', False)
-MONGO_URI = os.getenv('MONGO_URI', 'mongo://localhost:2700/scrapy')
+MONGO_URI = os.getenv('MONGO_URI', 'mongodb://127.0.0.1:27017/ze-the-scraper')
 # Google Cloud BigQuery pipeline configuration
 GOOGLE_CLOUD_BIGQUERY_ENABLED = os.getenv('GOOGLE_CLOUD_BIGQUERY_ENABLED', False)
 GOOGLE_CLOUD_BIGQUERY_DATASET  = os.getenv('GOOGLE_CLOUD_BIGQUERY_DATASET', None)
