@@ -50,20 +50,6 @@ GOOGLE_CLOUD_ENABLED = os.getenv('GOOGLE_CLOUD_ENABLED', False)
 # Google Cloud Application Credentions used for many pipelines
 GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON = os.getenv('GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON', None)
 
-FEED_EXPORTERS = {
-    'avro': 'ze.exporters.AvroItemExporter',
-}
-
-# Enable or disable spider middlewares
-# See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-DELTAFETCH_ENABLED = os.getenv('DELTAFETCH_ENABLED', False)
-SEARCH_MIDDLEWARE_ENABLED = os.getenv('SEARCH_MIDDLEWARE_ENABLED', True)
-# Search source gcse_api and googler. Ex: SEARCH_MIDDLEWARE_SOURCES='gcse_api,googler'
-SEARCH_MIDDLEWARE_SOURCES = os.getenv('SEARCH_MIDDLEWARE_SOURCES', 'googler')
-SEARCH_MIDDLEWARE_GCSE_API_KEY = os.getenv('SEARCH_MIDDLEWARE_GCSE_API_KEY', None)
-SEARCH_MIDDLEWARE_GCSE_CX = os.getenv('SEARCH_MIDDLEWARE_GCSE_CX', None)
-SEARCH_MIDDLEWARE_GCSE_MAX_INDEX = os.getenv('SEARCH_MIDDLEWARE_GCSE_MAX_INDEX', None)
-
 SPIDER_MIDDLEWARES = {
     'ze.middlewares.spider.searchengines.GoogleSearchMiddleware': 40,
     'scrapy.spidermiddlewares.httperror.HttpErrorMiddleware': 50,
@@ -73,6 +59,15 @@ SPIDER_MIDDLEWARES = {
     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
     'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
 }
+# Enable or disable spider middlewares
+# See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+DELTAFETCH_ENABLED = os.getenv('DELTAFETCH_ENABLED', False)
+SEARCH_MIDDLEWARE_ENABLED = os.getenv('SEARCH_MIDDLEWARE_ENABLED', True)
+# Search source gcse_api and googler. Ex: SEARCH_MIDDLEWARE_SOURCES='gcse_api,googler'
+SEARCH_MIDDLEWARE_SOURCES = os.getenv('SEARCH_MIDDLEWARE_SOURCES', 'googler')
+SEARCH_MIDDLEWARE_GCSE_API_KEY = os.getenv('SEARCH_MIDDLEWARE_GCSE_API_KEY', None)
+SEARCH_MIDDLEWARE_GCSE_CX = os.getenv('SEARCH_MIDDLEWARE_GCSE_CX', None)
+SEARCH_MIDDLEWARE_GCSE_MAX_INDEX = os.getenv('SEARCH_MIDDLEWARE_GCSE_MAX_INDEX', None)
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
