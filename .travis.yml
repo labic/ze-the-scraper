@@ -11,8 +11,4 @@ script:
   - scrapy settings
   - scrapy list | wc -w
   - scrapy bench
-  - | scrapy crawl all -a search="$SEARCH_ENGINE" \
-                     -a query="$SEARCH_QUERY" \
-                     -a regex="$SCORE_REGEX" \
-                     -a dateRestrict="$SEARCH_PERIOD" \
-                     -s LOG_LEVEL="$LOG_LEVEL"
+  - scrapy crawl all -a query="$SEARCH_QUERY" -a dateRestrict="$SEARCH_PERIOD" \ -s LOG_LEVEL="$LOG_LEVEL"
