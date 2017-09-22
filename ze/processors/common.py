@@ -44,8 +44,6 @@ class ParseDate(object):
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
 
-        print('\n\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n')
-
         if spider_name == 'r7':
             value=value.split('(')[1].split(')')[0]
 
@@ -125,19 +123,39 @@ class ParseDate(object):
                 return dateparser.parse(value)
             if spider_name =='sejabixo':
                 return dateparser.parse(value.split('em ')[1])
+            if spider_name =='senado':
+                value = value.split(' - ')[0]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
 
 
                 #GOVERNAMENTAL - ESTADOS
+            if spider_name == 'govac':
+                if 'Criado' in value:
+                    value=value.split(',')[1]
+                else:
+                    value=value.split(',')[0]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
             if spider_name == 'govce':
                 value=value.split(',')[0]
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
             if spider_name == 'govgo':
-                value=value.split('publicação:')[1].replace('-','')
+                if '-' in value:
+                    value=value.split('publicação:')[1].replace('-','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
-            if spider_name =='govpa':
-                print('-----------------------',value)
+            if spider_name == 'govpa':
+                print('- - - - - - - - - - ', value)
+                # value=value.split('publicação:')[1].replace('-','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
+            if spider_name == 'govpb':
+                value=value.split('Fotos')[0].replace(' - ',' ')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
 
 
         if (self.field == 'dateModified'):
@@ -179,6 +197,14 @@ class ParseDate(object):
                                             .strip(',')\
                                             .replace('às','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name =='senado':
+                value = value.split(' - ')[1].replace('ATUALIZADO EM','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            if spider_name=='govce':
+                value=value.split('em')[1]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
 
         value = value.replace('Atualizado:', '') \
                      .replace('Atualizado', '') \

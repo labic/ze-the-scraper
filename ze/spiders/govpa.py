@@ -16,7 +16,8 @@ class GovernoParaSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-title::text'
+                        '.entry-title::text',
+                        '.conteudo_interna h3::text'
                     ]
                 }
             },
@@ -49,6 +50,7 @@ class GovernoParaSpider(ZeSpider):
                         '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
+                        '.texto p:last-child::text'
                     ]
                 }
             },
@@ -58,7 +60,11 @@ class GovernoParaSpider(ZeSpider):
                         '[itemprop=datePublished]::attr(content)',
                         '.entry-date::text',
                         '.text-date::attr(datetime)',
+                        '.data:first-child::text',
+                        '.conteudo_interna .col-md-9 .data::text',
+                        # "meta[property='og:title']::attr(content)",
                         '.data::text'
+
                     ]
                 }
             },
@@ -74,7 +80,8 @@ class GovernoParaSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.noticia',
-                        'div.clear'
+                        'div.clear',
+                        '.texto'
                     ]
                 }
             },

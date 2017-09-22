@@ -481,14 +481,12 @@ class ImproveHTML(object):
             try:
                 selector='.content-media__container'
                 for el in html.select(selector):
-                    print( len(el.select("img")))
                     fg = html.new_tag('figure')
                     fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
 
                     fc = html.new_tag('figcaption')
                     fc.string = el.select('.content-media__description span')[0].get_text()
                     fg.append(fc)
-                    print('-------------------------oiiii')
 
                     el.replace_with(fg)
 
@@ -689,13 +687,14 @@ class ImproveHTML(object):
 
         # não consegue pegar os seletores de imagem, nem o próprio img, talvez seja carreado a parte
         if spider_name is 'govac':
+            ac_decompose=[  'h2','.article-info',
+                            '.gallery-size-thumbnail',
+                            '[id*=attachment]'
+                            ]
             try:
-                selector = '[id*=attachment]'
-                for el in html.select(selector):
-                    el.decompose()
-                selector='.gallery-size-thumbnail'
-                for el in html.select(selector):
-                    el.decompose()
+                for selector in ac_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
@@ -706,7 +705,10 @@ class ImproveHTML(object):
                 selector = '.gallery'
                 for el in html.select(selector):
                     el.decompose()
-                selector='img'
+                # for el in html.select('.body-part p'):
+                    # print(el.get_text())
+
+                # selector='img'
                 # for el in html.select(selector):
                 #     img_src=el['src']
                 #     if 'es.gov.br' in img_src:
@@ -734,6 +736,17 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'govpa':
+            try:
+                print('\n\nentrou em govpa----------\n')
+                selector = '.texto'
+                for el in html.select(selector):
+                    print('++++++++++++++++++',el)
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
         # SOLUÇÃO TEMPORÁRIA ENQUANTO NÃO RESOLVE O PROBLEMA DAS IMAGENS
         if spider_name is 'govma':
             try:
@@ -744,8 +757,98 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+        if spider_name is 'govce':
+            try:
+                selector = 'script'
+                for el in html.select(selector):
+                    el.decompose()
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+        if spider_name is 'govba':
+            try:
+                selector = 'img'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el['src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.parent.get_text()
+                    fg.append(fc)
+
+                    el.parent.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
 
+        if spider_name is 'govpb':
+            try:
+                selector = '.gallery'
+                for el in html.select(selector):
+                    # print('--------------GOVPB----------------------',el)
+
+                    # section = html.new_tag('section')
+
+
+                    # for gall_item in el.select('.gallery-item'):
+
+                    #     # print('--------------GOVPB----------------------',gall_item)
+                    #     gall_img =gall_item.select('img')[0]
+                    #     fg = section.new_tag('figure')
+                    #     fg.append(section.new_tag('img', src=gall_img['src']))
+                    #     # fc = section.new_tag('figcaption')
+                    #     # fc.string = el.parent.select('em')[0].string
+                    #     # fg.append(fc)
+                    #     # el.parent.select('em')[0].decompose()
+
+                    # el.replace_with(section)
+                    el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        if spider_name is 'govpe':
+            pe_decompose=[  '.article-tools',
+                            '.article-header',
+                            ]
+            try:
+                for selector in pe_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+            try:
+                selector='span'
+                for el in html.select(selector):
+                    el.unwrap()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+            try:
+                selector='img'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src='http://www.pe.gov.br'+el['src']))
+                    el.replace_with(fg)
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+        if spider_name is 'govrj':
+            pe_decompose=[  'h1',
+                            '.menor',
+                            ]
+            try:
+                for selector in pe_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
         # all spiders
         try:
@@ -805,6 +908,8 @@ class ImproveHTML(object):
 
         [el.unwrap() for el in html.select(', '.join(el_to_uwrap))]
 
+
+
         el_to_decompose = loader_context.get('el_to_decompose')
         if not el_to_decompose:
             el_to_decompose = {
@@ -828,7 +933,8 @@ class ImproveHTML(object):
                     '#comentarios',
                     '.compartilhe',
                     '.compartilhar',
-                    '.clear',
+                    '.css_buttons1',
+                    # '.clear',
                     '[data-beacon]',
                     '[data-block-type="related-articles"]',
                     '#liveblog-container',
@@ -847,10 +953,10 @@ class ImproveHTML(object):
                     '.bbccom_slot',
                     'bgsound',
                     'blink',
-                    'body',
+                    # 'body',
                     'button',
                     '.comentarios',
-                    '.clearfix',
+                    # '.clearfix',
                     'dir',
                     '#elpais_gpt-INTEXT',
                     'embed',
@@ -919,7 +1025,7 @@ class ImproveHTML(object):
         [el.decompose() for el in html.select('div') \
             if len(el.get_text()) == 0 or el.get_text() == '&nbsp;']
         [el.decompose() for el in html.select('p') \
-            if len(el.get_text()) == 0 or el.get_text() == '&nbsp;']
+            if len(el.contents) == 0 or el.get_text() == '&nbsp;']
 
         [el.decompose() for el in html.select('span') \
             if len(el.contents) == 0]

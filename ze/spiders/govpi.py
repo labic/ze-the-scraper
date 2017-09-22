@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovernoMinasGeraisSpider(ZeSpider):
+class GovernoPiauiSpider(ZeSpider):
 
-    name = 'govmg'
-    allowed_domains = ['mg.gov.br']
+    name = 'govpi'
+    allowed_domains = ['pi.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -16,20 +16,36 @@ class GovernoMinasGeraisSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-title::text'
+                        '.entry-title::text',
+                        '.conteudo_interna h3::text',
+                        'h1 a::text'
                     ]
                 }
             },
             "image": {
-                "selectors": {
-                    "css": [
-                        "meta[property='og:description']::attr(content)",
-                        "meta[name=description]::attr(content)",
-                        'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"]::attr(src)',
-                        '.lazy::attr("data-lazy-src")'
-                    ]
-                }
+                    # "url": {
+                    #     "selectors": {
+                    #         "css": [
+                    #             "meta[property='og:description']::attr(content)",
+                    #             "meta[name=description]::attr(content)",
+                    #             'meta[property="og:image"]::attr(content)',
+                    #             '[itemprop="image"]::attr(src)',
+                    #             '.lazy::attr("data-lazy-src")',
+                    #             '.article-description img::attr(src)'                            ]
+                    #     },
+                    #     "contexts": {
+                    #         "format": "http://www.pe.gov.br{}"
+                    #     }
+                    # }
+                    "selectors": {
+                        "css": [
+                            "meta[property='og:description']::attr(content)",
+                            "meta[name=description]::attr(content)",
+                            'meta[property="og:image"]::attr(content)',
+                            '[itemprop="image"]::attr(src)',
+                            '.lazy::attr("data-lazy-src")',
+                            '.text_post_section img::attr(src)'                            ]
+                    },
             },
             "description": {
                 "selectors": {
@@ -39,7 +55,8 @@ class GovernoMinasGeraisSpider(ZeSpider):
                         '[name="description"]::attr(content)',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        '.entry-content blockquote p::text'
+                        '.entry-content blockquote p::text',
+                        '[property="og:description"]::attr(content)'
                     ]
                 }
             },
@@ -49,6 +66,7 @@ class GovernoMinasGeraisSpider(ZeSpider):
                         '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
+                        '.texto p:last-child::text'
                     ]
                 }
             },
@@ -57,7 +75,10 @@ class GovernoMinasGeraisSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.entry-date::text',
-                        '.text-date::attr(datetime)'
+                        '.text-date::attr(datetime)',
+                        '.data:first-child::text',
+                        '.conteudo_interna .col-md-9 .data::text',
+                        '.event_date::text'
                     ]
                 }
             },
@@ -74,7 +95,8 @@ class GovernoMinasGeraisSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.noticia',
                         'div.clear',
-                        'article main'
+                        '#content',
+                        '.text_post_section'
                     ]
                 }
             },

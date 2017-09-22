@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovernoEspiritoSantoSpider(ZeSpider):
+class GovernoPernambucoSpider(ZeSpider):
 
-    name = 'goves'
-    allowed_domains = ['es.gov.br']
+    name = 'govpe'
+    allowed_domains = ['pe.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -16,29 +16,39 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-title::text'
+                        '.entry-title::text',
+                        '.conteudo_interna h3::text',
+                        'h1 a::text'
                     ]
                 }
             },
             "image": {
-                "selectors": {
-                    "css": [
-                        "meta[property='og:description']::attr(content)",
-                        "meta[name=description]::attr(content)",
-                        'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"]::attr(src)',
-                        '.lazy::attr("data-lazy-src")'
-                    ]
-                }
+                    "url": {
+                        "selectors": {
+                            "css": [
+                                "meta[property='og:description']::attr(content)",
+                                "meta[name=description]::attr(content)",
+                                'meta[property="og:image"]::attr(content)',
+                                '[itemprop="image"]::attr(src)',
+                                '.lazy::attr("data-lazy-src")',
+                                '.article-description img::attr(src)'                            ]
+                        },
+                        "contexts": {
+                            "format": "http://www.pe.gov.br{}"
+                        }
+                    }
+
             },
             "description": {
                 "selectors": {
                     "css": [
                         '[itemprop=description]::attr(content)',
                         '[itemprop=description]::text',
+                        '[name="description"]::attr(content)',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        '.entry-content blockquote p::text'
+                        '.entry-content blockquote p::text',
+                        '[property="og:description"]::attr(content)'
                     ]
                 }
             },
@@ -48,6 +58,7 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                         '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
+                        '.texto p:last-child::text'
                     ]
                 }
             },
@@ -55,7 +66,12 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.published::text'
+                        '.entry-date::text',
+                        '.text-date::attr(datetime)',
+                        '.data:first-child::text',
+                        '.conteudo_interna .col-md-9 .data::text',
+                        '.author time::attr(pubdate)',
+
                     ]
                 }
             },
@@ -70,8 +86,10 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        # '.noticia',
-                        '.body-part'
+                        '.noticia',
+                        'div.clear',
+                        '#content',
+                        'article.article'
                     ]
                 }
             },
@@ -80,7 +98,7 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[name="keywords"]::attr(content)',
                     ]
                 }
             }

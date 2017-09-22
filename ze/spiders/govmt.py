@@ -17,7 +17,6 @@ class GovernoMatoGrossoSpider(ZeSpider):
                         '[itemprop=headline]::text',
                         '.title-post::text',
                         '.header-title span::text',
-                        '.news-tit::text'
                     ]
                 }
             },
@@ -75,7 +74,7 @@ class GovernoMatoGrossoSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
-                        '.full-content'
+                        '.full-content',
                     ]
                 }
             },

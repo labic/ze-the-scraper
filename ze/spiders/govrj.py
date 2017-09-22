@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovernoEspiritoSantoSpider(ZeSpider):
+class GovernoRiodeJaneiroSpider(ZeSpider):
 
-    name = 'goves'
-    allowed_domains = ['es.gov.br']
+    name = 'govrj'
+    allowed_domains = ['rj.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -16,29 +16,34 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-title::text'
+                        '.entry-title::text',
+                        '.conteudo_interna h3::text',
+                        'h1 a::text',
+                        '#interna_noticia_conteudo h1:last-child::text'
                     ]
                 }
             },
             "image": {
-                "selectors": {
-                    "css": [
-                        "meta[property='og:description']::attr(content)",
-                        "meta[name=description]::attr(content)",
-                        'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"]::attr(src)',
-                        '.lazy::attr("data-lazy-src")'
-                    ]
-                }
+                    "selectors": {
+                        "css": [
+                            "meta[property='og:description']::attr(content)",
+                            "meta[name=description]::attr(content)",
+                            'meta[property="og:image"]::attr(content)',
+                            '[itemprop="image"]::attr(src)',
+                            '.lazy::attr("data-lazy-src")',
+                            '.text_post_section img::attr(src)'                            ]
+                    },
             },
             "description": {
                 "selectors": {
                     "css": [
                         '[itemprop=description]::attr(content)',
                         '[itemprop=description]::text',
+                        '[name="description"]::attr(content)',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        '.entry-content blockquote p::text'
+                        '.entry-content blockquote p::text',
+                        '[property="og:description"]::attr(content)'
                     ]
                 }
             },
@@ -48,6 +53,7 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                         '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
+                        '.texto p:last-child::text'
                     ]
                 }
             },
@@ -55,14 +61,19 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.published::text'
+                        '.entry-date::text',
+                        '.text-date::attr(datetime)',
+                        '.data:first-child::text',
+                        '.conteudo_interna .col-md-9 .data::text',
+                        '.event_date::text'
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        '[itemprop=dateModified]::attr(content)'
+                        '[itemprop=dateModified]::attr(content)',
+                        '.menor::text'
                     ]
                 }
             },
@@ -70,8 +81,10 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        # '.noticia',
-                        '.body-part'
+                        '.noticia',
+                        'div.clear',
+                        '#interna_noticia_conteudo .listacor4',
+                        '.text_post_section'
                     ]
                 }
             },
@@ -80,7 +93,7 @@ class GovernoEspiritoSantoSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[name="keywords"]::attr(content)',
                     ]
                 }
             }

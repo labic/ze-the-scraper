@@ -15,7 +15,8 @@ class GovernoGoiasSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '#tituloconteudo::text'
+                        '#tituloconteudo::text',
+                        '.single-titulo::text'
                     ]
                 }
             },
@@ -37,7 +38,8 @@ class GovernoGoiasSpider(ZeSpider):
                         '[itemprop=description]::text',
                         '.entry-content h2::text',
                         '.linha-fina::text',
-                        '.entry-content blockquote p::text'
+                        '.entry-content blockquote p::text',
+                        '[name="description"]::attr(content)'
                     ]
                 }
             },
@@ -55,7 +57,8 @@ class GovernoGoiasSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.published::text',
-                        '#textoresumo::text'
+                        '#textoresumo::text',
+                        '.single-header em::text',
                     ]
                 }
             },
@@ -70,7 +73,8 @@ class GovernoGoiasSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '#texto_content'
+                        '#texto_content',
+                        '.content section'
                     ]
                 }
             },
@@ -79,7 +83,8 @@ class GovernoGoiasSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[onclick*=montaURL]::text',
+                        '[name="keywords"]::attr(content)'
                     ]
                 }
             }
