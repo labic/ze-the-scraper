@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-
+from importlib import import_module
+import traceback
 import json
 import requests
 import logging; logger = logging.getLogger(__name__)
+
 from bs4 import BeautifulSoup, Comment
 
 
@@ -12,8 +14,22 @@ class ImproveHTML(object):
 
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
+        improve_html_locations = loader_context.get('improve_html')
         html = BeautifulSoup(value, 'html.parser')
-
+        
+        try:
+            for improve_html in improve_html_locations:
+                module_name, cls_name, func_name = improve_html.rsplit('.', 2)
+                module = import_module(module_name)
+                cls = getattr(module, cls_name)
+                
+                html, exceptions = getattr(cls, func_name)(html, spider_name)
+                if len(exceptions) > 0:
+                    for e in exceptions:
+                        logger.warn(e)
+        except Exception as e:
+            logger.warn(e)
+        
         if spider_name is 'cartacapital':
             try:
                 selector = '.image-inline'
@@ -113,49 +129,6 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
-
-        if spider_name is 'g1':
-            try:
-                selector = '[data-block-type="backstage-photo"]'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    img_src = el.select_one('img.content-media__image').get('data-src')
-                    fg.append(html.new_tag('img', src=img_src))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select_one('.content-media__description__caption').get_text()
-                    fg.append(fc)
-
-                    el.replace_with(fg)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
-
-            try:
-                selector = '[data-block-type="backstage-video"]'
-                for el in html.select(selector):
-                    video_id = el.select('.content-video__placeholder')[0]['data-video-id']
-
-                    fg = html.new_tag('figure')
-                    fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select('[itemprop="description"]')[0].get_text() #antes tava itemprop='caption'
-                    fg.append(fc)
-                    a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
-                    a.append(fg)
-
-                    el.replace_with(a)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
-            try:
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
-
-
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
-
 
         if spider_name is 'estadao':
             try:
