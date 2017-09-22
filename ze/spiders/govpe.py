@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovernoParaibaSpider(ZeSpider):
+class GovernoPernambucoSpider(ZeSpider):
 
-    name = 'govpb'
-    allowed_domains = ['pb.gov.br']
+    name = 'govpe'
+    allowed_domains = ['pe.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -17,7 +17,8 @@ class GovernoParaibaSpider(ZeSpider):
                         '[itemprop=headline]::text',
                         '.title-post::text',
                         '.entry-title::text',
-                        '.conteudo_interna h3::text'
+                        '.conteudo_interna h3::text',
+                        'h1 a::text'
                     ]
                 }
             },
@@ -63,8 +64,7 @@ class GovernoParaibaSpider(ZeSpider):
                         '.text-date::attr(datetime)',
                         '.data:first-child::text',
                         '.conteudo_interna .col-md-9 .data::text',
-                        # "meta[property='og:title']::attr(content)",
-                        '.data::text'
+                        '.author time::attr(pubdate)',
 
                     ]
                 }

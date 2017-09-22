@@ -130,6 +130,13 @@ class ParseDate(object):
 
 
                 #GOVERNAMENTAL - ESTADOS
+            if spider_name == 'govac':
+                if 'Criado' in value:
+                    value=value.split(',')[1]
+                else:
+                    value=value.split(',')[0]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
             if spider_name == 'govce':
                 value=value.split(',')[0]
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
