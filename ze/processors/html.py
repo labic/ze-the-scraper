@@ -687,13 +687,14 @@ class ImproveHTML(object):
 
         # não consegue pegar os seletores de imagem, nem o próprio img, talvez seja carreado a parte
         if spider_name is 'govac':
+            ac_decompose=[  'h2','.article-info',
+                            '.gallery-size-thumbnail',
+                            '[id*=attachment]'
+                            ]
             try:
-                selector = '[id*=attachment]'
-                for el in html.select(selector):
-                    el.decompose()
-                selector='.gallery-size-thumbnail'
-                for el in html.select(selector):
-                    el.decompose()
+                for selector in ac_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
@@ -781,6 +782,31 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
 
+        if spider_name is 'govpb':
+            try:
+                selector = '.gallery'
+                for el in html.select(selector):
+                    # print('--------------GOVPB----------------------',el)
+
+                    # section = html.new_tag('section')
+
+
+                    # for gall_item in el.select('.gallery-item'):
+
+                    #     # print('--------------GOVPB----------------------',gall_item)
+                    #     gall_img =gall_item.select('img')[0]
+                    #     fg = section.new_tag('figure')
+                    #     fg.append(section.new_tag('img', src=gall_img['src']))
+                    #     # fc = section.new_tag('figcaption')
+                    #     # fc.string = el.parent.select('em')[0].string
+                    #     # fg.append(fc)
+                    #     # el.parent.select('em')[0].decompose()
+
+                    # el.replace_with(section)
+                    el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
 
         # all spiders
@@ -864,6 +890,7 @@ class ImproveHTML(object):
                     '#comentarios',
                     '.compartilhe',
                     '.compartilhar',
+                    '.css_buttons1',
                     # '.clear',
                     '[data-beacon]',
                     '[data-block-type="related-articles"]',

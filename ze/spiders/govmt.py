@@ -74,7 +74,7 @@ class GovernoMatoGrossoSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
-                        '.full-content'
+                        '.full-content',
                     ]
                 }
             },

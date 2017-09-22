@@ -17,7 +17,9 @@ class GovAcreSpider(ZeSpider):
                         '[itemprop=headline]::text',
                         '.materia h1::text',
                         'h3.tituloMateria::text',
-                        '.page-title::text'
+                        '.page-title::text',
+                        #Secretaria de educação
+                        'title::text',
                     ]
                 }
             },
@@ -27,6 +29,9 @@ class GovAcreSpider(ZeSpider):
                         'meta[property="og:image"]::attr(content)',
                         '[itemprop="image"] img::attr(src)',
                         '.conteudoMateria figure img::attr(src)',
+                        'article.item-page p img::attr(src)',
+                        # 'title::text',
+
                     ]
                 }
             },
@@ -45,7 +50,8 @@ class GovAcreSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
-                        '.autor-post ::text'
+                        '.autor-post ::text',
+                        '.createdby::text   '
                     ]
                 }
             },
@@ -54,7 +60,8 @@ class GovAcreSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
-                        '.data-post::text'
+                        '.data-post::text',
+                        '.create::text'
                     ]
                 }
             },
@@ -72,7 +79,8 @@ class GovAcreSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '[class=card-content]'
+                        '[class=card-content]',
+                        'article.item-page'
                     ]
                 }
             },
