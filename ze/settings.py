@@ -43,12 +43,15 @@ TELNETCONSOLE_ENABLED = os.getenv('TELNETCONSOLE_ENABLED', False)
 # Enable or disable extensions
 EXTENSIONS={
     'ze.extensions.google.GoogleCloud': 10,
+    'scrapy_jsonrpc.webservice.WebService': 500,
 }
 # ROTATING_PROXY_LIST = ze.utils.file.load_lines('./proxies-list.txt')
 # Google Cloud Application
 GOOGLE_CLOUD_ENABLED = os.getenv('GOOGLE_CLOUD_ENABLED', False)
 # Google Cloud Application Credentions used for many pipelines
 GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON = os.getenv('GOOGLE_CLOUD_APPLICATION_CREDENTIALS_JSON', None)
+JSONRPC_ENABLED=False
+JSONRPC_PORT=6080
 
 SPIDER_MIDDLEWARES = {
     'ze.middlewares.spider.searchengines.GoogleSearchMiddleware': 40,
