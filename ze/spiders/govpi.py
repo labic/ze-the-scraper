@@ -2,10 +2,10 @@
 from . import ZeSpider
 
 
-class GovernoPernambucoSpider(ZeSpider):
+class GovernoPiauiSpider(ZeSpider):
 
-    name = 'govpe'
-    allowed_domains = ['pe.gov.br']
+    name = 'govpi'
+    allowed_domains = ['pi.gov.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -23,21 +23,29 @@ class GovernoPernambucoSpider(ZeSpider):
                 }
             },
             "image": {
-                    "url": {
-                        "selectors": {
-                            "css": [
-                                "meta[property='og:description']::attr(content)",
-                                "meta[name=description]::attr(content)",
-                                'meta[property="og:image"]::attr(content)',
-                                '[itemprop="image"]::attr(src)',
-                                '.lazy::attr("data-lazy-src")',
-                                '.article-description img::attr(src)'                            ]
-                        },
-                        "contexts": {
-                            "format": "http://www.pe.gov.br{}"
-                        }
-                    }
-
+                    # "url": {
+                    #     "selectors": {
+                    #         "css": [
+                    #             "meta[property='og:description']::attr(content)",
+                    #             "meta[name=description]::attr(content)",
+                    #             'meta[property="og:image"]::attr(content)',
+                    #             '[itemprop="image"]::attr(src)',
+                    #             '.lazy::attr("data-lazy-src")',
+                    #             '.article-description img::attr(src)'                            ]
+                    #     },
+                    #     "contexts": {
+                    #         "format": "http://www.pe.gov.br{}"
+                    #     }
+                    # }
+                    "selectors": {
+                        "css": [
+                            "meta[property='og:description']::attr(content)",
+                            "meta[name=description]::attr(content)",
+                            'meta[property="og:image"]::attr(content)',
+                            '[itemprop="image"]::attr(src)',
+                            '.lazy::attr("data-lazy-src")',
+                            '.text_post_section img::attr(src)'                            ]
+                    },
             },
             "description": {
                 "selectors": {
@@ -70,8 +78,7 @@ class GovernoPernambucoSpider(ZeSpider):
                         '.text-date::attr(datetime)',
                         '.data:first-child::text',
                         '.conteudo_interna .col-md-9 .data::text',
-                        '.author time::attr(pubdate)',
-
+                        '.event_date::text'
                     ]
                 }
             },
@@ -89,7 +96,7 @@ class GovernoPernambucoSpider(ZeSpider):
                         '.noticia',
                         'div.clear',
                         '#content',
-                        'article.article'
+                        '.text_post_section'
                     ]
                 }
             },

@@ -808,6 +808,47 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'govpe':
+            pe_decompose=[  '.article-tools',
+                            '.article-header',
+                            ]
+            try:
+                for selector in pe_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+            try:
+                selector='span'
+                for el in html.select(selector):
+                    el.unwrap()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+            try:
+                selector='img'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src='http://www.pe.gov.br'+el['src']))
+                    el.replace_with(fg)
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+        if spider_name is 'govrj':
+            pe_decompose=[  'h1',
+                            '.menor',
+                            ]
+            try:
+                for selector in pe_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
         # all spiders
         try:
@@ -866,6 +907,8 @@ class ImproveHTML(object):
             ]
 
         [el.unwrap() for el in html.select(', '.join(el_to_uwrap))]
+
+
 
         el_to_decompose = loader_context.get('el_to_decompose')
         if not el_to_decompose:
@@ -982,7 +1025,7 @@ class ImproveHTML(object):
         [el.decompose() for el in html.select('div') \
             if len(el.get_text()) == 0 or el.get_text() == '&nbsp;']
         [el.decompose() for el in html.select('p') \
-            if len(el.get_text()) == 0 or el.get_text() == '&nbsp;']
+            if len(el.contents) == 0 or el.get_text() == '&nbsp;']
 
         [el.decompose() for el in html.select('span') \
             if len(el.contents) == 0]
