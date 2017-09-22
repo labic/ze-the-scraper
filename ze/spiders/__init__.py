@@ -21,6 +21,7 @@ class ZeSpider(scrapy.Spider):
             yield Request(url, dont_filter=False)
 
     def parse(self, response):
+        # TODO: fix this
         for item_ref in self.items_refs:
             yield self.load_item(item_ref, response)
 
