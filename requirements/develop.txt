@@ -1,5 +1,6 @@
 setuptools==35.0.2
 Pillow==4.2.1
+awesome-slugify==1.6.5
 beautifulsoup4==4.6.0
 boto==2.48
 croniter==0.3.16
