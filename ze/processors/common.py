@@ -122,7 +122,7 @@ class ParseDate(object):
             if spider_name =='sbt':
                 return dateparser.parse(value)
             if spider_name =='sejabixo':
-                return dateparser.parse(value.split('em ')[1])
+                return dateparser.parse(value.split('em')[1])
             if spider_name =='senado':
                 value = value.split(' - ')[0]
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})

@@ -130,6 +130,52 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'g1':
+            try:
+                selector = '[data-block-type="backstage-photo"]'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    img_src = el.select_one('img.content-media__image').get('data-src')
+                    fg.append(html.new_tag('img', src=img_src))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select_one('.content-media__description__caption').get_text()
+                    fg.append(fc)
+
+                    el.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+            try:
+                selector = '[data-block-type="backstage-video"]'
+                for el in html.select(selector):
+                    video_id = el.select('.content-video__placeholder')[0]['data-video-id']
+
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select('[itemprop="description"]')[0].get_text() #antes tava itemprop='caption'
+                    fg.append(fc)
+                    a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
+                    a.append(fg)
+
+                    el.replace_with(a)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+
+                for el in html.select('svg'):
+                    el.decompose()
+
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
         if spider_name is 'estadao':
             try:
                 selector = '[data-config]'
@@ -544,9 +590,36 @@ class ImproveHTML(object):
                 for el in html.select('a'):
                     el.replace_with(el.get_text())
 
+                selector = '.js-pageplayer'
+                for el in html.select(selector):
+                    # transcricao =el.select('.Songs-transcricao p')[0].get_text()
+                    # print(transcricao)
+                    transc_tag=html.new_tag('div')
+                    transc_tag.append(el.select('.Songs-transcricao p')[0].get_text())
+                    transc_tag['id']='transcricao'
+                    el.clear()
+                    # print('\nel \n', transc_tag, '\n fim el \n')
+                    # el.append(transcricao)
+                    el.replace_with(transc_tag)
+
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+
+
+            camara_decompose=[  'h1',
+                                '#viewlet-below-content-title',
+                                '#viewlet-above-content-body',
+                                '.ByLine'
+                            ]
+            try:
+                for selector in camara_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+            except Exception as e:
+                logger.error('Failed to decompose "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
         if spider_name is 'elpais':
             try:
                 for el in html.select('a'):
@@ -721,15 +794,15 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
         # SOLUÇÃO TEMPORÁRIA ENQUANTO NÃO RESOLVE O PROBLEMA DAS IMAGENS
-        if spider_name is 'govma':
-            try:
-                selector = '.wp-caption'
-                for el in html.select(selector):
-                    el.decompose()
+        # if spider_name is 'govma':
+        #     try:
+        #         selector = '.wp-caption'
+        #         for el in html.select(selector):
+        #             el.decompose()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
         if spider_name is 'govce':
             try:
                 selector = 'script'
@@ -933,6 +1006,7 @@ class ImproveHTML(object):
                     'dir',
                     '#elpais_gpt-INTEXT',
                     'embed',
+                    '. fb_comments_count_zero',
                     'fieldset',
                     'form',
                     # 'frame',
@@ -950,6 +1024,7 @@ class ImproveHTML(object):
                     'link',
                     'marquee',
                     'menu',
+                    '.navegacao',
                     'n--noticia__newsletter',
                     '#noticia_vinculadas',
                     # 'meta',
@@ -987,6 +1062,7 @@ class ImproveHTML(object):
                     'textarea',
                     '.titulo-post',
                     '.top-artigos',
+                    '#viewlet-above-content-title',
                     'video',
                     'xml',
                     '[data-ng-controller="compartilhamentoController"]',

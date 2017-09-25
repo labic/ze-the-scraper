@@ -5,7 +5,9 @@ from . import ZeSpider
 class GloboSpider(ZeSpider):
 
     name = 'globo'
-    allowed_domains = ['globo.com']
+    allowed_domains = [
+                        # 'globo.com'
+                        ]
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {

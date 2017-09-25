@@ -51,7 +51,8 @@ class SejaBixoSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
-                        'article div[align=center] strong::text'
+                        'article div[align=center] strong::text',
+                        'article i strong::text'
                     ]
                 }
             },
@@ -67,7 +68,7 @@ class SejaBixoSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.conteudo-materia',
-                        'article'#ta dando algo errado aqui. não consigo pegar todos os <p>s
+                        'article'
                     ]
                 }
             },
