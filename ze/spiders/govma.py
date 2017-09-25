@@ -55,7 +55,8 @@ class GovernoMaranhaoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::attr(datetime)'
+                        '.entry-date::attr(datetime)',
+                        '[property="article:published_time"]::attr(content)'
                     ]
                 }
             },
@@ -63,7 +64,8 @@ class GovernoMaranhaoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=dateModified]::attr(content)',
-                        '.updated::attr(datetime)'
+                        '.updated::attr(datetime)',
+                        '[property="article:modified_time"]::attr(content)'
                     ]
                 }
             },
@@ -72,8 +74,9 @@ class GovernoMaranhaoSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
-                        '#noticia-principal #noticias'
-                        # '.entry-content'
+                        '#noticia-principal #noticias',
+                        # '.entry-content',
+                        '.cb-entry-content'
                     ]
                 }
             },

@@ -71,7 +71,8 @@ class DiarioDePernambucoSpider(ZeSpider):
                         #para blog
                         '.entry-date::attr(datetime)',
                         '.date::text',
-                        '.published::text'
+                        '.published::text',
+                        '[name="DC.date.created"]::attr(content)'
                     ]
                 }
             },
