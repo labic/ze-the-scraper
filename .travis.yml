@@ -7,7 +7,7 @@ cache: pip
 env:
   - LOG_LEVEL=DEBUG
 install:
-  - pip install -r "requirements/${TRAVIS_BRANCH}.txt"
+  - pip install -r "requirements.txt"
 script:
   - scrapy settings
   - scrapy list | wc -w
