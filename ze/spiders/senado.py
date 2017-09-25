@@ -3,7 +3,6 @@ from . import ZeSpider
 
 
 class SenadoSpider(ZeSpider):
-
     name = 'senado'
     allowed_domains = ['senado.leg.br']
     items_refs = [{
@@ -39,12 +38,26 @@ class SenadoSpider(ZeSpider):
                     ]
                 }
             },
+            "audio": {
+                "item": "ze.items.creativework.AudioObjectItem",
+                "fields": {
+                    "url": {
+                        "selectors": {
+                            "css": [
+                                '#downloadAudio a ::attr(href)',
+                                '.Control--download ::attr(href)'
+                            ]
+                        }
+                    }
+                }
+            },
             "author": {
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
                         '[class*=autor]::text',
-                        '#materia > p small::text'
+                        '#materia > p small::text',
+                        '.ByLine-autor a::text'
                     ]
                 }
             },
@@ -54,6 +67,7 @@ class SenadoSpider(ZeSpider):
                         '[itemprop=datePublished]::attr(content)',
                         '.datahoraNoticia::text',
                         '#materia span.text-muted::text',
+                        '.ByLine-data::text'
                     ]
                 }
             },
@@ -68,9 +82,10 @@ class SenadoSpider(ZeSpider):
             "articleBody": {
                 "selectors": {
                     "css": [
-                '[itemprop=articleBody]',
-                '[property=articleBody]',
-                '#textoMateria'
+                        '[itemprop=articleBody]',
+                        '[property=articleBody]',
+                        '#textoMateria',
+                        '#content'
                     ]
                 }
             },
