@@ -16,20 +16,22 @@ class ImproveHTML(object):
         spider_name = loader_context.get('spider_name')
         improve_html_locations = loader_context.get('improve_html')
         html = BeautifulSoup(value, 'html.parser')
-        
+
+
+
         try:
             for improve_html in improve_html_locations:
                 module_name, cls_name, func_name = improve_html.rsplit('.', 2)
                 module = import_module(module_name)
                 cls = getattr(module, cls_name)
-                
+
                 html, exceptions = getattr(cls, func_name)(html, spider_name)
                 if len(exceptions) > 0:
                     for e in exceptions:
                         logger.warn(e)
         except Exception as e:
             logger.warn(e)
-        
+
         if spider_name is 'cartacapital':
             try:
                 selector = '.image-inline'
@@ -101,6 +103,7 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+
 
 
         if spider_name is 'veja':
@@ -524,6 +527,10 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+
+
+        #Aqui ta funcionando
+
         # if spider_name is 'istoe':
         #     try:
         #         for el in html.select('a'):
@@ -560,6 +567,8 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        # Aqui ta funcionando
+
         if spider_name is 'extra':
 
             try:
@@ -585,7 +594,8 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
 
-        if spider_name is 'camara' or 'senado':
+
+        if (spider_name is 'camara') or (spider_name is 'senado'):
             try:
                 for el in html.select('a'):
                     el.replace_with(el.get_text())
@@ -620,6 +630,8 @@ class ImproveHTML(object):
                 logger.error('Failed to decompose "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+
+
         if spider_name is 'elpais':
             try:
                 for el in html.select('a'):
@@ -628,6 +640,10 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+
+
+        # Aqui não ta funcionando
+
 
         if spider_name is 'brasilescola':
             try:
@@ -714,7 +730,6 @@ class ImproveHTML(object):
 
 
 
-
         if spider_name is 'r7':
 
             try:
@@ -782,16 +797,15 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
-        if spider_name is 'govpa':
-            try:
-                print('\n\nentrou em govpa----------\n')
-                selector = '.texto'
-                for el in html.select(selector):
-                    print('++++++++++++++++++',el)
+        # if spider_name is 'govpa':
+        #     try:
+        #         selector = '.texto'
+        #         for el in html.select(selector):
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
+
 
         # SOLUÇÃO TEMPORÁRIA ENQUANTO NÃO RESOLVE O PROBLEMA DAS IMAGENS
         # if spider_name is 'govma':
@@ -895,6 +909,39 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
+
+        if spider_name is 'govsp':
+            try:
+                selector = '.gallery'
+
+                for el in html.select(selector):
+
+                    section = html.new_tag('section',**{'class':'gallery'})
+                    for photo in el.select('img'):
+                        fg = html.new_tag('figure')
+                        fg.append(html.new_tag('img', src=photo['src']))
+                        section.append(fg)
+                    el.replace_with(section)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        if spider_name is 'govsc':
+            try:
+                selector = 'img'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src='http://www.sc.gov.br/'+el['src']))
+                    el.parent.replace_with(fg)
+
+                # selector='a'
+                # for el in html.select(selector):
+                #     print('------xxxxxxxxxxx----------')
+                #     el.replace(el.get_text())
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
 
         # all spiders
         try:
