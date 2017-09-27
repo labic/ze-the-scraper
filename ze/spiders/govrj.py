@@ -31,7 +31,8 @@ class GovernoRiodeJaneiroSpider(ZeSpider):
                             'meta[property="og:image"]::attr(content)',
                             '[itemprop="image"]::attr(src)',
                             '.lazy::attr("data-lazy-src")',
-                            '.text_post_section img::attr(src)'                            ]
+                            '.text_post_section img::attr(src)',
+                            '.listacor4 img::attr(src)'                            ]
                     },
             },
             "description": {
@@ -43,7 +44,8 @@ class GovernoRiodeJaneiroSpider(ZeSpider):
                         '.entry-content h2::text',
                         '.linha-fina::text',
                         '.entry-content blockquote p::text',
-                        '[property="og:description"]::attr(content)'
+                        '[property="og:description"]::attr(content)',
+                        '.mediacor1::text'
                     ]
                 }
             },
@@ -53,7 +55,8 @@ class GovernoRiodeJaneiroSpider(ZeSpider):
                         '[name=author]::attr(content)',
                         '[itemprop=author]::text',
                         '.author a::text',
-                        '.texto p:last-child::text'
+                        '.texto p:last-child::text',
+                        '.menor::text'
                     ]
                 }
             },
@@ -65,7 +68,9 @@ class GovernoRiodeJaneiroSpider(ZeSpider):
                         '.text-date::attr(datetime)',
                         '.data:first-child::text',
                         '.conteudo_interna .col-md-9 .data::text',
-                        '.event_date::text'
+                        '.event_date::text',
+                        '#interna_noticia_conteudo .menor::text',
+                        '.menor::text'
                     ]
                 }
             },
@@ -73,7 +78,9 @@ class GovernoRiodeJaneiroSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=dateModified]::attr(content)',
-                        '.menor::text'
+                        '.menor::text',
+                        '#interna_noticia_conteudo .menor::text'
+
                     ]
                 }
             },

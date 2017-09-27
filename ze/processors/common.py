@@ -147,7 +147,6 @@ class ParseDate(object):
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
             if spider_name == 'govpa':
-                print('- - - - - - - - - - ', value)
                 # value=value.split('publicação:')[1].replace('-','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
@@ -156,7 +155,9 @@ class ParseDate(object):
                 value=value.split('Fotos')[0].replace(' - ',' ')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
-
+            if spider_name == 'govrj':
+                value=value.split('Atualizado em')[0].replace(' - ',' ')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
         if (self.field == 'dateModified'):
             if spider_name == 'zh':
@@ -204,6 +205,11 @@ class ParseDate(object):
             if spider_name=='govce':
                 value=value.split('em')[1]
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            if spider_name == 'govrj':
+                if 'Atualizado em' in value:
+                    value=value.split('Atualizado em')[1].replace(' - ',' ')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
 
         value = value.replace('Atualizado:', '') \
