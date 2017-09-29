@@ -934,14 +934,83 @@ class ImproveHTML(object):
                     fg.append(html.new_tag('img', src='http://www.sc.gov.br/'+el['src']))
                     el.parent.replace_with(fg)
 
-                # selector='a'
-                # for el in html.select(selector):
-                #     print('------xxxxxxxxxxx----------')
-                #     el.replace(el.get_text())
+                selector='a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'govrn':
+            rn_decompose=[  'h1',
+                            '.compartilhar',
+                            '.credito',
+                            '.tags',
+                            '.noticias_relacionadas'
+                            ]
+            try:
+                for selector in rn_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+                selector = '.imagem'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select('.legenda')[0].get_text()
+                    fg.append(fc)
+
+                    el.replace_with(fg)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+
+        if spider_name is 'govro':
+            try:
+                selector='.wp-caption'
+                for el in html.select(selector):
+                    fg = html.new_tag('figure')
+                    fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
+                    fc = html.new_tag('figcaption')
+                    fc.string = el.select('.wp-caption-text')[0].get_text()
+                    fg.append(fc)
+                    el.replace_with(fg)
+
+                selector='a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        if spider_name is 'govrr':
+            try:
+                selector='a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
+        if spider_name is 'govto':
+            try:
+                selector = '#fotos'
+
+                for el in html.select(selector):
+
+                    section = html.new_tag('section',**{'class':'gallery'})
+                    for photo in el.select('img'):
+                        fg = html.new_tag('figure')
+                        fg.append(html.new_tag('img', src=photo['src']))
+                        fc = html.new_tag('figcaption')
+                        fc.string = el.parent.select('p')[0].get_text()
+                        fg.append(fc)
+                        section.append(fg)
+                    el.replace_with(section)
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
         # all spiders
         try:

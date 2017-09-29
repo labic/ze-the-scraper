@@ -159,6 +159,11 @@ class ParseDate(object):
                 value=value.split('Atualizado em')[0].replace(' - ',' ')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
+            if spider_name == 'govto':
+                value=value.split('-')[0]
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
         if (self.field == 'dateModified'):
             if spider_name == 'zh':
                 value=value.split('|')[1].replace(' - ',' ')\
