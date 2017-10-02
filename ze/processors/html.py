@@ -204,9 +204,13 @@ class ImproveHTML(object):
                     fg.append(fc)
 
                     el.replace_with(fg)
-                selector = 'div section p'
-                for el in html.select(selector):
-                    el.decompose()
+
+                estadao_decompose=[  'div section p',
+                                    '.documento'
+                                    ]
+                for selector in estadao_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s', selector, spider_name, e)
 
@@ -760,6 +764,18 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'goval':
+            al_decompose=[  'h1',
+                            'time'
+                            ]
+            try:
+                for selector in al_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
 
         if spider_name is 'goves':
             try:
@@ -823,6 +839,9 @@ class ImproveHTML(object):
                 for el in html.select(selector):
                     el.decompose()
 
+                selector = 'audio'
+                for el in html.select(selector):
+                    el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
@@ -1141,7 +1160,8 @@ class ImproveHTML(object):
                     'marquee',
                     'menu',
                     '.navegacao',
-                    'n--noticia__newsletter',
+                    '.n--noticia__newsletter',
+                    # 'n--noticia__newsletter'
                     '#noticia_vinculadas',
                     # 'meta',
                     'figure meta',
@@ -1158,6 +1178,7 @@ class ImproveHTML(object):
                     '.publicidade-content',
                     '.publicado',
                     '#recomendadosParaVoce',
+                    '.RedesSociais',
                     '.relacionadas',
                     '.related-news-shell',
                     '#respond',
@@ -1180,6 +1201,7 @@ class ImproveHTML(object):
                     '.top-artigos',
                     '#viewlet-above-content-title',
                     'video',
+                    'videoEmbed',
                     'xml',
                     '[data-ng-controller="compartilhamentoController"]',
                     '[data-ng-controller="newsletterControllerCardapio"]',

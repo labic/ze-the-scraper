@@ -62,7 +62,8 @@ class G1Spider(ZeSpider):
                         "[itemprop=datePublished]::text",
                         "time[datetime]::text",
                         "time::attr(datetime)" ,
-                        ".data::text"
+                        ".data::text",
+                        ".published::text"
                     ]
                 }
             },
@@ -71,7 +72,8 @@ class G1Spider(ZeSpider):
                     "css": [
                         "[itemprop=dateModified]::attr(datetime)" ,
                         "[itemprop=dateModified]::text",
-                        ".updated"
+                        ".updated::text",
+                        
                     ]
                 }
             },

@@ -52,7 +52,8 @@ class SejaBixoSpider(ZeSpider):
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
                         'article div[align=center] strong::text',
-                        'article i strong::text'
+                        'article i strong::text',
+                        '"#content i strong"::text'
                     ]
                 }
             },

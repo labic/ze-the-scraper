@@ -14,7 +14,8 @@ class SenadoSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         "[itemprop=headline]::text",
-                        "#tituloNoticia h2::text"
+                        "#tituloNoticia h2::text",
+                        ".tituloVerNoticia::text"
                     ]
                 }
             },
@@ -57,7 +58,8 @@ class SenadoSpider(ZeSpider):
                         '[itemprop=author]::text',
                         '[class*=autor]::text',
                         '#materia > p small::text',
-                        '.ByLine-autor a::text'
+                        '.ByLine-autor a::text',
+                        # '.editoriaVerNoticia b::text'
                     ]
                 }
             },
@@ -67,7 +69,8 @@ class SenadoSpider(ZeSpider):
                         '[itemprop=datePublished]::attr(content)',
                         '.datahoraNoticia::text',
                         '#materia span.text-muted::text',
-                        '.ByLine-data::text'
+                        '.ByLine-data::text',
+                        '.editoriaVerNoticia::text'
                     ]
                 }
             },
@@ -85,7 +88,8 @@ class SenadoSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
                         '#textoMateria',
-                        '#content'
+                        '#content',
+                        '.textoNovo'
                     ]
                 }
             },

@@ -74,6 +74,7 @@ class GovCearaSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '[class=card-content]',
                         '#conteudo_central',
+                        '.SingleContent'
                     ]
                 }
             },

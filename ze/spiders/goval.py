@@ -54,7 +54,8 @@ class GovAlagoasSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
-                        '.data-post::text'
+                        '.data-post::text',
+                        'time'
                     ]
                 }
             },
@@ -72,7 +73,8 @@ class GovAlagoasSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '[class=card-content]'
+                        '[class=card-content]',
+                        '.texto'
                     ]
                 }
             },

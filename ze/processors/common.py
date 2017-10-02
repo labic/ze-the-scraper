@@ -45,7 +45,8 @@ class ParseDate(object):
         spider_name = loader_context.get('spider_name')
 
         if spider_name == 'r7':
-            value=value.split('(')[1].split(')')[0]
+            if '(' in value:
+                value=value.split('(')[1].split(')')[0]
 
         if spider_name == 'correiobraziliense':
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
@@ -54,7 +55,7 @@ class ParseDate(object):
             return datetime.fromtimestamp(int(value))
 
         if spider_name == 'mundoeducacao':
-            value = value.replace('em','')
+            value = value.replace(' em','').replace('às','')
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
         if (self.field == 'datePublished'):
@@ -138,6 +139,8 @@ class ParseDate(object):
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
             if spider_name == 'govce':
+                if 'em' in value:
+                    value=value.split('em')[1]
                 value=value.split(',')[0]
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
@@ -207,9 +210,9 @@ class ParseDate(object):
                 value = value.split(' - ')[1].replace('ATUALIZADO EM','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
-            if spider_name=='govce':
-                value=value.split('em')[1]
-                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            # if spider_name=='govce':
+            #     value=value.split('em')[1]
+            #     return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name == 'govrj':
                 if 'Atualizado em' in value:

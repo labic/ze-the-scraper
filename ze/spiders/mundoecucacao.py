@@ -44,7 +44,7 @@ class MundoEducacaoSpider(ZeSpider):
                         '[itemprop=author]::text',
                         '.autor-nome::text',
                         '.node-author-inner strong::text',
-                        '.publicado b::text'
+                        '.publicado b::text',
                     ]
                 }
             },
@@ -54,7 +54,8 @@ class MundoEducacaoSpider(ZeSpider):
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
                         'p.meta::text',
-                        '.publicado p'
+                        '.publicado p',
+                        '.publicado::text'
                     ]
                 }
             },
