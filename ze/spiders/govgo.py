@@ -27,7 +27,8 @@ class GovernoGoiasSpider(ZeSpider):
                         "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
                         '[itemprop="image"]::attr(src)',
-                        '#texto_content img::attr("src")'
+                        '#texto_content img::attr("src")',
+                        '.content figure img::attr("src")'
                     ]
                 }
             },

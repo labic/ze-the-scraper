@@ -813,6 +813,16 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
+        if spider_name is 'govmg':
+            try:
+                selector = 'a'
+                for el in html.select(selector):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)                
+
         # if spider_name is 'govpa':
         #     try:
         #         selector = '.texto'
@@ -1165,6 +1175,7 @@ class ImproveHTML(object):
                     '#noticia_vinculadas',
                     # 'meta',
                     'figure meta',
+                    '.full-sharing',
                     'noframes',
                     'noscript',
                     'object',
