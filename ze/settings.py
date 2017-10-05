@@ -107,16 +107,16 @@ MERGE_DUPLICATES = os.getenv('MERGE_DUPLICATES', True)
 MEDIA_ALLOW_REDIRECTS = os.getenv('MEDIA_ALLOW_REDIRECTS', True)
 MEDIA_BASE_URL = os.getenv('MEDIA_BASE_URL', 'https://sub.domain.net')
 MEDIA_ITEMS_FIELDS={
-    'ArticleItem': { 
-        'images': { 
+    'ArticleItem': {
+        'images': {
             'image': 'urls',
             'articleBody': 'html',
         },
         'files': None
     },
-    'NewsArticleItem': { 
+    'NewsArticleItem': {
         'images': None,
-        'files': { 
+        'files': {
             'url': 'url',
         }
     }

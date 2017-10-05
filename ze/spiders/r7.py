@@ -54,7 +54,9 @@ class R7Spider(ZeSpider):
                 "selectors": {
                     "css": [
                         "[itemprop=datePublished]::text",
-                        "[property='article:published_time']::attr(content)"
+                        "[property='article:published_time']::attr(content)",
+                        ".published_at::attr(datetime)"
+                        
                     ]
                 }
             }, 

@@ -44,9 +44,9 @@ class TerraSpider(ZeSpider):
             "author": {
                 "selectors": {
                     "css": [
+                        ".author [itemprop=name]::attr(content)",                    
                         ".authorName::text",
                         "[itemprop=author]::text", 
-                        # "[itemprop=creator] [itemprop=name]::text",
                     ]
                 }
             }, 

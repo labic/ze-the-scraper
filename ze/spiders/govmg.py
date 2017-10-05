@@ -16,7 +16,8 @@ class GovernoMinasGeraisSpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-title::text'
+                        '.entry-title::text',
+                        '.title::text'
                     ]
                 }
             },
@@ -57,7 +58,8 @@ class GovernoMinasGeraisSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.entry-date::text',
-                        '.text-date::attr(datetime)'
+                        '.text-date::attr(datetime)',
+                        '.date::text'
                     ]
                 }
             },
@@ -74,7 +76,8 @@ class GovernoMinasGeraisSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.noticia',
                         'div.clear',
-                        'article main'
+                        'article main',
+                        '.content'
                     ]
                 }
             },

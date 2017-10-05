@@ -70,9 +70,10 @@ class AgenciaBrasilSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
-                        '.news',
-                        '.content',
-                        '.node-noticia .content'
+                        # '.news',
+                        # '.content',
+                        '.node-noticia .content',
+                        
                     ]
                 }
             },

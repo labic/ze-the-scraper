@@ -77,7 +77,8 @@ class OGloboSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         "[itemprop=articleBody]",
-                        ".corpo"
+                        ".corpo",
+                        '.n--noticia__body .content'
                     ]
                 }
             }, 
