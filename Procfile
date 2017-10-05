@@ -1,0 +1,1 @@
+web: scrapyrt --ip $IP --port $PORT
