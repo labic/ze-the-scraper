@@ -73,7 +73,7 @@ class G1Spider(ZeSpider):
                         "[itemprop=dateModified]::attr(datetime)" ,
                         "[itemprop=dateModified]::text",
                         ".updated::text",
-                        
+
                     ]
                 }
             },
@@ -97,22 +97,23 @@ class G1Spider(ZeSpider):
                     "css": [
                         "meta[name=keywords]::attr(content)",
                         "[itemprop=keywords]::text",
-                        ".entities__list-itemLink::text"
+                        ".entities__list-itemLink::text",
+                        '.entities__list a::text',
                     ]
                 }
             }
         }
     }]
-    
+
     # def harvest_metadata(self, resp: Response, item, **kargs):
     #     # TODO: Move to DownloadMiddleware
     #     item['meta']['jsonLDSchemas'] = self.jsonLDSchemas(reponse)
     #     item['meta']['otherLinks'] = self.jsonLD
-    
+
     @staticmethod
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
-        
+
         try:
             selector = '[data-block-type="backstage-photo"]'
             for el in html.select(selector):
@@ -122,16 +123,16 @@ class G1Spider(ZeSpider):
                 fc = html.new_tag('figcaption')
                 fc.string = el.select_one('.content-media__description__caption').get_text()
                 fg.append(fc)
-                
+
                 el.replace_with(fg)
         except Exception as e:
             exceptions_append(e)
-        
+
         try:
             selector = '[data-block-type="backstage-video"]'
             for el in html.select(selector):
                 video_id = el.select('.content-video__placeholder')[0]['data-video-id']
-                
+
                 fg = html.new_tag('figure')
                 fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
                 fc = html.new_tag('figcaption')
@@ -139,7 +140,7 @@ class G1Spider(ZeSpider):
                 fg.append(fc)
                 a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
                 a.append(fg)
-                
+
                 el.replace_with(a)
         except Exception as e:
             exceptions_append(e)
@@ -148,5 +149,5 @@ class G1Spider(ZeSpider):
                 el.replace_with(el.get_text())
         except Exception as e:
             exceptions_append(e)
-        
+
         return html, exceptions

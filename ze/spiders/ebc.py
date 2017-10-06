@@ -24,7 +24,9 @@ class EBCSpider(ZeSpider):
                     "css": [
                         'meta[property="og:image"]::attr(content)',
                         '[itemprop="image"] img::attr(src)',
-                        '.node-noticia figure img::attr(src)'
+                        '.node-noticia figure img::attr(src)',
+                        '.teaser img::attr(src)'
+
                     ]
                 }
             },
