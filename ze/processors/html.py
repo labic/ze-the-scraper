@@ -652,7 +652,16 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
 
-        # Aqui não ta funcionando
+
+        if spider_name is 'theintercept':
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
 
 
         if spider_name is 'brasilescola':
@@ -1215,6 +1224,7 @@ class ImproveHTML(object):
                     '.single__conteudo--galeria-de-fotos',
                     '.single__conteudo--tags',
                     '.social-share-buttons',
+                    '.social-share',
                     '.social-share',
                     '.story-body__unordered-list',
                     '.sumario_apoyos',

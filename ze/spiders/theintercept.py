@@ -8,15 +8,15 @@ class TheInterceptSpider(ZeSpider):
     allowed_domains = ['theintercept.com']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
-        "fields": { 
+        "fields": {
             "name": {
                 "selectors": {
-                    "css": [ 
+                    "css": [
                         "meta[property='og:title']::attr(content)",
                         "meta[property='twitter:title']::attr(content)",
                         "meta[name=title]::attr(content)",
-                        "[itemprop=name]::text", 
-                        ".title::text"  
+                        "[itemprop=name]::text",
+                        ".title::text"
                     ]
                 }
             },
@@ -25,26 +25,27 @@ class TheInterceptSpider(ZeSpider):
                     "css": [
                         'meta[property="og:image"]::attr(content)',
                         'meta[property="twitter:image"]::attr(content)',
-                        "[itemprop=image]::attr(content)" 
+                        "[itemprop=image]::attr(content)",
+                        '.Post-image-block img::attr(src)'
                     ]
                 }
-            }, 
+            },
             "description": {
                 "selectors": {
                     "css": [
-                        "meta[name='description']::attr(content)", 
+                        "meta[name='description']::attr(content)",
                         "meta[property='og:description']::attr(content)",
                         "meta[property='twitter:description']::attr(content)",
                         "meta[name=description]::attr(content)",
-                        "[property=description]::attr(content)" 
+                        "[property=description]::attr(content)"
                     ]
                 }
             },
             "author": {
                 "selectors": {
                     "css": [
-                        "[itemprop=author]::text", 
-                        "[itemprop=name]::text" 
+                        "[itemprop=author]::text",
+                        "[itemprop=name]::text"
                     ]
                 }
             },
@@ -52,14 +53,14 @@ class TheInterceptSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         "[itemprop=datePublished]::text",
-                        ".PostByline-date::text" 
+                        ".PostByline-date::text"
                     ]
                 }
-            }, 
+            },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        "[itemprop=dateModified]::text" 
+                        "[itemprop=dateModified]::text"
                     ]
                 }
             },
@@ -67,15 +68,15 @@ class TheInterceptSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         "[itemprop=articleBody]",
-                        ".PostContent div"  
+                        ".PostContent div"
                     ]
                 }
-            }, 
+            },
             "keywords": {
                 "selectors": {
                     "css": [
                         "meta[property='keywords']::attr(content)",
-                        "[itemprop=keywords]::text" 
+                        "[itemprop=keywords]::text"
                     ]
                 }
             }
