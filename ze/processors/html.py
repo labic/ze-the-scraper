@@ -248,6 +248,12 @@ class ImproveHTML(object):
                         section.append(fg)
 
                     el.replace_with(section)
+
+                folha_decompose=[  'h5'
+                                    ]
+                for selector in folha_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
@@ -646,7 +652,16 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
 
-        # Aqui não ta funcionando
+
+        if spider_name is 'theintercept':
+            try:
+                for el in html.select('a'):
+                    el.replace_with(el.get_text())
+
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
+
 
 
         if spider_name is 'brasilescola':
@@ -730,7 +745,17 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
 
-
+        if spider_name is 'guiadoestudante':
+            guia_decompose=[    '.top_helper ',
+                                '#links-uteis-',
+                            ]
+            try:
+                for selector in guia_decompose:
+                    for el in html.select(selector):
+                        el.decompose()
+            except Exception as e:
+                logger.error('Failed to replace "%s" selector from %s:\n%s',
+                    selector, spider_name, e)
 
 
 
@@ -821,7 +846,7 @@ class ImproveHTML(object):
 
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)                
+                    selector, spider_name, e)
 
         # if spider_name is 'govpa':
         #     try:
@@ -1105,6 +1130,7 @@ class ImproveHTML(object):
         if not el_to_decompose:
             el_to_decompose = {
                 'geral':     [
+                    '.ad-content',
                     '.additional',
                     '.advertising',
                     '.articleCredit',
@@ -1198,6 +1224,8 @@ class ImproveHTML(object):
                     '.single__conteudo--galeria-de-fotos',
                     '.single__conteudo--tags',
                     '.social-share-buttons',
+                    '.social-share',
+                    '.social-share',
                     '.story-body__unordered-list',
                     '.sumario_apoyos',
                     "#sponsored-links",

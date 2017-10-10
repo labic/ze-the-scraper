@@ -16,7 +16,8 @@ class PortalUAISpider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
                         '.title-post::text',
-                        '.entry-title::text'
+                        '.entry-title::text',
+                        '.title::text'
                     ]
                 }
             },
@@ -56,7 +57,8 @@ class PortalUAISpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::text'
+                        '[name="DC.date.created"]::attr(content)',
+                        '.entry-date::text',
                     ]
                 }
             },

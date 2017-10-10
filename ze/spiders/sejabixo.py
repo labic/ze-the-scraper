@@ -49,11 +49,12 @@ class SejaBixoSpider(ZeSpider):
             "datePublished": {
                 "selectors": {
                     "css": [
-                        "[itemprop=datePublished]::attr(content)",
-                        ".data::text",
-                        "article div[align=center] strong::text",
-                        "article i strong::text",
-                        "#content i strong::text"
+                        '[itemprop=datePublished]::attr(content)',
+                        '.data::text',
+                        'article div[align=center] strong::text',
+                        'article i strong::text',
+                        '"#content i strong"::text',
+                        '.lrec1 i strong::text',
                     ]
                 }
             },

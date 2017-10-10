@@ -24,7 +24,8 @@ class IstoESpider(ZeSpider):
                     "css": [
                         'meta[property="og:image"]::attr(content)',
                         "[itemprop=image]::attr(content)",
-                        "[property=og:image]::attr(content)"
+                        "[property=og:image]::attr(content)",
+                        '.teaser img::attr(src)'
                     ]
                 }
             },

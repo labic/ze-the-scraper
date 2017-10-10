@@ -15,7 +15,8 @@ class EBCSpider(ZeSpider):
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         '[itemprop=headline]::text',
-                        '.title-post::text'
+                        '.title-post::text',
+                        '.news-main h1::text'
                     ]
                 }
             },
@@ -24,7 +25,9 @@ class EBCSpider(ZeSpider):
                     "css": [
                         'meta[property="og:image"]::attr(content)',
                         '[itemprop="image"] img::attr(src)',
-                        '.node-noticia figure img::attr(src)'
+                        '.node-noticia figure img::attr(src)',
+                        '.teaser img::attr(src)'
+
                     ]
                 }
             },
@@ -43,7 +46,8 @@ class EBCSpider(ZeSpider):
                     "css": [
                         '[itemprop=author]::text',
                         '[class*=autor]::text',
-                        '.node-info span strong::text'
+                        '.node-info span strong::text',
+                        '.news-info p strong::text'
                     ]
                 }
             },
@@ -67,7 +71,8 @@ class EBCSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
-                        '.node-noticia .content'
+                        '.node-noticia .content',
+                        '.news'
                     ]
                 }
             },

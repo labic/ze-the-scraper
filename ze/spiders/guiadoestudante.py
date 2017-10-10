@@ -69,7 +69,9 @@ class GuiadoEstudanteSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         "[itemprop=articleBody]",
-                        ".article-content"
+                        'article'
+                        # ".article-content",
+
                     ]
                 }
             },
