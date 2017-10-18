@@ -7,7 +7,7 @@ class MundoEducacaoSpider(ZeSpider):
     allowed_domains = ['mundoeducacao.bol.uol.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
-        "fields": { 
+        "fields": {
             "name": {
                 "selectors": {
                     "css": [
@@ -22,7 +22,7 @@ class MundoEducacaoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         'meta[property="og:image"]::attr(content)',
-                        '[itemprop="image"] img::attr(src)',                        
+                        '[itemprop="image"] img::attr(src)',
                         '[class*= "wp-image"]::attr(src)',
                         '.main-single::attr(src)'
                     ]
@@ -74,6 +74,11 @@ class MundoEducacaoSpider(ZeSpider):
                         '.entry',
                         '.post'
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.g1.G1Spider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -81,10 +86,52 @@ class MundoEducacaoSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text',                        
+                        '[onclick*=montaURL]::text',
                         '.publicado a::text'
                     ]
                 }
             }
-        }        
+        }
     }]
+
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        # try:
+        #     selector = '[data-block-type="backstage-photo"]'
+        #     for el in html.select(selector):
+        #         fg = html.new_tag('figure')
+        #         img_src = el.select_one('img.content-media__image').get('data-src')
+        #         fg.append(html.new_tag('img', src=img_src))
+        #         fc = html.new_tag('figcaption')
+        #         fc.string = el.select_one('.content-media__description__caption').get_text()
+        #         fg.append(fc)
+
+        #         el.replace_with(fg)
+        # except Exception as e:
+        #     exceptions_append(e)
+
+        # try:
+        #     selector = '[data-block-type="backstage-video"]'
+        #     for el in html.select(selector):
+        #         video_id = el.select('.content-video__placeholder')[0]['data-video-id']
+
+        #         fg = html.new_tag('figure')
+        #         fg.append(html.new_tag('img', src='https://s02.video.glbimg.com/x720/%s.jpg' % video_id))
+        #         fc = html.new_tag('figcaption')
+        #         fc.string = el.select('[itemprop="description"]')[0].get_text() #antes tava itemprop='caption'
+        #         fg.append(fc)
+        #         a = html.new_tag('a', href='https://globoplay.globo.com/v/%s/' % video_id)
+        #         a.append(fg)
+
+        #         el.replace_with(a)
+        # except Exception as e:
+        #     exceptions_append(e)
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
