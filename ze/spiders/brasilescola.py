@@ -67,6 +67,11 @@ class BrasilEscolaSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.conteudo-materia'#ta dando algo errado aqui. não consigo pegar todos os <p>s
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.g1.G1Spider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -80,3 +85,14 @@ class BrasilEscolaSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions

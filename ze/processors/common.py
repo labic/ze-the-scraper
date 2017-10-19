@@ -55,7 +55,10 @@ class ParseDate(object):
             return datetime.fromtimestamp(int(value))
 
         if spider_name == 'mundoeducacao':
-            value = value.replace(' em','').replace('às','')
+            if 'em' in value:
+                value = value.split('em')[1]
+                value = value.replace(' em','').replace('às','')
+
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
         if (self.field == 'datePublished'):
@@ -76,15 +79,26 @@ class ParseDate(object):
                                             .replace('Atualizado','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
-            if spider_name=='jconline':
-                value=value.split('Atualizado')[0].replace(' - ',' ')\
+            if spider_name =='brasilescola':
+                value=value.split(',')[0].replace(' - ',' ')\
                                             .replace('h', ':') \
                                             .replace('min', '')\
                                             .replace('Publicado','')\
-                                            .replace('Atualizado','')\
-                                            .replace('em','')\
-                                            .strip(',')\
-                                            .replace('às','')
+                                            .replace('Atualizado','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
+            if spider_name=='jconline':
+                value=value.split('Atualizado')[0].replace(' - ',' ')\
+                                                .replace('h', ':') \
+                                                .replace('min', '')\
+                                                .replace('Publicado','')\
+                                                .replace('Atualizado','')\
+                                                .replace('em','')\
+                                                .strip(',')\
+                                                .replace('às','')\
+                                                .replace('T0', ' ')\
+                                                .replace('Z', ' ')
+                print('--s-------------sssss----------s-',value)
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name =='atarde':
@@ -196,16 +210,7 @@ class ParseDate(object):
                                             .replace('Atualizado','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
-            if spider_name=='jconline':
-                value=value.split('Atualizado')[0].replace(' - ',' ')\
-                                            .replace('h', ':') \
-                                            .replace('min', '')\
-                                            .replace('Publicado','')\
-                                            .replace('Atualizado','')\
-                                            .replace('em','')\
-                                            .strip(',')\
-                                            .replace('às','')
-                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+
             if spider_name =='senado':
                 value = value.split(' - ')[1].replace('ATUALIZADO EM','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})

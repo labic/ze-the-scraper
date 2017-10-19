@@ -24,7 +24,8 @@ class CorreioPopularSpider(ZeSpider):
                     "css": [
                         "meta[property='og:image']::attr(content)",
                         '[itemprop="image"] img::attr(src)',
-                        '#foto_auto img::attr(src)'
+                        '#foto_auto img::attr(src)',
+                        '.news-box-picture img::attr(src)',
                     ]
                 }
             },
@@ -53,6 +54,7 @@ class CorreioPopularSpider(ZeSpider):
                         '[itemprop=datePublished]::attr(content)',
                         "meta[name='DC.date.created']::attr(content)",
                         '.publish-time::text',#dateModified ta junto
+
                     ]
                 }
             },

@@ -49,6 +49,7 @@ class JCOnlineSpider(ZeSpider):
                         "[itemprop=author]::text",
                         ".author a::text",#não tem autor da matéria no site
                         "[id*=post] header strong::text",#"pra blog"
+                        '[property="article:author"]::attr(content)',#para especial
                     ]
                 }
             },
@@ -57,7 +58,9 @@ class JCOnlineSpider(ZeSpider):
                     "css": [
                         "[itemprop=datePublished]::attr(content)",
                         ".data-materia::text",
-                        ".data-post div::text"
+                        ".data-post div::text",
+                        ".data-materia::text",
+                        '[property="article:published_time"]::attr(content)',
                     ]
                 }
             },
@@ -74,7 +77,8 @@ class JCOnlineSpider(ZeSpider):
                         "[itemprop=articleBody]",
                         "#noticia_corpodanoticia",#pegar o que ta entre <p></p>,
                         "#texto-noticia",#fazer negocio de pegar xhr
-                        ".noticia_corpodanoticia"
+                        ".noticia_corpodanoticia",
+                        "#conteudo-iss .container .row"
                     ]
                 }
             },
@@ -83,7 +87,8 @@ class JCOnlineSpider(ZeSpider):
                     "css": [
                         "[itemprop=keywords] a::text",
                         "meta[name=keymwords]::attr(content)",
-                        "li.keywords a::text"
+                        "li.keywords a::text",
+                        '[property="article:tag"]::attr(content)'
                     ]
                 }
             }
