@@ -98,7 +98,6 @@ class ParseDate(object):
                                                 .replace('às','')\
                                                 .replace('T0', ' ')\
                                                 .replace('Z', ' ')
-                print('--s-------------sssss----------s-',value)
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name =='atarde':
@@ -108,9 +107,14 @@ class ParseDate(object):
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name == 'veja':
+                print('---------sssssssssssssss----------',value)
                 value = value.split(' - ')[1].replace('Publicado','')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
                                             .replace('em','')\
                                             .replace(',','')
+                print('---------sssssssssssssss----------',value)
+
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name=='estadao':

@@ -52,7 +52,8 @@ class VejaSpider(ZeSpider):
                     "css": [
                         "[itemprop=datePublished]::text",
                         ".article-date span::text",
-                        ".entry-date::text"
+                        ".entry-date::text",
+
                     ]
                 }
             },
@@ -70,6 +71,11 @@ class VejaSpider(ZeSpider):
                         "[itemprop=articleBody]",
                         ".article-content"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.veja.VejaSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -82,3 +88,37 @@ class VejaSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        try:
+            selector = '.featured-image'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('p')[0].string
+                fg.append(fc)
+
+                el.replace_with(fg)
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            selector = 'p span iframe[src*="https://www.youtubel.com/embed"]'
+            for el in html.select(selector):
+                video_id = el['data-lazy-src'].split('/')[4]
+                fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
+                    width='1280', height='720', frameborder='0', allowfullscreen='true')
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

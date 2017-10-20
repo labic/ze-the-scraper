@@ -61,6 +61,7 @@ class JCOnlineSpider(ZeSpider):
                         ".data-post div::text",
                         ".data-materia::text",
                         '[property="article:published_time"]::attr(content)',
+
                     ]
                 }
             },
