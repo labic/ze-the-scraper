@@ -79,7 +79,13 @@ class OGloboSpider(ZeSpider):
                     "css": [
                         "[itemprop=articleBody]",
                         ".corpo",
-                        '.n--noticia__body .content'
+                        '.n--noticia__body .content',
+                        ".entry",
+                    ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.oglobo.OGloboSpider.improve_html"
                     ]
                 }
             },
@@ -94,3 +100,15 @@ class OGloboSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

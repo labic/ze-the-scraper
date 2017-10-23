@@ -94,3 +94,14 @@ class IGSpider(ZeSpider):
             }
         }
     }]
+
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
