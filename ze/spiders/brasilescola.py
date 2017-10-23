@@ -70,7 +70,7 @@ class BrasilEscolaSpider(ZeSpider):
                 },
                 "contexts": {
                     "improve_html": [
-                        "ze.spiders.g1.G1Spider.improve_html"
+                        "ze.spiders.brasilescola.BrasilEscolaSpider.improve_html"
                     ]
                 }
             },

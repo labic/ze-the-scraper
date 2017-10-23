@@ -4,7 +4,8 @@ from . import ZeSpider
 class MundoEducacaoSpider(ZeSpider):
 
     name = 'mundoeducacao'
-    allowed_domains = ['mundoeducacao.bol.uol.com.br']
+    allowed_domains = ['mundoeducacao.bol.uol.com.br',
+                        'vestibular.mundoeducacao.bol.uol.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {

@@ -56,7 +56,8 @@ class CorreioBrasilienseSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.entry-date::text'
+                        '.entry-date::text',
+                        '[name="DC.date.created"]::attr(content)'
                     ]
                 }
             },
@@ -73,6 +74,11 @@ class CorreioBrasilienseSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.entry-content'
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.correiobraziliense.CorreioBrasilienseSpider.improve_html"
+                    ]
                 }
             },
             "keywords":  {
@@ -86,3 +92,43 @@ class CorreioBrasilienseSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+        try:
+            selector = 'section'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                images = el.select('img')
+
+                if not(len(images) ==0):
+                    for img in images:
+                        fg.append(html.new_tag('img', src=img['src']))
+                    el.replace_with(fg)
+
+            selector = 'div'
+            for el in html.select(selector):
+                el.name = 'p'
+
+            selector = 'br'
+            for el in html.select(selector):
+                el.decompose()
+
+            selector = 'h3'
+            for el in html.select(selector):
+                el.name = 'h2'
+            selector = 'p'
+            for el in html.select(selector):
+                if el.get_text() == '':
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions

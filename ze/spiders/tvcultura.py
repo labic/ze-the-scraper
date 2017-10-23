@@ -57,7 +57,8 @@ class TVCulturaSpider(ZeSpider):
                         "[itemprop=datePublished]::attr(content)",
                         ".date::text",
                         ".date-display-single::text",
-                        "aside small"
+                        "aside small",
+                        "#programas-box-info h2::text"
                     ]
                 }
             },
@@ -74,7 +75,13 @@ class TVCulturaSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
                         '.node-noticia .content',
-                        "article"
+                        "article",
+                        "#programas-box-info aside"
+                    ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.tvcultura.TVCulturaSpider.improve_html"
                     ]
                 }
             },
@@ -90,3 +97,27 @@ class TVCulturaSpider(ZeSpider):
             },
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose = ['h1',
+                        'h2',
+                        '.box-share',
+                        ]
+        try:
+            for selector in to_decompose:
+                for el in html.select(selector):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+
+
+

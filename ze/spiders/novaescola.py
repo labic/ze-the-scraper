@@ -52,7 +52,8 @@ class NovaEscolaSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.data::text',
-                        '.heading-content date::text'
+                        '.heading-content date::text',
+                        'date::text'
                     ]
                 }
             },

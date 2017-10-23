@@ -86,6 +86,14 @@ class ParseDate(object):
                                             .replace('Publicado','')\
                                             .replace('Atualizado','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name =='ig':
+                if '|' in value:
+                    value=value.split('|')[1].replace(' - ',' ')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('Publicado','')\
+                                            .replace('Atualizado','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name=='jconline':
                 value=value.split('Atualizado')[0].replace(' - ',' ')\
@@ -107,14 +115,11 @@ class ParseDate(object):
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name == 'veja':
-                print('---------sssssssssssssss----------',value)
                 value = value.split(' - ')[1].replace('Publicado','')\
                                             .replace('h', ':') \
                                             .replace('min', '')\
                                             .replace('em','')\
                                             .replace(',','')
-                print('---------sssssssssssssss----------',value)
-
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name=='estadao':
@@ -124,7 +129,10 @@ class ParseDate(object):
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name=='tvcultura':
-                value=value.replace('<small>','').replace('</small>','').replace('<time>','').replace('</time>','')
+                if '|' in value:
+                    value = value.split('|')[2]
+                else:
+                    value=value.replace('<small>','').replace('</small>','').replace('<time>','').replace('</time>','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name == 'epoca':
