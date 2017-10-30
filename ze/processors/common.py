@@ -121,6 +121,13 @@ class ParseDate(object):
                                             .replace('em','')\
                                             .replace(',','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
+            if spider_name == 'terra':
+                value = value.replace('|','').split('atualizado')[0].replace('Publicado','')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('em','')\
+                                            .replace(',','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name=='estadao':
                 value1 = value.split('|')[1]
@@ -222,6 +229,15 @@ class ParseDate(object):
                                             .replace('Atualizado','')
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
+            if spider_name == 'terra':
+                value = value.split('|')[0]+value.split('|')[2]
+                value=value.replace('atualizado','')\
+                                            .replace('h', ':') \
+                                            .replace('min', '')\
+                                            .replace('em','')\
+                                            .replace(',','')\
+                                            .replace('às','')
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 
             if spider_name =='senado':
                 value = value.split(' - ')[1].replace('ATUALIZADO EM','')
