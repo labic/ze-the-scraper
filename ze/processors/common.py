@@ -61,6 +61,14 @@ class ParseDate(object):
 
             return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
+        # if spider_name == 'band':
+        #     # if 'em' in value:
+        #     #     value = value.split('em')[1]
+        #     #     value = value.replace(' em','').replace('às','')
+
+        #     return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+
         if (self.field == 'datePublished'):
             if spider_name == 'zh':
                 value=value.split('|')[0].replace(' - ',' ')\

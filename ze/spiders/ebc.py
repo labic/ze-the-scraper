@@ -69,10 +69,11 @@ class EBCSpider(ZeSpider):
             "articleBody": {
                 "selectors": {
                     "css": [
+                        'article .content',
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
                         '.node-noticia .content',
-                        '.news'
+                        '.news',
                     ]
                 }
             },

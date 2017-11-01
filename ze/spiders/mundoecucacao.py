@@ -53,6 +53,7 @@ class MundoEducacaoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
+                        '[itemprop="datePublished"]::attr(content)',
                         '.data::text',
                         'p.meta::text',
                         '.publicado p',
