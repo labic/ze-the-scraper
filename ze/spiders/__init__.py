@@ -89,9 +89,7 @@ class AllSpiders(ZeSpider):
 
     def start_requests(self):
         self._prepare_domains_items_refs()
-        self.start_urls = [
-        'http://vestibular.mundoeducacao.bol.uol.com.br/noticias/enem-2017-inscricoes-para-privados-liberdade-terminam-hoje-20/334589.html'
-            ]
+
         for url in self.start_urls:
             yield Request(url, dont_filter=False)
 
