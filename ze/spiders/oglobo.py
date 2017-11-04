@@ -5,7 +5,8 @@ from . import ZeSpider
 class OGloboSpider(ZeSpider):
 
     name = 'oglobo'
-    allowed_domains = ['oglobo.globo.com']
+    allowed_domains = ['oglobo.globo.com',
+                        'blogs.oglobo.globo.com']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
