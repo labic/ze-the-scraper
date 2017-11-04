@@ -106,32 +106,32 @@ class ImproveHTML(object):
 
 
 
-        if spider_name is 'veja':
-            try:
-                selector = '.featured-image'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select('p')[0].string
-                    fg.append(fc)
+        # if spider_name is 'veja':
+        #     try:
+        #         selector = '.featured-image'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+        #             fc = html.new_tag('figcaption')
+        #             fc.string = el.select('p')[0].string
+        #             fg.append(fc)
 
-                    el.replace_with(fg)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #             el.replace_with(fg)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-            try:
-                selector = 'p span iframe[src*="https://www.youtubel.com/embed"]'
-                for el in html.select(selector):
-                    video_id = el['data-lazy-src'].split('/')[4]
-                    fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
-                        width='1280', height='720', frameborder='0', allowfullscreen='true')
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     try:
+        #         selector = 'p span iframe[src*="https://www.youtubel.com/embed"]'
+        #         for el in html.select(selector):
+        #             video_id = el['data-lazy-src'].split('/')[4]
+        #             fm = html.new_tag('iframe', src='https://www.youtubel.com/embed/%s?rel=0' % video_id,
+        #                 width='1280', height='720', frameborder='0', allowfullscreen='true')
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
         if spider_name is 'g1':
             try:
@@ -441,21 +441,22 @@ class ImproveHTML(object):
             except Exception as e:
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
-        if spider_name is 'novaescola':
-            try:
-                selector = 'div'
-                for el in html.select(selector):
-                    el.unwrap()
-                # selector = 'img'
-                # for el in html.select(selector):
-                #     el.attrs.remove('caption')
-                selector = 'a'
-                for el in html.select(selector):
-                    el.replace_with(el.get_text())
+        # if spider_name is 'novaescola':
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     try:
+        #         selector = 'div'
+        #         for el in html.select(selector):
+        #             el.unwrap()
+        #         # selector = 'img'
+        #         # for el in html.select(selector):
+        #         #     el.attrs.remove('caption')
+        #         selector = 'a'
+        #         for el in html.select(selector):
+        #             el.replace_with(el.get_text())
+
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
         if spider_name is 'valor':
             try:
                 selector = 'div'

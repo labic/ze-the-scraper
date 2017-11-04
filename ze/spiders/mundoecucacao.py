@@ -4,7 +4,8 @@ from . import ZeSpider
 class MundoEducacaoSpider(ZeSpider):
 
     name = 'mundoeducacao'
-    allowed_domains = ['mundoeducacao.bol.uol.com.br']
+    allowed_domains = ['mundoeducacao.bol.uol.com.br',
+                        'vestibular.mundoeducacao.bol.uol.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -52,6 +53,7 @@ class MundoEducacaoSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
+                        '[itemprop="datePublished"]::attr(content)',
                         '.data::text',
                         'p.meta::text',
                         '.publicado p',

@@ -55,24 +55,28 @@ class EBCSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.date::text'
+                        '.date::text',
+                        '[property="article:published_time"]::attr(content)'
                     ]
                 }
             },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        '[itemprop=dateModified]::attr(content)'
+                        '[itemprop=dateModified]::attr(content)',
+                        '[property="article:modified_time"]::attr(content)'
                     ]
                 }
             },
             "articleBody": {
                 "selectors": {
                     "css": [
+                        'article .content',
                         '[itemprop=articleBody]',
                         '[property=articleBody]',
                         '.node-noticia .content',
-                        '.news'
+                        '.news',
+                        'article'
                     ]
                 }
             },

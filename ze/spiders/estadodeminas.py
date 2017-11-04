@@ -72,6 +72,11 @@ class EstadoDeMinasSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.entry-content'
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.estadodeminas.EstadoDeMinasSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -85,3 +90,30 @@ class EstadoDeMinasSpider(ZeSpider):
             }
         }
     }]
+
+    # def harvest_metadata(self, resp: Response, item, **kargs):
+    #     # TODO: Move to DownloadMiddleware
+    #     item['meta']['jsonLDSchemas'] = self.jsonLDSchemas(reponse)
+    #     item['meta']['otherLinks'] = self.jsonLD
+
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=['.read-more-widget',]
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for el in html.select('a'):
+                # print(el.get_text().strip('\n'))
+                el.replace_with(el.get_text().strip('\n'))
+        except Exception as e:
+            exceptions_append(e)
+
+
+        return html, exceptions
+

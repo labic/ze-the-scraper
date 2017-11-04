@@ -42,7 +42,8 @@ class NovaEscolaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
-                        '.autor-nome::text'
+                        '.autor-nome::text',
+                        '.author::text'
                     ]
                 }
             },
@@ -50,7 +51,9 @@ class NovaEscolaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
-                        '.data::text'
+                        '.data::text',
+                        '.heading-content date::text',
+                        'date::text'
                     ]
                 }
             },
@@ -65,7 +68,13 @@ class NovaEscolaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.texto'#ta dando algo errado aqui. não consigo pegar todos os <p>s
+                        '.texto',
+                        '#content'#ta dando algo errado aqui. não consigo pegar todos os <p>s
+                    ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.novaescola.NovaEscolaSpider.improve_html"
                     ]
                 }
             },
@@ -74,9 +83,41 @@ class NovaEscolaSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[onclick*=montaURL]::text',
+                        '[name="keywords"]::attr(content)'
                     ]
                 }
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+        to_decompose = ['.heading-content',
+                        'header',
+                        ]
+        try:
+            selector = 'div'
+            for el in html.select(selector):
+                el.unwrap()
+
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            for selector in to_decompose:
+                for el in html.select(selector):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+        return html, exceptions
+
+
+# .heading-content
+# header
