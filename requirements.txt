@@ -16,4 +16,4 @@ scrapy-jsonrpc==0.3.0
 scrapy-rotating-proxies==0.3.1
 scrapyrt==0.10
 shub==2.5.1
-google-api-python-client==1.6.4
+search_google==1.2.0
