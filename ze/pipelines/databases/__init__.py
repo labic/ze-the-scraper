@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging; logger = logging.getLogger(__name__)
+import traceback
 
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
@@ -63,7 +64,7 @@ class MongoPipeline(BasePipeline):
         except Exception as e:
             logger.error('Failed insert item to MongoDB: %s', e)
             self.stats.inc_value('items/mongodb/insert_erros_count')
-            self.stats.set_value('mongodb/errors', e)
+            self.stats.set_value('mongodb/error/traceback', traceback.format_exc())
             pass
         
         return item
