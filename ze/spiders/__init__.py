@@ -89,20 +89,19 @@ class AllSpiders(ZeSpider):
 
     def start_requests(self):
         self._prepare_domains_items_refs()
-        self.start_urls = [
-            'http://blogs.oglobo.globo.com/todos-pela-educacao/post/quem-quer-ser-professor-no-brasil.html'
-            ]
+        
         for url in self.start_urls:
             yield Request(url, dont_filter=False)
 
     def parse(self, response):
+        possible_domains = []
         try:
             response_url = urlparse(response.url)
 
 
             domains_allowed = list(d for d in self.allowed_domains \
                                       if d in response_url.geturl())
-
+            possible_domains = domains_allowed
             # FIXME what do when get 2 domain? For now let some DropItem handler
             if (len(domains_allowed) > 1):
                 url_split = response_url.netloc.split('.')
@@ -111,8 +110,10 @@ class AllSpiders(ZeSpider):
                     for domain in domains_allowed:
                         if piece_of_url not in domain:
                             possible_domains.remove(domain)
+                        if len(possible_domains)==1:
+                            break
                     if len(possible_domains)==1:
-                        break
+                            break
                 self.logger.error('more than one allowed domain %s to url: %s'
                                   %(domains_allowed, response.url))
         except IndexError as error:
