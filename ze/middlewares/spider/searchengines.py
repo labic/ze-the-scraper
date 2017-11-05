@@ -13,7 +13,7 @@ from scrapy.exceptions import NotConfigured
 from scrapy import signals
 from scrapy.utils.project import data_path
 
-import search_google.api
+from search_google import api as gcse_api
 import GoogleScraper
 
 
@@ -65,7 +65,7 @@ class GoogleSearchMiddleware(object):
             gcs_urls = []
             
             for i in range(1, 11):
-                results = search_google.api.results(buildargs, query_paraments)
+                results = gcse_api.results(buildargs, query_paraments)
                 gcs_urls += results.links
                 query_paraments['start'] += 10
             
