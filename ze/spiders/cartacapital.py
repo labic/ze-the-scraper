@@ -70,6 +70,11 @@ class CartaCapitalSpider(ZeSpider):
                         "#content-core",
                         ".td-post-content"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.cartacapital.CartaCapitalSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -84,3 +89,54 @@ class CartaCapitalSpider(ZeSpider):
             }
         }
     }]
+
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        try:
+            selector = '.image-inline'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('.image-caption')[0].string
+                fg.append(fc)
+
+                el.replace_with(fg)
+        except Exception as e:
+            exceptions_append(e)
+
+
+        try:
+            selector = '.tile-rights'
+            for i, el in enumerate(html.select(selector)):
+                fg = html.new_tag('figure')
+                img = html.select('.canvasImg img')[i]
+                fg.append(html.new_tag('img', src=img['data-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('span')[0].string
+                fg.append(fc)
+
+                el.replace_with(fg)
+                img.parent.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+
+        return html, exceptions
+

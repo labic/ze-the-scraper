@@ -101,7 +101,8 @@ class BandSpider(ZeSpider):
         exceptions = []; exceptions_append = exceptions.append
         to_decompose=['.cp-share-list-entry-share',
                         '.alert-warning',
-                        '.cp-content-list-links']
+                        '.cp-content-list-links',
+                        ]
 
         try:
             for item in to_decompose:

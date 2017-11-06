@@ -72,6 +72,11 @@ class CorreioPopularSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.article-container'
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.correiopopular.CorreioPopularSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -84,3 +89,44 @@ class CorreioPopularSpider(ZeSpider):
             }
         }
     }]
+
+
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+        try:
+            selector = '#foto_auto'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                images = el.select('img')
+                if not(len(images) ==0):
+                    for img in images:
+                        fg.append(html.new_tag('img', src=img['src']))
+                    el.replace_with(fg)
+
+            selector = '.fe-content'
+            for el in html.select(selector):
+                text=el.get_text()
+                el.replace_with(text)
+        except Exception as e:
+            exceptions_append(e)
+
+
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+
+

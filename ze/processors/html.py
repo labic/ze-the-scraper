@@ -32,77 +32,77 @@ class ImproveHTML(object):
         except Exception as e:
             logger.warn(e)
 
-        if spider_name is 'cartacapital':
-            try:
-                selector = '.image-inline'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select('.image-caption')[0].string
-                    fg.append(fc)
+        # if spider_name is 'cartacapital':
+        #     try:
+        #         selector = '.image-inline'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+        #             fc = html.new_tag('figcaption')
+        #             fc.string = el.select('.image-caption')[0].string
+        #             fg.append(fc)
 
-                    el.replace_with(fg)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #             el.replace_with(fg)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-            try:
-                selector = '.tile-rights'
-                for i, el in enumerate(html.select(selector)):
-                    fg = html.new_tag('figure')
-                    img = html.select('.canvasImg img')[i]
-                    fg.append(html.new_tag('img', src=img['data-src']))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select('span')[0].string
-                    fg.append(fc)
+        #     try:
+        #         selector = '.tile-rights'
+        #         for i, el in enumerate(html.select(selector)):
+        #             fg = html.new_tag('figure')
+        #             img = html.select('.canvasImg img')[i]
+        #             fg.append(html.new_tag('img', src=img['data-src']))
+        #             fc = html.new_tag('figcaption')
+        #             fc.string = el.select('span')[0].string
+        #             fg.append(fc)
 
-                    el.replace_with(fg)
-                    img.parent.decompose()
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #             el.replace_with(fg)
+        #             img.parent.decompose()
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-        if spider_name is 'cartaeducacao':
-            try:
-                selector = '.image-inline'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select('.image-caption')[0].string
-                    fg.append(fc)
+        # if spider_name is 'cartaeducacao':
+        #     try:
+        #         selector = '.image-inline'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             fg.append(html.new_tag('img', src=el.select('img')[0]['data-src']))
+        #             fc = html.new_tag('figcaption')
+        #             fc.string = el.select('.image-caption')[0].string
+        #             fg.append(fc)
 
-                    el.replace_with(fg)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #             el.replace_with(fg)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-            try:
-                selector = '.tile-rights'
-                for i, el in enumerate(html.select(selector)):
-                    fg = html.new_tag('figure')
-                    img = html.select('.canvasImg img')[i]
-                    fg.append(html.new_tag('img', src=img['data-src']))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select('span')[0].string
-                    fg.append(fc)
+        #     try:
+        #         selector = '.tile-rights'
+        #         for i, el in enumerate(html.select(selector)):
+        #             fg = html.new_tag('figure')
+        #             img = html.select('.canvasImg img')[i]
+        #             fg.append(html.new_tag('img', src=img['data-src']))
+        #             fc = html.new_tag('figcaption')
+        #             fc.string = el.select('span')[0].string
+        #             fg.append(fc)
 
-                    el.replace_with(fg)
-                    img.parent.decompose()
+        #             el.replace_with(fg)
+        #             img.parent.decompose()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-            try:
-                selector = 'a'
-                for el in html.select(selector):
-                    el.decompose()
+        #     try:
+        #         selector = 'a'
+        #         for el in html.select(selector):
+        #             el.decompose()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
 
 
@@ -258,111 +258,111 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
-        if spider_name is 'atarde':
-            # try:
-            #     selector = 'p'
-            #     for el in html.select(selector):
-            #         text=el.get_text()
-            #         el.replace_with(text)
-            # except Exception as e:
-            #     logger.error('Failed to replace "%s" selector from %s:\n%s',
-            #         selector, spider_name, e)
-            # try:
-            #     selector = 'figure'
-            #     for el in html.select(selector):
-            #         text=el.get_text()
-            #         el.replace_with('')
-            #     selector = 'aside'
-            #     for el in html.select(selector):
-            #         text=el.get_text()
-            #         el.replace_with('')
-            try:
-                selector = 'a'
-                for el in html.select(selector):
-                    text=el.get_text()
-                    el.replace_with(text)
-                selector = 'aside'
-                for el in html.select(selector):
-                    el.decompose()
+        # if spider_name is 'atarde':
+        #     # try:
+        #     #     selector = 'p'
+        #     #     for el in html.select(selector):
+        #     #         text=el.get_text()
+        #     #         el.replace_with(text)
+        #     # except Exception as e:
+        #     #     logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #     #         selector, spider_name, e)
+        #     # try:
+        #     #     selector = 'figure'
+        #     #     for el in html.select(selector):
+        #     #         text=el.get_text()
+        #     #         el.replace_with('')
+        #     #     selector = 'aside'
+        #     #     for el in html.select(selector):
+        #     #         text=el.get_text()
+        #     #         el.replace_with('')
+        #     try:
+        #         selector = 'a'
+        #         for el in html.select(selector):
+        #             text=el.get_text()
+        #             el.replace_with(text)
+        #         selector = 'aside'
+        #         for el in html.select(selector):
+        #             el.decompose()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-        if spider_name is 'correiobraziliense':
-            try:
+        # if spider_name is 'correiobraziliense':
+        #     try:
 
-                selector = 'section'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    images = el.select('img')
+        #         selector = 'section'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             images = el.select('img')
 
-                    if not(len(images) ==0):
-                        for img in images:
-                            fg.append(html.new_tag('img', src=img['src']))
-                        el.replace_with(fg)
+        #             if not(len(images) ==0):
+        #                 for img in images:
+        #                     fg.append(html.new_tag('img', src=img['src']))
+        #                 el.replace_with(fg)
 
-                selector = 'div'
-                for el in html.select(selector):
-                    el.name = 'p'
+        #         selector = 'div'
+        #         for el in html.select(selector):
+        #             el.name = 'p'
 
-                selector = 'br'
-                for el in html.select(selector):
-                    el.decompose()
+        #         selector = 'br'
+        #         for el in html.select(selector):
+        #             el.decompose()
 
-                selector = 'h3'
-                for el in html.select(selector):
-                    el.name = 'h2'
-                selector = 'p'
-                for el in html.select(selector):
-                    if el.get_text() == '':
-                        el.decompose()
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #         selector = 'h3'
+        #         for el in html.select(selector):
+        #             el.name = 'h2'
+        #         selector = 'p'
+        #         for el in html.select(selector):
+        #             if el.get_text() == '':
+        #                 el.decompose()
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-        if spider_name is 'correiopopular':
-            try:
-                selector = '#foto_auto'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    images = el.select('img')
-                    if not(len(images) ==0):
-                        for img in images:
-                            fg.append(html.new_tag('img', src=img['src']))
-                        el.replace_with(fg)
+        # if spider_name is 'correiopopular':
+        #     try:
+        #         selector = '#foto_auto'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             images = el.select('img')
+        #             if not(len(images) ==0):
+        #                 for img in images:
+        #                     fg.append(html.new_tag('img', src=img['src']))
+        #                 el.replace_with(fg)
 
-                selector = '.fe-content'
-                for el in html.select(selector):
-                    text=el.get_text()
-                    el.replace_with(text)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #         selector = '.fe-content'
+        #         for el in html.select(selector):
+        #             text=el.get_text()
+        #             el.replace_with(text)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
                 ######----FALTA TERMINAR----######
-        if spider_name is 'diariodepernambuco':
-            try:
-                selector = 'table'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    images = el.select('img')
-                    if not(len(images) ==0):
-                        for img in images:
-                            fg.append(html.new_tag('img', src=img['src']))
-                        el.replace_with(fg)
-                    # el.replace_with(src)
+        # if spider_name is 'diariodepernambuco':
+        #     try:
+        #         selector = 'table'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             images = el.select('img')
+        #             if not(len(images) ==0):
+        #                 for img in images:
+        #                     fg.append(html.new_tag('img', src=img['src']))
+        #                 el.replace_with(fg)
+        #             # el.replace_with(src)
 
-                selector = 'a'
-                for el in html.select(selector):
-                    el.decompose()
-                selector = 'div'
-                for el in html.select(selector):
-                    el.unwrap()
+        #         selector = 'a'
+        #         for el in html.select(selector):
+        #             el.decompose()
+        #         selector = 'div'
+        #         for el in html.select(selector):
+        #             el.unwrap()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
         if spider_name is 'estadodeminas':
             try:
@@ -569,14 +569,14 @@ class ImproveHTML(object):
                 logger.error('Failed to replace "%s" selector from %s:\n%s',
                     selector, spider_name, e)
 
-        if spider_name is 'band':
-            try:
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
+        # if spider_name is 'band':
+        #     try:
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
         # Aqui ta funcionando
 
@@ -665,39 +665,39 @@ class ImproveHTML(object):
 
 
 
-        if spider_name is 'brasilescola':
-            try:
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
+        # if spider_name is 'brasilescola':
+        #     try:
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-            try:
-                selector = '.zoom-expand'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
-                    fc = html.new_tag('figcaption')
-                    fc.string = el.select('img')[0]['titulo']
-                    fg.append(fc)
+        #     try:
+        #         selector = '.zoom-expand'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
+        #             fc = html.new_tag('figcaption')
+        #             fc.string = el.select('img')[0]['titulo']
+        #             fg.append(fc)
 
 
-                    el.replace_with(fg)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #             el.replace_with(fg)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-            try:
-                selector='.align-img'
+        #     try:
+        #         selector='.align-img'
 
-                for el in html.select(selector):
-                    el.decompose()
+        #         for el in html.select(selector):
+        #             el.decompose()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
         if spider_name is 'terra':
             try:
