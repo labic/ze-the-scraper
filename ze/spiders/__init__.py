@@ -89,7 +89,7 @@ class AllSpiders(ZeSpider):
 
     def start_requests(self):
         self._prepare_domains_items_refs()
-        
+
         for url in self.start_urls:
             yield Request(url, dont_filter=False)
 

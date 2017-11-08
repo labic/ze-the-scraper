@@ -16,7 +16,8 @@ class R7Spider(ZeSpider):
                         "meta[property='twitter:title']::attr(content)",
                         "meta[name=title]::attr(content)",
                         "[itemprop=name]::text",
-                        ".title::text"
+                        ".title::text",
+                        ".post-title::text"
                     ]
                 }
             },
@@ -37,7 +38,8 @@ class R7Spider(ZeSpider):
                         "meta[property='og:description']::attr(content)",
                         "meta[name=description]::attr(content)",
                         "[property=description]::attr(content)",
-                        "[property='og:description']::attr(content)"
+                        "[property='og:description']::attr(content)",
+                        '[property="og:description"]::attr(content)'
                     ]
                 }
             },
@@ -55,8 +57,10 @@ class R7Spider(ZeSpider):
                     "css": [
                         "[itemprop=datePublished]::text",
                         "[property='article:published_time']::attr(content)",
+                        '[property="article:published_time"]::attr(content)',
                         ".published_at::attr(datetime)",
-                        ".list-item a::text"
+                        ".list-item a::text",
+                        ".post-publication::text"
 
                     ]
                 }
@@ -65,7 +69,8 @@ class R7Spider(ZeSpider):
                 "selectors": {
                     "css": [
                         "[itemprop=dateModified]::text",
-                        "[itemprop=dateModified]::attr(datetime)"
+                        "[itemprop=dateModified]::attr(datetime)",
+                        '[property="article:published_time"]::attr(content)',
                     ]
                 }
             },
@@ -74,7 +79,8 @@ class R7Spider(ZeSpider):
                     "css": [
                         "[itemprop=articleBody]",
                         ".content",
-                        "#article_content"
+                        "#article_content",
+                        '.post-content'
                     ]
                 }
             },
@@ -83,7 +89,9 @@ class R7Spider(ZeSpider):
                     "css": [
                         "meta[property='keywords']::attr(content)",
                         "[itemprop=keywords]::text",
-                        "[name=news_keywords]::attr(content)"
+                        "[name=news_keywords]::attr(content)",
+                        '[name="keywords"]::attr(content)',
+                        ".post-tag-container a::text"
                     ]
                 }
             },

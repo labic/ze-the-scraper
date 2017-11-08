@@ -43,6 +43,7 @@ class ParseDate(object):
 
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
+        print('SPIDER: ', spider_name)
 
         if spider_name == 'r7':
             if '(' in value:
