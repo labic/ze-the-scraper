@@ -79,7 +79,7 @@ class MundoEducacaoSpider(ZeSpider):
                 },
                 "contexts": {
                     "improve_html": [
-                        "ze.spiders.g1.G1Spider.improve_html"
+                        "ze.spiders.mundoeducacao.MundoEducacaoSpider.improve_html"
                     ]
                 }
             },

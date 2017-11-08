@@ -390,57 +390,57 @@ class ImproveHTML(object):
         #         logger.error('Failed to replace "%s" selector from %s:\n%s',
         #             selector, spider_name, e)
 
-        if spider_name is 'jornaldecampinas':
-            try:
-                selector = 'i'
-                for el in html.select(selector):
-                    if (len(el.contents))==0:
-                        el.decompose()
-                selector = 'a'
-                for el in html.select(selector):
-                    el.decompose()
-                selector = 'ul'
-                for el in html.select(selector):
-                    el.decompose()
-                selector = 'u'
-                for el in html.select(selector):
-                    el.unwrap()
-                selector = 'img'
-                for el in html.select(selector):
-                    fg = html.new_tag('figure')
-                    fg.append(html.new_tag('img', src=img['src']))
-                    img_src = el['src']
-                    el.replace_with(fg)
-                selector = 'h2'
-                for el in html.select(selector):
-                    el.decompose()
-                selector = 'h3'
-                for el in html.select(selector):
-                    el.decompose()
-                selector = 'span'
-                for el in html.select(selector):
-                    text = el.get_text()
-                    if text=='':
-                        el.decompose()
-                    else:
-                        el.replace_with(text)
-                selector = 'p'
-                for el in html.select(selector):
-                    text = el.get_text()
-                    if text=='':
-                        el.decompose()
-                    # else:
-                    #     el.replace_with(text)
-                selector = 'table'
-                for el in html.select(selector):
-                    ems=el.select('em')
-                    text=''
-                    for em in ems:
-                        text=text+em.get_text()
-                    el.replace_with(text)
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        # if spider_name is 'jornaldecampinas':
+        #     try:
+        #         selector = 'i'
+        #         for el in html.select(selector):
+        #             if (len(el.contents))==0:
+        #                 el.decompose()
+        #         selector = 'a'
+        #         for el in html.select(selector):
+        #             el.decompose()
+        #         selector = 'ul'
+        #         for el in html.select(selector):
+        #             el.decompose()
+        #         selector = 'u'
+        #         for el in html.select(selector):
+        #             el.unwrap()
+        #         selector = 'img'
+        #         for el in html.select(selector):
+        #             fg = html.new_tag('figure')
+        #             fg.append(html.new_tag('img', src=img['src']))
+        #             img_src = el['src']
+        #             el.replace_with(fg)
+        #         selector = 'h2'
+        #         for el in html.select(selector):
+        #             el.decompose()
+        #         selector = 'h3'
+        #         for el in html.select(selector):
+        #             el.decompose()
+        #         selector = 'span'
+        #         for el in html.select(selector):
+        #             text = el.get_text()
+        #             if text=='':
+        #                 el.decompose()
+        #             else:
+        #                 el.replace_with(text)
+        #         selector = 'p'
+        #         for el in html.select(selector):
+        #             text = el.get_text()
+        #             if text=='':
+        #                 el.decompose()
+        #             # else:
+        #             #     el.replace_with(text)
+        #         selector = 'table'
+        #         for el in html.select(selector):
+        #             ems=el.select('em')
+        #             text=''
+        #             for em in ems:
+        #                 text=text+em.get_text()
+        #             el.replace_with(text)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
         # if spider_name is 'novaescola':
 
         #     try:
@@ -457,17 +457,17 @@ class ImproveHTML(object):
         #     except Exception as e:
         #         logger.error('Failed to replace "%s" selector from %s:\n%s',
         #             selector, spider_name, e)
-        if spider_name is 'valor':
-            try:
-                selector = 'div'
-                for el in html.select(selector):
-                    el.unwrap()
-                selector = 'a'
-                for el in html.select(selector):
-                    el.replace_with(el.get_text())
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        # if spider_name is 'valor':
+        #     try:
+        #         selector = 'div'
+        #         for el in html.select(selector):
+        #             el.unwrap()
+        #         selector = 'a'
+        #         for el in html.select(selector):
+        #             el.replace_with(el.get_text())
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
         # if spider_name is 'ebc':
         #     try:
@@ -528,15 +528,15 @@ class ImproveHTML(object):
         #             selector, spider_name, e)
 
 
-        if spider_name is 'huffpostbrasil':
-            try:
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
-                for el in html.select('blockquote'):
-                    el.decompose()
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        # if spider_name is 'huffpostbrasil':
+        #     try:
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
+        #         for el in html.select('blockquote'):
+        #             el.decompose()
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
 
 
@@ -551,14 +551,14 @@ class ImproveHTML(object):
         #         logger.error('Failed to replace "%s" selector from %s:\n%s',
         #             selector, spider_name, e)
 
-        if spider_name is 'jconline':
-            try:
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
+        # if spider_name is 'jconline':
+        #     try:
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
         if spider_name is 'zh':
             try:
@@ -654,14 +654,14 @@ class ImproveHTML(object):
 
 
 
-        if spider_name is 'theintercept':
-            try:
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
+        # if spider_name is 'theintercept':
+        #     try:
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
 
 
@@ -699,35 +699,35 @@ class ImproveHTML(object):
         #         logger.error('Failed to replace "%s" selector from %s:\n%s',
         #             selector, spider_name, e)
 
-        if spider_name is 'terra':
-            try:
-                selector = '.video-related'
-                for el in html.select(selector):
-                    el.parent.decompose()
+        # if spider_name is 'terra':
+        #     try:
+        #         selector = '.video-related'
+        #         for el in html.select(selector):
+        #             el.parent.decompose()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-        if spider_name is 'tvbrasil':
-            try:
-                selector = 'link'
-                for el in html.select(selector):
-                    el.decompose()
+        # if spider_name is 'tvbrasil':
+        #     try:
+        #         selector = 'link'
+        #         for el in html.select(selector):
+        #             el.decompose()
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
-        if spider_name is 'redetv':
-            try:
-                selector = 'a'
-                for el in html.select(selector):
-                    el.replace_with(el.get_text())
+        # if spider_name is 'redetv':
+        #     try:
+        #         selector = 'a'
+        #         for el in html.select(selector):
+        #             el.replace_with(el.get_text())
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
 
             try:
@@ -746,17 +746,17 @@ class ImproveHTML(object):
                     selector, spider_name, e)
 
 
-        if spider_name is 'guiadoestudante':
-            guia_decompose=[    '.top_helper ',
-                                '#links-uteis-',
-                            ]
-            try:
-                for selector in guia_decompose:
-                    for el in html.select(selector):
-                        el.decompose()
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        # if spider_name is 'guiadoestudante':
+        #     guia_decompose=[    '.top_helper ',
+        #                         '#links-uteis-',
+        #                     ]
+        #     try:
+        #         for selector in guia_decompose:
+        #             for el in html.select(selector):
+        #                 el.decompose()
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
 
 

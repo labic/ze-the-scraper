@@ -8,7 +8,7 @@ class ValorEconomicoSpider(ZeSpider):
     allowed_domains = ['valor.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
-        "fields": { 
+        "fields": {
             "name": {
                 "selectors": {
                     "css": [
@@ -72,6 +72,11 @@ class ValorEconomicoSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.node-body'
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.valor.ValorEconomicoSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -86,3 +91,29 @@ class ValorEconomicoSpider(ZeSpider):
             }
         }
     }]
+
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+        try:
+            selector = 'div'
+            for el in html.select(selector):
+                el.unwrap()
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

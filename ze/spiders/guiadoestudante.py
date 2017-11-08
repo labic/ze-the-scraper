@@ -95,7 +95,10 @@ class GuiadoEstudanteSpider(ZeSpider):
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
 
-        to_decompose = ['.article-tags']
+        to_decompose = ['.article-tags',
+                        '.top_helper ',
+                        '#links-uteis-',
+                        ]
         try:
             for item in to_decompose:
                 for el in html.select(item):

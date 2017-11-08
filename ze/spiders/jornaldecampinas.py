@@ -72,6 +72,11 @@ class JornaldeCampinasSpider(ZeSpider):
                         '[itemprop=articleBody]',
                         '.entry'
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.jornaldecampinas.JornaldeCampinasSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -86,3 +91,64 @@ class JornaldeCampinasSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=["i",'ul','h2','h3']
+
+
+        try:
+            selector = 'u'
+            for el in html.select(selector):
+                el.unwrap()
+
+            selector = 'img'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=img['src']))
+                img_src = el['src']
+                el.replace_with(fg)
+
+            selector = 'span'
+            for el in html.select(selector):
+                text = el.get_text()
+                if text=='':
+                    el.decompose()
+                else:
+                    el.replace_with(text)
+
+            selector = 'p'
+            for el in html.select(selector):
+                text = el.get_text()
+                if text=='':
+                    el.decompose()
+                # else:
+                #     el.replace_with(text)
+
+            selector = 'table'
+            for el in html.select(selector):
+                ems=el.select('em')
+                text=''
+                for em in ems:
+                    text=text+em.get_text()
+                el.replace_with(text)
+
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+
+

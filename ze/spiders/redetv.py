@@ -92,6 +92,11 @@ class RedeTVSpider(ZeSpider):
                         "#content",
                         ".text"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.redetv.RedeTVSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -105,3 +110,37 @@ class RedeTVSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+
+        try:
+            selector = 'img'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el['src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.parent.select('em')[0].string
+                fg.append(fc)
+                el.parent.select('em')[0].decompose()
+
+                el.replace_with(fg)
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+
