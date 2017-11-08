@@ -100,7 +100,19 @@ class EstadoDeMinasSpider(ZeSpider):
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
 
-        to_decompose=['.read-more-widget',]
+        to_decompose=['.read-more-widget','meta']
+        try:
+            #Caso imagens em galeria
+            selector = 'section'
+            for el in html.select(selector):
+                images = el.select('img')
+                img_src=''
+                for img in images:
+                    img_src=img_src+img['src']+'\n'
+                el.replace_with(img_src)
+        except Exception as e:
+            exceptions_append(e)
+
         try:
             for item in to_decompose:
                 for el in html.select(item):

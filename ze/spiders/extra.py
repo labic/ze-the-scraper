@@ -83,6 +83,11 @@ class ExtraSpider(ZeSpider):
                         ".conteudo",
                         ".story"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.extra.ExtraSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -96,3 +101,36 @@ class ExtraSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        try:
+            selector = 'figure'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img')[0]['data-pagespeed-lazy-src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('figcaption')[0].get_text()
+                fg.append(fc)
+
+                el.replace_with(fg)
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+
