@@ -5,7 +5,7 @@ from . import ZeSpider
 class BandSpider(ZeSpider):
 
     name = 'band'
-    allowed_domains = ['band.uol.com.br']
+    allowed_domains = ['band.uol.com.br','noticias.band.uol.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {

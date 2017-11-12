@@ -56,7 +56,8 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                     "css": [
                         ".news time::attr(datetime)",
                         "[itemprop=datePublished]::text",
-                        '[property="article:published_time"]::attr(content)'
+                        '[property="article:published_time"]::attr(content)',
+                        'article time::attr(datetime)'
                     ]
                 }
             },

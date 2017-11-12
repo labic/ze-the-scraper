@@ -560,14 +560,14 @@ class ImproveHTML(object):
         #         logger.error('Failed to replace "%s" selector from %s:\n%s',
         #             selector, spider_name, e)
 
-        if spider_name is 'zh':
-            try:
-                for el in html.select('a'):
-                    el.replace_with(el.get_text())
+        # if spider_name is 'zh':
+        #     try:
+        #         for el in html.select('a'):
+        #             el.replace_with(el.get_text())
 
-            except Exception as e:
-                logger.error('Failed to replace "%s" selector from %s:\n%s',
-                    selector, spider_name, e)
+        #     except Exception as e:
+        #         logger.error('Failed to replace "%s" selector from %s:\n%s',
+        #             selector, spider_name, e)
 
         # if spider_name is 'band':
         #     try:

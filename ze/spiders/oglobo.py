@@ -95,7 +95,8 @@ class OGloboSpider(ZeSpider):
                     "css": [
                         "meta[name=keywords]::attr(content)",
                         "[itemprop=keywords]::text",
-                        ".entities__list-itemLink::text"
+                        ".entities__list-itemLink::text",
+                        ".tags a::text"
                     ]
                 }
             }

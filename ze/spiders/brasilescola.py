@@ -5,7 +5,7 @@ from . import ZeSpider
 class BrasilEscolaSpider(ZeSpider):
 
     name = 'brasilescola'
-    allowed_domains = ['brasilescola.uol.com.br']
+    allowed_domains = ['brasilescola.uol.com.br','vestibular.brasilescola.uol.com.br']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {

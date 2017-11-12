@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import ZeSpider
-
+__all__ = ['ElPaisBrasilSpider']
 
 class ElPaisBrasilSpider(ZeSpider):
 
@@ -95,9 +95,10 @@ class ElPaisBrasilSpider(ZeSpider):
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
 
-        to_decompose=[]
+        to_decompose=['#elpais_gpt-INTEXT',]
 
         try:
+            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA--------------------AAAAAAAAAAAAAAAA')
             for el in html.select('a'):
                 el.replace_with(el.get_text())
         except Exception as e:

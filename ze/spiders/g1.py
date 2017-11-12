@@ -114,7 +114,7 @@ class G1Spider(ZeSpider):
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
 
-        to_decompose=['[data-track-category="fim do conteudo"]',]
+        to_decompose=[]
         try:
             selector = '[data-block-type="backstage-photo"]'
             for el in html.select(selector):

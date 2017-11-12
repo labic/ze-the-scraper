@@ -90,10 +90,12 @@ class ParseDate(object):
 
             if spider_name =='brasilescola':
                 value=value.split(',')[0].replace(' - ',' ')\
+                                            .replace('em','')\
                                             .replace('h', ':') \
                                             .replace('min', '')\
                                             .replace('Publicado','')\
                                             .replace('Atualizado','')
+                print('--------------------Value: ',value)
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
             if spider_name =='ig':
                 if '|' in value:
