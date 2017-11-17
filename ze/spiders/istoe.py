@@ -7,6 +7,7 @@ class IstoESpider(ZeSpider):
     name = 'istoe'
     allowed_domains = ['istoe.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

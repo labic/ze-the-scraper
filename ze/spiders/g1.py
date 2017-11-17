@@ -9,6 +9,7 @@ class G1Spider(ZeSpider):
     name = 'g1'
     allowed_domains = ['g1.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

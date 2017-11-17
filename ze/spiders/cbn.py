@@ -7,6 +7,7 @@ class CBNSpider(ZeSpider):
     name = 'cbn'
     allowed_domains = ['cbn.globoradio.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": { 
             "name": {

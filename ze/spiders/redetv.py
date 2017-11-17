@@ -7,6 +7,7 @@ class RedeTVSpider(ZeSpider):
     name = 'redetv'
     allowed_domains = ['redetv.uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name":{

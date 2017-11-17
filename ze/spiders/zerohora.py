@@ -7,6 +7,7 @@ class ZeroHoraSpider(ZeSpider):
     name = 'zh'
     allowed_domains = ['zh.clicrbs.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

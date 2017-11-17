@@ -7,6 +7,7 @@ class UOLSpider(ZeSpider):
     name = 'uol'
     allowed_domains = ['uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

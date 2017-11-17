@@ -7,6 +7,7 @@ class MundoEducacaoSpider(ZeSpider):
     allowed_domains = ['mundoeducacao.bol.uol.com.br',
                         'vestibular.mundoeducacao.bol.uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

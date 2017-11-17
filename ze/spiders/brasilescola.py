@@ -7,6 +7,7 @@ class BrasilEscolaSpider(ZeSpider):
     name = 'brasilescola'
     allowed_domains = ['brasilescola.uol.com.br','vestibular.brasilescola.uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

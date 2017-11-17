@@ -7,6 +7,7 @@ class RecordTVSpider(ZeSpider):
     name = 'r7tv'
     allowed_domains = ['recordtv.r7.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

@@ -7,6 +7,7 @@ class EpocaSpider(ZeSpider):
     name = 'epoca'
     allowed_domains = ['epoca.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

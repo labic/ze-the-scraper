@@ -7,6 +7,7 @@ class BandNewsFMSpider(ZeSpider):
     name = 'bandnewsfm'
     allowed_domains = ['cbn.globoradio.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

@@ -7,6 +7,7 @@ class ExtraSpider(ZeSpider):
     name = 'extra'
     allowed_domains = ['extra.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name":{

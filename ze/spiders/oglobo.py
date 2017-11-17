@@ -8,6 +8,7 @@ class OGloboSpider(ZeSpider):
     allowed_domains = ['oglobo.globo.com',
                         'blogs.oglobo.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

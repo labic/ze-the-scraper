@@ -7,6 +7,7 @@ class TheInterceptSpider(ZeSpider):
     name = 'theintercept'
     allowed_domains = ['theintercept.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

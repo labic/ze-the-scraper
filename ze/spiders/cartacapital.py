@@ -7,6 +7,7 @@ class CartaCapitalSpider(ZeSpider):
     name = 'cartacapital'
     allowed_domains = ['cartacapital.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

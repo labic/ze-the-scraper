@@ -8,6 +8,7 @@ class GestaoEscolarSpider(ZeSpider):
     name = 'gestaoescolar'
     allowed_domains = ['gestaoescolar.org.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

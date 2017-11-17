@@ -7,6 +7,7 @@ class ValorEconomicoSpider(ZeSpider):
     name = 'valor'
     allowed_domains = ['valor.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

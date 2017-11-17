@@ -9,6 +9,7 @@ class GloboSpider(ZeSpider):
                         # 'globo.com'
                         ]
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name":{

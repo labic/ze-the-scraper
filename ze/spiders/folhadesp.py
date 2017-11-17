@@ -7,6 +7,7 @@ class FolhaDeSaoPauloSpider(ZeSpider):
     name = 'folhadesp'
     allowed_domains = ['folha.uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

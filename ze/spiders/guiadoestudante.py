@@ -7,6 +7,7 @@ class GuiadoEstudanteSpider(ZeSpider):
     name = 'guiadoestudante'
     allowed_domains = ['guiadoestudante.abril.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

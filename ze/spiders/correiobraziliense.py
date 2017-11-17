@@ -7,6 +7,7 @@ class CorreioBrasilienseSpider(ZeSpider):
     name = 'correiobraziliense'
     allowed_domains = ['correiobraziliense.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name":  {

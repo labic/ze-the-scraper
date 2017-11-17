@@ -7,6 +7,7 @@ class CamaraSpider(ZeSpider):
     name = 'camara'
     allowed_domains = ['camara.leg.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

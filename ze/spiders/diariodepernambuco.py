@@ -7,6 +7,7 @@ class DiarioDePernambucoSpider(ZeSpider):
     name = 'diariodepernambuco'
     allowed_domains = ['diariodepernambuco.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

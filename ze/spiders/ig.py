@@ -7,6 +7,7 @@ class IGSpider(ZeSpider):
     name = 'ig'
     allowed_domains = ['ig.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

@@ -7,6 +7,7 @@ class SBTSpider(ZeSpider):
     name = 'sbt'
     allowed_domains = ['sbt.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

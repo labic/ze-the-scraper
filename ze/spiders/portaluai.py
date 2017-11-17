@@ -7,6 +7,7 @@ class PortalUAISpider(ZeSpider):
     name = 'portaluai'
     allowed_domains = ['uai.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

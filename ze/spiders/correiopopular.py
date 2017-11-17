@@ -7,6 +7,7 @@ class CorreioPopularSpider(ZeSpider):
     name = 'correiopopular'
     allowed_domains = ['correio.rac.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

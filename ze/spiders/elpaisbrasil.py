@@ -7,6 +7,7 @@ class ElPaisBrasilSpider(ZeSpider):
     name = 'elpais'
     allowed_domains = ['brasil.elpais.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

@@ -7,6 +7,7 @@ class R7Spider(ZeSpider):
     name = 'r7'
     allowed_domains = ['r7.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

@@ -7,6 +7,7 @@ class TVBrasilSpider(ZeSpider):
     name = 'tvbrasil'
     allowed_domains = ['tvbrasil.ebc.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

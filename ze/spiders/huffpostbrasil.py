@@ -7,6 +7,7 @@ class HuffPostBrasilSpider(ZeSpider):
     name = 'huffpostbrasil'
     allowed_domains = ['huffpostbrasil.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

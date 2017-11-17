@@ -7,6 +7,7 @@ class EstadoDeMinasSpider(ZeSpider):
     name = 'estadodeminas'
     allowed_domains = ['em.com.br','uai.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

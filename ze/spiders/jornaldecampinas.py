@@ -7,6 +7,7 @@ class JornaldeCampinasSpider(ZeSpider):
     name = 'jornaldecampinas'
     allowed_domains = ['jornaldecampinas.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

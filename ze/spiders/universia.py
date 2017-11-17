@@ -7,6 +7,7 @@ class UniversiaSpider(ZeSpider):
     name = 'universia'
     allowed_domains = ['universia.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

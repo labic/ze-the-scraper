@@ -7,6 +7,7 @@ class TVCulturaSpider(ZeSpider):
     name = 'tvcultura'
     allowed_domains = ['tvcultura.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
