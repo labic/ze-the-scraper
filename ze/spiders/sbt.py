@@ -58,7 +58,9 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.entry-date::text',
-                        '.BOX.FG666.BOLD::text'
+                        '.BOX.FG666.BOLD::text',
+                        'span.titleNoticeSocial ::text'
+
                     ]
                 }
             },
@@ -74,6 +76,7 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
+                        '#ContentFirst',
                         '.contentNotice .FG333',
                         '.contenttice .FG333'
                     ]
@@ -89,7 +92,8 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[onclick*=montaURL]::text',
+                        '.listKeyword a::text'
                     ]
                 }
             },

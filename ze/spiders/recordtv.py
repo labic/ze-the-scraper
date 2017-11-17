@@ -5,7 +5,7 @@ from . import ZeSpider
 class RecordTVSpider(ZeSpider):
 
     name = 'r7tv'
-    allowed_domains = ['r7.com']
+    allowed_domains = ['recordtv.r7.com']
     items_refs = [{
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
@@ -42,7 +42,7 @@ class RecordTVSpider(ZeSpider):
                 }
             },
             "author": {
-                "default": "SBT Notícias",
+                # "default": "SBT Notícias",
                 "selectors": {
                     "css": [
                         "[itemprop=author]::text",
@@ -57,7 +57,8 @@ class RecordTVSpider(ZeSpider):
                     "css": [
                         "[itemprop=datePublished]::text",
                         "[property='article:published_time']::attr(content)",
-                        '.published_at::attr(datetime)'
+                        '.published_at::attr(datetime)',
+                        '.published::text'
                     ]
                 }
             },

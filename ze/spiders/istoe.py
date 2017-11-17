@@ -45,7 +45,8 @@ class IstoESpider(ZeSpider):
                         # "[itemprop=author]::text",
                         # ".article-author span strong::text",
                         # '.author:not(figcaption)::text',
-                        "[rel=author]::text"
+                        "[rel=author] a::text",
+                        "[rel=author]::text",
                     ]
                 }
             },
@@ -97,11 +98,11 @@ class IstoESpider(ZeSpider):
 
         to_decompose=[]
 
-        try:
-            for el in html.select('a'):
-                el.replace_with(el.get_text())
-        except Exception as e:
-            exceptions_append(e)
+        # try:
+        #     for el in html.select('a'):
+        #         el.replace_with(el.get_text())
+        # except Exception as e:
+        #     exceptions_append(e)
         try:
             for item in to_decompose:
                 for el in html.select(item):

@@ -56,7 +56,7 @@ class MundoEducacaoSpider(ZeSpider):
                         '[itemprop="datePublished"]::attr(content)',
                         '.data::text',
                         'p.meta::text',
-                        '.publicado p',
+                        # '.publicado p',
                         '.publicado::text'
                     ]
                 }
@@ -86,6 +86,7 @@ class MundoEducacaoSpider(ZeSpider):
             "keywords": {
                 "selectors": {
                     "css": [
+                        '[name="news_keywords"]::attr(content)',
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
                         '[onclick*=montaURL]::text',

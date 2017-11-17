@@ -6,6 +6,7 @@ class SenadoSpider(ZeSpider):
     name = 'senado'
     allowed_domains = ['senado.leg.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -70,7 +71,8 @@ class SenadoSpider(ZeSpider):
                         '.datahoraNoticia::text',
                         '#materia span.text-muted::text',
                         '.ByLine-data::text',
-                        '.editoriaVerNoticia::text'
+                        '.editoriaVerNoticia::text',
+                        '#materia span.text-muted::text'
                     ]
                 }
             },
