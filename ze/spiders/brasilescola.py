@@ -43,7 +43,8 @@ class BrasilEscolaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
-                        '.autor-nome::text'
+                        '.autor-nome::text',
+                        '.autores::text'
                     ]
                 }
             },
@@ -66,7 +67,8 @@ class BrasilEscolaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.conteudo-materia'#ta dando algo errado aqui. não consigo pegar todos os <p>s
+                        '.conteudo-materia',
+                        '.materia-conteudo'
                     ]
                 },
                 "contexts": {

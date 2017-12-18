@@ -18,7 +18,9 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                         ".news header h1::text",
                         "[itemprop=name]::text",
                         "[itemprop='headline']::text",
-                        "[itemprop=alternativeHeadline]::attr(content)"
+                        "[itemprop=alternativeHeadline]::attr(content)",
+                        # MOBILE
+                        "h1::text",
                     ]
                 }
             },
@@ -29,7 +31,9 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                         "meta[name=description]::attr(content)",
                         'meta[property="og:image"]::attr(content)',
                         "[itemprop=image]::attr(content)",
-                        "[property='og:image']::attr(content)"
+                        "[property='og:image']::attr(content)",
+                        # MOBILE
+                        ".gallery img::attr(src)"
                     ]
                 }
             },
@@ -48,7 +52,10 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                         ".news .author p b",
                         "[itemprop=author] b::text",
                         ".news__byline p strong::text",
-                        '.post-autor::text'
+                        '.post-autor::text',
+                        # MOBILE
+                        '.meta .credits p b::text'
+
                     ]
                 }
             },
@@ -58,7 +65,11 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                         ".news time::attr(datetime)",
                         "[itemprop=datePublished]::text",
                         '[property="article:published_time"]::attr(content)',
-                        'article time::attr(datetime)'
+                        'article time::attr(datetime)',
+                        '.post-date',
+                        '.news header time::attr(datetime)',
+                        # MOBILE
+                        '.meta .date::text'
                     ]
                 }
             },
@@ -76,7 +87,9 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                         ".news .content",
                         "[itemprop=articleBody]",
                         ".single-post-content",
-                        ".text--container"
+                        ".text--container",
+                        # MOBILE
+                        ".content-type-news"
                     ]
                 },
                 "contexts": {
@@ -90,7 +103,9 @@ class FolhaDeSaoPauloSpider(ZeSpider):
                     "css": [
                         "meta[name=keywords]::attr(content)",
                         "[itemprop=keywords]::text",
-                        "[itemprop=keywords]::attr(content)"
+                        "[itemprop=keywords]::attr(content)",
+                        # MOBILE
+                        ".tags-related-box a::text"
                     ]
                 }
             }

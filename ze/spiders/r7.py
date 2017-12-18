@@ -18,7 +18,9 @@ class R7Spider(ZeSpider):
                         "meta[name=title]::attr(content)",
                         "[itemprop=name]::text",
                         ".title::text",
-                        ".post-title::text"
+                        ".post-title::text",
+                        'title::text',
+                        '#h3_newstitle::text'
                     ]
                 }
             },
@@ -45,6 +47,7 @@ class R7Spider(ZeSpider):
                 }
             },
             "author": {
+                "default": "R7",
                 "selectors": {
                     "css": [
                         "[itemprop=author]::text",
@@ -61,7 +64,8 @@ class R7Spider(ZeSpider):
                         '[property="article:published_time"]::attr(content)',
                         ".published_at::attr(datetime)",
                         ".list-item a::text",
-                        ".post-publication::text"
+                        ".post-publication::text",
+                        '.publicado::text'
 
                     ]
                 }
@@ -81,7 +85,9 @@ class R7Spider(ZeSpider):
                         "[itemprop=articleBody]",
                         ".content",
                         "#article_content",
-                        '.post-content'
+                        '.post-content',
+                        '.materia_texto',
+                        '.initial-letter'
                     ]
                 },
                 "contexts": {
@@ -97,7 +103,7 @@ class R7Spider(ZeSpider):
                         "[itemprop=keywords]::text",
                         "[name=news_keywords]::attr(content)",
                         '[name="keywords"]::attr(content)',
-                        ".post-tag-container a::text"
+                        ".post-tag-container a::text",
                     ]
                 }
             },

@@ -57,6 +57,7 @@ class ParseDate(object):
         if (self.field == 'datePublished'):
 
             if spider_name == 'r7':
+                value = value.replace('publicado',' ').replace('em',' ').replace('às',' ').replace(':','')
                 if '(' in value:
                     value=value.split('(')[1].split(')')[0]
 
