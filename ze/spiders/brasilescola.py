@@ -5,8 +5,9 @@ from . import ZeSpider
 class BrasilEscolaSpider(ZeSpider):
 
     name = 'brasilescola'
-    allowed_domains = ['brasilescola.uol.com.br']
+    allowed_domains = ['brasilescola.uol.com.br','vestibular.brasilescola.uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -42,7 +43,8 @@ class BrasilEscolaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=author]::text',
-                        '.autor-nome::text'
+                        '.autor-nome::text',
+                        '.autores::text'
                     ]
                 }
             },
@@ -65,7 +67,8 @@ class BrasilEscolaSpider(ZeSpider):
                 "selectors": {
                     "css": [
                         '[itemprop=articleBody]',
-                        '.conteudo-materia'#ta dando algo errado aqui. não consigo pegar todos os <p>s
+                        '.conteudo-materia',
+                        '.materia-conteudo'
                     ]
                 },
                 "contexts": {
@@ -88,10 +91,32 @@ class BrasilEscolaSpider(ZeSpider):
     @staticmethod
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
+        to_decompose = ['.align-img',]
+
+        try:
+            selector = '.zoom-expand'
+            for el in html.select(selector):
+                fg = html.new_tag('figure')
+                fg.append(html.new_tag('img', src=el.select('img')[0]['src']))
+                fc = html.new_tag('figcaption')
+                fc.string = el.select('img')[0]['titulo']
+                fg.append(fc)
+
+
+                el.replace_with(fg)
+        except Exception as e:
+            exceptions_append(e)
 
         try:
             for el in html.select('a'):
                 el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
         except Exception as e:
             exceptions_append(e)
 

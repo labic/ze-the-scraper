@@ -7,6 +7,7 @@ class TVBrasilSpider(ZeSpider):
     name = 'tvbrasil'
     allowed_domains = ['tvbrasil.ebc.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -75,6 +76,11 @@ class TVBrasilSpider(ZeSpider):
                         '.node-noticia .content',
                         "article"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.tvbrasil.TVBrasilSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -89,3 +95,23 @@ class TVBrasilSpider(ZeSpider):
             },
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=['link']
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

@@ -7,6 +7,7 @@ class JCOnlineSpider(ZeSpider):
     name = "jconline"
     allowed_domains = ["jconline.ne10.uol.com.br"]
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

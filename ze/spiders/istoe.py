@@ -7,6 +7,7 @@ class IstoESpider(ZeSpider):
     name = 'istoe'
     allowed_domains = ['istoe.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -45,7 +46,8 @@ class IstoESpider(ZeSpider):
                         # "[itemprop=author]::text",
                         # ".article-author span strong::text",
                         # '.author:not(figcaption)::text',
-                        "[rel=author]::text"
+                        "[rel=author] a::text",
+                        "[rel=author]::text",
                     ]
                 }
             },
@@ -74,6 +76,11 @@ class IstoESpider(ZeSpider):
                         '.content-section.content',
                         ".article-content"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.istoe.IstoESpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -86,3 +93,23 @@ class IstoESpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        # try:
+        #     for el in html.select('a'):
+        #         el.replace_with(el.get_text())
+        # except Exception as e:
+        #     exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

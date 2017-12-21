@@ -7,24 +7,25 @@ class EpocaSpider(ZeSpider):
     name = 'epoca'
     allowed_domains = ['epoca.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
-        "fields": { 
+        "fields": {
             "name": {
                 "selectors": {
                     "css": [
                         "meta[property='og:title']::attr(content)",
                         "meta[name=title]::attr(content)",
-                        "[itemprop=name]::text", 
-                        ".content-head__title::text" 
+                        "[itemprop=name]::text",
+                        ".content-head__title::text"
                     ]
                 }
-            }, 
+            },
             "image": {
                 "selectors": {
                     "css": [
                         'meta[property="og:image"]::attr(content)',
-                        "[itemprop=image]::attr(content)", 
-                        "[property='og:image']::attr(content)" 
+                        "[itemprop=image]::attr(content)",
+                        "[property='og:image']::attr(content)"
                     ]
                 }
             },
@@ -33,26 +34,26 @@ class EpocaSpider(ZeSpider):
                     "css": [
                         "meta[property='og:description']::attr(content)",
                         "meta[name=description]::attr(content)",
-                        "[itemprop=description]::text", 
-                        "[itemprop=alternativeHeadline]::text", 
-                        ".content-head__subtitle::text" 
+                        "[itemprop=description]::text",
+                        "[itemprop=alternativeHeadline]::text",
+                        ".content-head__subtitle::text"
                     ]
                 }
             },
             "author": {
                 "selectors": {
                     "css": [
-                        "[itemprop=author]::text", 
+                        "[itemprop=author]::text",
                         "[itemprop=creator]::text",
                         ".autor::text"
                     ]
                 }
-            }, 
+            },
             "datePublished": {
                 "selectors": {
                     "css": [
-                        "[itemprop=datePublished]::attr(datetime)", 
-                        "[itemprop=datePublished]::text", 
+                        "[itemprop=datePublished]::attr(datetime)",
+                        "[itemprop=datePublished]::text",
                         "meta[name='article:published_time']::attr(content)",
                         "meta[name=dtnoticia]::attr(content)",
                         "#info-edicao-acervo b::text",
@@ -60,17 +61,17 @@ class EpocaSpider(ZeSpider):
                         ".published::text"
                     ]
                 }
-            }, 
+            },
             "dateModified": {
                 "selectors": {
                     "css": [
-                        "[itemprop=dateModified]::attr(datetime)" , 
-                        "[itemprop=dateModified]::text", 
+                        "[itemprop=dateModified]::attr(datetime)" ,
+                        "[itemprop=dateModified]::text",
                         "meta[name='article:modified_time']::attr(content)",
-                        "updated::text" 
+                        "updated::text"
                     ]
                 }
-            }, 
+            },
             "articleBody": {
                 "selectors": {
                     "css": [
@@ -81,16 +82,41 @@ class EpocaSpider(ZeSpider):
                     ".conteudo",
                     "#texto"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.epoca.EpocaSpider.improve_html"
+                    ]
                 }
-            }, 
+            },
             "keywords": {
                 "selectors": {
                     "css": [
                         "meta[name=keywords]::attr(content)",
-                        "[itemprop=keywords]::text", 
+                        "[itemprop=keywords]::text",
                         ".entities__list-itemLink::text"
                     ]
                 }
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+
