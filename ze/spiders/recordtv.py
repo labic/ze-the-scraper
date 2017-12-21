@@ -2,11 +2,12 @@
 from . import ZeSpider
 
 
-class GovAcreSpider(ZeSpider):
+class RecordTVSpider(ZeSpider):
 
     name = 'r7tv'
-    allowed_domains = ['r7.com']
+    allowed_domains = ['recordtv.r7.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -42,7 +43,7 @@ class GovAcreSpider(ZeSpider):
                 }
             },
             "author": {
-                "default": "SBT Notícias",
+                # "default": "SBT Notícias",
                 "selectors": {
                     "css": [
                         "[itemprop=author]::text",
@@ -57,7 +58,8 @@ class GovAcreSpider(ZeSpider):
                     "css": [
                         "[itemprop=datePublished]::text",
                         "[property='article:published_time']::attr(content)",
-                        '.published_at::attr(datetime)'
+                        '.published_at::attr(datetime)',
+                        '.published::text'
                     ]
                 }
             },
@@ -76,6 +78,11 @@ class GovAcreSpider(ZeSpider):
                         ".content",
                         "#article_content"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.r7tv.RecordTVSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -89,3 +96,23 @@ class GovAcreSpider(ZeSpider):
             },
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

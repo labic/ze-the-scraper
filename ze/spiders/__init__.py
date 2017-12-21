@@ -89,7 +89,6 @@ class AllSpiders(ZeSpider):
 
     def start_requests(self):
         self._prepare_domains_items_refs()
-        
         for url in self.start_urls:
             yield Request(url, dont_filter=False)
 
@@ -104,7 +103,7 @@ class AllSpiders(ZeSpider):
             possible_domains = domains_allowed
             # FIXME what do when get 2 domain? For now let some DropItem handler
             if (len(domains_allowed) > 1):
-                url_split = response_url.netloc.split('.')
+                url_split = response_url.netloc.replace('www.','').split('.')
                 possible_domains=domains_allowed
                 for piece_of_url in url_split:
                     for domain in domains_allowed:

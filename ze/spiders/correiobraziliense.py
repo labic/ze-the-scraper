@@ -7,6 +7,7 @@ class CorreioBrasilienseSpider(ZeSpider):
     name = 'correiobraziliense'
     allowed_domains = ['correiobraziliense.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name":  {
@@ -95,6 +96,8 @@ class CorreioBrasilienseSpider(ZeSpider):
     @staticmethod
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=['br']
         try:
             selector = 'section'
             for el in html.select(selector):
@@ -105,18 +108,25 @@ class CorreioBrasilienseSpider(ZeSpider):
                     for img in images:
                         fg.append(html.new_tag('img', src=img['src']))
                     el.replace_with(fg)
+        except Exception as e:
+            exceptions_append(e)
 
+        try:
             selector = 'div'
             for el in html.select(selector):
                 el.name = 'p'
 
-            selector = 'br'
-            for el in html.select(selector):
-                el.decompose()
+        except Exception as e:
+            exceptions_append(e)
 
+        try:
             selector = 'h3'
             for el in html.select(selector):
                 el.name = 'h2'
+        except Exception as e:
+            exceptions_append(e)
+        
+        try:
             selector = 'p'
             for el in html.select(selector):
                 if el.get_text() == '':

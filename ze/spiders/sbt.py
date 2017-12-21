@@ -7,6 +7,7 @@ class SBTSpider(ZeSpider):
     name = 'sbt'
     allowed_domains = ['sbt.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -58,7 +59,9 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=datePublished]::attr(content)',
                         '.entry-date::text',
-                        '.BOX.FG666.BOLD::text'
+                        '.BOX.FG666.BOLD::text',
+                        'span.titleNoticeSocial ::text'
+
                     ]
                 }
             },
@@ -74,8 +77,14 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=articleBody]',
                         '.entry-content',
+                        '#ContentFirst',
                         '.contentNotice .FG333',
                         '.contenttice .FG333'
+                    ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.sbt.SBTSpider.improve_html"
                     ]
                 }
             },
@@ -84,9 +93,30 @@ class SBTSpider(ZeSpider):
                     "css": [
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
-                        '[onclick*=montaURL]::text'
+                        '[onclick*=montaURL]::text',
+                        '.listKeyword a::text'
                     ]
                 }
             },
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

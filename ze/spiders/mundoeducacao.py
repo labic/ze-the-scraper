@@ -7,6 +7,7 @@ class MundoEducacaoSpider(ZeSpider):
     allowed_domains = ['mundoeducacao.bol.uol.com.br',
                         'vestibular.mundoeducacao.bol.uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -56,7 +57,7 @@ class MundoEducacaoSpider(ZeSpider):
                         '[itemprop="datePublished"]::attr(content)',
                         '.data::text',
                         'p.meta::text',
-                        '.publicado p',
+                        # '.publicado p',
                         '.publicado::text'
                     ]
                 }
@@ -79,13 +80,14 @@ class MundoEducacaoSpider(ZeSpider):
                 },
                 "contexts": {
                     "improve_html": [
-                        "ze.spiders.g1.G1Spider.improve_html"
+                        "ze.spiders.mundoeducacao.MundoEducacaoSpider.improve_html"
                     ]
                 }
             },
             "keywords": {
                 "selectors": {
                     "css": [
+                        '[name="news_keywords"]::attr(content)',
                         '[itemprop=keywords] a::text',
                         '[rel=tag]::text',
                         '[onclick*=montaURL]::text',

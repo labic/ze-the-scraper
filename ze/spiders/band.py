@@ -5,8 +5,9 @@ from . import ZeSpider
 class BandSpider(ZeSpider):
 
     name = 'band'
-    allowed_domains = ['band.uol.com.br']
+    allowed_domains = ['band.uol.com.br','noticias.band.uol.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -101,7 +102,8 @@ class BandSpider(ZeSpider):
         exceptions = []; exceptions_append = exceptions.append
         to_decompose=['.cp-share-list-entry-share',
                         '.alert-warning',
-                        '.cp-content-list-links']
+                        '.cp-content-list-links',
+                        ]
 
         try:
             for item in to_decompose:

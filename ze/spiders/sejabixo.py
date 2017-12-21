@@ -7,6 +7,7 @@ class SejaBixoSpider(ZeSpider):
     name = 'sejabixo'
     allowed_domains = ['sejabixo.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -72,6 +73,11 @@ class SejaBixoSpider(ZeSpider):
                         ".conteudo-materia",
                         "article"
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.sejabixo.SejaBixoSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -85,3 +91,23 @@ class SejaBixoSpider(ZeSpider):
             }
         }
     }]
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+

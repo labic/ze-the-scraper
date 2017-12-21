@@ -7,6 +7,7 @@ class NovaEscolaSpider(ZeSpider):
     name = 'novaescola'
     allowed_domains = ['novaescola.org.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {

@@ -43,23 +43,8 @@ class ParseDate(object):
 
     def __call__(self, value, loader_context):
         spider_name = loader_context.get('spider_name')
+        print('SPIDER: ', spider_name)
 
-        if spider_name == 'r7':
-            if '(' in value:
-                value=value.split('(')[1].split(')')[0]
-
-        if spider_name == 'correiobraziliense':
-            return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
-
-        if spider_name == 'bbc':
-            return datetime.fromtimestamp(int(value))
-
-        if spider_name == 'mundoeducacao':
-            if 'em' in value:
-                value = value.split('em')[1]
-                value = value.replace(' em','').replace('às','')
-
-            return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
 
         # if spider_name == 'band':
         #     # if 'em' in value:
@@ -70,6 +55,29 @@ class ParseDate(object):
 
 
         if (self.field == 'datePublished'):
+
+            if spider_name == 'r7':
+                value = value.replace('publicado',' ').replace('em',' ').replace('às',' ').replace(':','')
+                if '(' in value:
+                    value=value.split('(')[1].split(')')[0]
+
+            if spider_name == 'r7tv':
+                if '(' in value:
+                    value=value.split('(')[0].replace('às',':')
+
+            if spider_name == 'correiobraziliense':
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
+            if spider_name == 'bbc':
+                return datetime.fromtimestamp(int(value))
+
+            if spider_name == 'mundoeducacao':
+                if 'em' in value:
+                    value = value.split('em')[1]
+                    value = value.replace(' em','').replace('às','')
+
+                return dateparser.parse(value, settings={'TIMEZONE': '+0300','DATE_ORDER': 'DMY'})
+
             if spider_name == 'zh':
                 value=value.split('|')[0].replace(' - ',' ')\
                                             .replace('h', ':') \
@@ -89,10 +97,12 @@ class ParseDate(object):
 
             if spider_name =='brasilescola':
                 value=value.split(',')[0].replace(' - ',' ')\
+                                            .replace('em','')\
                                             .replace('h', ':') \
                                             .replace('min', '')\
                                             .replace('Publicado','')\
                                             .replace('Atualizado','')
+                print('--------------------Value: ',value)
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
             if spider_name =='ig':
                 if '|' in value:
@@ -162,10 +172,12 @@ class ParseDate(object):
             if spider_name =='exame':
                 return dateparser.parse(value)
             if spider_name =='sbt':
+                value.replace('Data de Publicação','')
                 return dateparser.parse(value)
             if spider_name =='sejabixo':
                 return dateparser.parse(value.split('em')[1])
             if spider_name =='senado':
+                print('---------------SENADO-----------------')
                 value = value.split(' - ')[0]
                 return dateparser.parse(value, settings={'TIMEZONE': '+0300'})
 

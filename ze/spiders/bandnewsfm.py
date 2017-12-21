@@ -7,6 +7,7 @@ class BandNewsFMSpider(ZeSpider):
     name = 'bandnewsfm'
     allowed_domains = ['cbn.globoradio.globo.com']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -90,6 +91,11 @@ class BandNewsFMSpider(ZeSpider):
                         "#materia_interna",
                         '.td-post-content'
                     ]
+                },
+                "contexts": {
+                    "improve_html": [
+                        "ze.spiders.bandnewsfm.BandNewsFMSpider.improve_html"
+                    ]
                 }
             },
             "keywords": {
@@ -103,3 +109,29 @@ class BandNewsFMSpider(ZeSpider):
             }
         }
     }]
+    # def harvest_metadata(self, resp: Response, item, **kargs):
+    #     # TODO: Move to DownloadMiddleware
+    #     item['meta']['jsonLDSchemas'] = self.jsonLDSchemas(reponse)
+    #     item['meta']['otherLinks'] = self.jsonLD
+
+    @staticmethod
+    def improve_html(html, spider_name=None):
+        exceptions = []; exceptions_append = exceptions.append
+
+        to_decompose=[]
+
+        try:
+            for el in html.select('a'):
+                el.replace_with(el.get_text())
+        except Exception as e:
+            exceptions_append(e)
+        try:
+            for item in to_decompose:
+                for el in html.select(item):
+                    el.decompose()
+        except Exception as e:
+            exceptions_append(e)
+
+        return html, exceptions
+
+

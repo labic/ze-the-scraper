@@ -7,6 +7,7 @@ class GuiadoEstudanteSpider(ZeSpider):
     name = 'guiadoestudante'
     allowed_domains = ['guiadoestudante.abril.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
@@ -95,7 +96,10 @@ class GuiadoEstudanteSpider(ZeSpider):
     def improve_html(html, spider_name=None):
         exceptions = []; exceptions_append = exceptions.append
 
-        to_decompose = ['.article-tags']
+        to_decompose = ['.article-tags',
+                        '.top_helper ',
+                        '#links-uteis-',
+                        ]
         try:
             for item in to_decompose:
                 for el in html.select(item):

@@ -7,6 +7,7 @@ class ExameSpider(ZeSpider):
     name = 'exame'
     allowed_domains = ['exame.abril.com.br']
     items_refs = [{
+        "spider_name":name,
         "item": "ze.items.creativework.ArticleItem",
         "fields": {
             "name": {
