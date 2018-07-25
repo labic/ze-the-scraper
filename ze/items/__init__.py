@@ -9,6 +9,8 @@ from scrapy.loader.processors import Join, TakeFirst, MapCompose, Compose
 from ..processors.common import *
 from ..processors.schema import AuthorParse, KeywordsParse
 
+# from .thing.product import ProductItem
+
 
 class ItemLoader(ScrapyItemLoader):
 
@@ -37,7 +39,7 @@ class ItemLoader(ScrapyItemLoader):
             elif not item.get(field_name) and default_value:
                 item[field_name] = default_value
         
-        item['dateCreated'] = datetime.now(timezone.utc)
+        # item['dateCreated'] = datetime.now(timezone.utc)
         
         return item
 
@@ -56,8 +58,9 @@ class ThingItem(BaseItem):
         output_processor=TakeFirst(),
     )
     description = Field(
-        input_processor=MapCompose(CleanString()),
-        output_processor=TakeFirst(),
+        input_processor=MapCompose(ScapeString()),
+        # output_processor=MapCompose(TakeFirst()),
+        # input_processor =MapCompose(TakeFirst()),
         schemas={
             'avro': {
                 'name': 'description',
@@ -296,3 +299,108 @@ class CreativeWorkItem(ThingItem):
     version = Field()
     video = Field()
     workExample = Field()
+
+
+class ProductItem(ThingItem):
+    
+    gtin13 = Field(
+        output_processor=TakeFirst(),
+    )
+    gtin14 = Field(
+        output_processor=TakeFirst(),
+    )
+    brand = Field(
+        input_processor=MapCompose(CleanString()),
+        output_processor=TakeFirst(),
+    )
+    price = Field(
+        output_processor=TakeFirst(),
+    )
+    category = Field(
+        output_processor=TakeFirst(),
+    )
+    subcategory = Field(
+        output_processor=TakeFirst(),
+    )
+    sku = Field(
+        output_processor=TakeFirst(),
+    )
+    itemCondition = Field(
+        output_processor=TakeFirst(),
+    )
+    mpn = Field(
+        input_processor=MapCompose(CleanString()),
+        output_processor=TakeFirst(),
+    )
+    brand = Field(
+        input_processor=MapCompose(CleanString()),
+        output_processor=TakeFirst(),
+    )
+    offers_priceCurrency = Field(
+        output_processor=TakeFirst(),
+    )
+    offers_price = Field(
+        output_processor=TakeFirst(),
+    )
+    offers_eligibleQuantity = Field(
+        input_processor=MapCompose(CleanString()),
+        output_processor=TakeFirst(),
+    )
+    offers_availability = Field(
+        output_processor=TakeFirst(),
+    )
+    links = Field(
+        output_processor=TakeFirst(),
+    )
+    composicao_new = Field(
+        output_processor=TakeFirst(),
+    )
+    ingredientes = Field(
+        output_processor=TakeFirst(),
+    )
+    beneficios = Field(
+        output_processor=TakeFirst(),
+    )
+    tx_principal_indicacao = Field(
+        output_processor=TakeFirst(),
+    )
+    tx_contra_indicacao = Field(
+        output_processor=TakeFirst(),
+    )
+    seleciona_cores = Field(
+        output_processor=TakeFirst(),
+    )
+    tipo = Field(
+        output_processor=TakeFirst(),
+    )
+    seleciona_tipo_cabelos = Field(
+        output_processor=TakeFirst(),
+    )
+    especificacoes = Field(
+        output_processor=TakeFirst(),
+    )
+    inmetro = Field(
+        output_processor=TakeFirst(),
+    )
+    selos_do_produto = Field(
+        output_processor=TakeFirst(),
+    )
+    garantia_numero = Field(
+        output_processor=TakeFirst(),
+    )
+    conteudo_embalagem = Field(
+        output_processor=TakeFirst(),
+    )
+    voltagem = Field(
+        output_processor=TakeFirst(),
+    )
+    nr_sac_facricante = Field(
+        output_processor=TakeFirst(),
+    )
+    nr_ministerio_da_saude = Field(
+        output_processor=TakeFirst(),
+    )
+    tx_msg_anvisa = Field(
+        output_processor=TakeFirst(),
+    )
+    

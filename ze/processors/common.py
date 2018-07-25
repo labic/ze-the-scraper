@@ -6,13 +6,18 @@ import logging; logger = logging.getLogger(__name__)
 from datetime import datetime
 import dateparser
 
-__all__ = ('CleanString', 'FormatString', 'ValidURL', 'ParseDate')
+__all__ = ('CleanString', 'ScapeString', 'FormatString', 'ValidURL', 'ParseDate')
 
 
 class CleanString(object):
 
     def __call__(self, value, loader_context):
         return value.strip().strip('\t\n')
+
+class ScapeString(object):
+
+    def __call__(self, value, loader_context):
+        return value.replace('\r', '\\r').replace('\t', '\\t').replace('\n', '\\n')
 
 
 class FormatString(object):

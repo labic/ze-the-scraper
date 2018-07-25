@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from slugify import Slugify; slugify = Slugify(to_lower=True)
+# from slugify import Slugify; slugify = Slugify(to_lower=True)
 
 
 class AuthorParse():

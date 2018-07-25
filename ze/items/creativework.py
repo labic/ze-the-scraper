@@ -84,3 +84,11 @@ class NewsArticleItem(ArticleItem):
     printEdition = Field()
     printPage = Field()
     printSection = Field()
+
+
+class SocialMediaPosting(ArticleItem):
+    task = Field()
+    keyword = Field()
+    type = Field()
+    timestamp = Field()
+    post_data = Field()

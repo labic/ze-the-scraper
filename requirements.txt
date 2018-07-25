@@ -17,3 +17,4 @@ scrapy-rotating-proxies==0.3.1
 scrapyrt==0.10
 shub==2.5.1
 search_google==1.2.0
+scrapy-splash==0.7.2

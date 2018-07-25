@@ -19,6 +19,8 @@ ENVIROMENT = os.getenv('ENVIROMENT', 'development')
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'DEBUG')
 DUPEFILTER_DEBUG = True
 
+SPLASH_URL = 'http://localhost:8050'
+
 SPIDERS_AUTH = os.getenv('SPIDERS_AUTH', {'somespider': {'user': 'USER', 'pass': 'PASS'}})
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -57,13 +59,17 @@ SPIDER_MIDDLEWARES = {
     'ze.middlewares.spider.searchengines.GoogleSearchMiddleware': 40,
     'scrapy.spidermiddlewares.httperror.HttpErrorMiddleware': 50,
     # 'scrapy_deltafetch.DeltaFetch': 100,
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
     'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': 500,
     'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
     'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
 }
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 DELTAFETCH_ENABLED = os.getenv('DELTAFETCH_ENABLED', False)
 SEARCH_MIDDLEWARE_ENABLED = os.getenv('SEARCH_MIDDLEWARE_ENABLED', True)
 # Search source gcse_api and googler. Ex: SEARCH_MIDDLEWARE_SOURCES='gcse_api,googler'
@@ -143,11 +149,11 @@ IMAGES_THUMBS={
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 # NOTE: AutoThrottle will honour the standard settings for concurrency and delay
-#AUTOTHROTTLE_ENABLED=True
+# AUTOTHROTTLE_ENABLED=True
 # The initial download delay
-#AUTOTHROTTLE_START_DELAY=5
+# AUTOTHROTTLE_START_DELAY=5
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY=60
+# AUTOTHROTTLE_MAX_DELAY6=5
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG=False
 
